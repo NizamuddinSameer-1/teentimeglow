@@ -125,12 +125,12 @@
   3. [x] Add `getPostBySlug(slug)` helper in `src/lib/api.ts` with resilient seed matching.
   4. [x] Include "Related Edits" carousel and social share actions.
 
-### Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`)
+### Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`) [x] (Completed: 2026-10-17)
 * **Goal**: Build dedicated standalone pages for the interactive Quiz (`/quiz`) and Community Showcase (`/gallery`).
 * **Tasks**:
-  1. Create `src/pages/quiz/index.astro` with a full-viewport dedicated QuizPlayer island, ambient glow, and outcome card generator.
-  2. Create `src/pages/gallery/index.astro` with masonry showcase grid, category tabs (Nails, DIY, Sketch, Room Decor), live like increments (`/api/community/like`), and prominent "Upload Creation" floating button.
-  3. Mount `CommunitySubmitModal.tsx` on `/gallery`.
+  1. [x] Create `src/pages/quiz/index.astro` with a full-viewport dedicated QuizPlayer island, ambient glow, and outcome card generator.
+  2. [x] Create `src/pages/gallery/index.astro` with masonry showcase grid, category tabs (Nails, DIY, Sketch, Room Decor), live like increments (`/api/community/like`), and prominent "Upload Creation" floating button.
+  3. [x] Mount `CommunitySubmitModal.tsx` on `/gallery`.
 
 ### Phase 12: Unified Navigation, Global Links & Production Verification
 * **Goal**: Update global navigation, links across all components, and run full test & build verification.

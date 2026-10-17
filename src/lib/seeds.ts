@@ -432,5 +432,60 @@ export const fallbackCommunity: CommunityCreation[] = [
     status: 'approved',
     likes_count: 187,
     created_at: new Date().toISOString()
+  },
+  {
+    id: '4',
+    author_name: 'Elena R.',
+    author_social: '@elenavibes',
+    category: 'decor',
+    image_url: '/assets/feature-decor.jpg',
+    caption: 'Cozy fairy light bookshelf setup & scented candle nook 🕯️',
+    status: 'approved',
+    likes_count: 215,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '5',
+    author_name: 'Aria M.',
+    author_social: '@aria.style',
+    category: 'fashion',
+    image_url: '/assets/arrival-1.jpg',
+    caption: 'Oversized trench & vintage chunky loafers for Saturday coffee run 🧥',
+    status: 'approved',
+    likes_count: 310,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '6',
+    author_name: 'Zoe T.',
+    author_social: '@zoenailart',
+    category: 'nails',
+    image_url: '/assets/arrival-3.jpg',
+    caption: 'Micro-pearl glazed milk jelly manicure for autumn ✨',
+    status: 'approved',
+    likes_count: 176,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '7',
+    author_name: 'Hannah B.',
+    author_social: '@hannahfits',
+    category: 'fashion',
+    image_url: '/assets/feature-fashion.jpg',
+    caption: 'Monochrome knit layered fit inspired by Rini’s capsule guide 🍂',
+    status: 'approved',
+    likes_count: 254,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '8',
+    author_name: 'Lily W.',
+    author_social: '@cozylily',
+    category: 'decor',
+    image_url: '/assets/arrival-2.jpg',
+    caption: 'Sunday morning linen bedding & warm golden hour glow 🌅',
+    status: 'approved',
+    likes_count: 198,
+    created_at: new Date().toISOString()
   }
 ];

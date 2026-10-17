@@ -75,7 +75,7 @@ export interface CommunityCreation {
   id: string;
   author_name: string;
   author_social?: string | null;
-  category: 'nails' | 'diy' | 'sketch' | 'decor';
+  category: 'nails' | 'diy' | 'sketch' | 'decor' | 'fashion' | string;
   image_url: string;
   caption?: string | null;
   status: 'pending' | 'approved' | 'rejected';
