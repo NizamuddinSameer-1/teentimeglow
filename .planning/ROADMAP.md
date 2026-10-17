@@ -140,3 +140,17 @@
   3. [x] Run `npm run build` and ensure 0 errors across all routes.
   4. [x] Perform visual checks in the browser to ensure pixel-perfect design parity.
 
+---
+
+## Milestone 3: Google SEO, Analytics & Search Console Indexing
+
+### Phase 13: Google Analytics 4, Search Console, Sitemap & Search Engine Optimization
+* **Goal**: Equip TeenTimeGlow with production SEO, Google Analytics 4 tracking, Google Search Console verification, dynamic XML sitemaps, robots.txt, and rich JSON-LD schemas so pages index and rank on Google.
+* **Tasks**:
+  1. Add non-blocking `Analytics.astro` component supporting `PUBLIC_GA_MEASUREMENT_ID`.
+  2. Implement `public/robots.txt` and `public/sitemap.xml` referencing `https://teentimeglow.me`.
+  3. Implement JSON-LD structured data schemas (`WebSite`, `Organization`, `BlogPosting`, `ItemList`) in `BaseLayout.astro` and article reader `/edits/[slug]`.
+  4. Add canonical URLs (`<link rel="canonical" ...>`) and Google Search Console verification meta tag in `BaseLayout.astro`.
+  5. Document actionable step-by-step instructions for submitting the site to Google Search Console and obtaining the GA4 ID.
+
+
