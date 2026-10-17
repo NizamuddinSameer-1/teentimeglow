@@ -16,6 +16,32 @@ const audiobooks = rankings.filter(r => r.category === 'audiobook');
   title="Curated Leaderboard: Prime Video & Audiobooks — TeenTimeGlow by Rini"
   description="Explore Rini's top curated rankings for Prime Video series and captivating audiobooks. Honest 5-star reviews, dark academia aesthetics, summer romances, and mindset audio."
 >
+  <!-- Google Rich Snippet: ItemList Schema -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": "Rini's Curated Teen Entertainment & Audiobook Leaderboard",
+    "description": "Top rated Prime Video series and audiobooks curated by TeenTimeGlow.",
+    "numberOfItems": rankings.length,
+    "itemListElement": rankings.map((item, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Review",
+        "name": item.title,
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": item.rating,
+          "bestRating": 5
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Rini"
+        },
+        "reviewBody": item.review_text
+      }
+    }))
+  })} />
   <main class="rankings-page-container">
     <!-- Breadcrumb & Back Bar -->
     <div class="container breadcrumb-wrap">

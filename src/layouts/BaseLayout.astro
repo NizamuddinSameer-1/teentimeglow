@@ -4,16 +4,23 @@ import Preloader from '@/components/Preloader.astro';
 import Navbar from '@/components/Navbar.astro';
 import Footer from '@/components/Footer.astro';
 import Modals from '@/components/Modals.astro';
+import Analytics from '@/components/Analytics.astro';
 
 interface Props {
   title?: string;
   description?: string;
+  ogImage?: string;
 }
 
 const {
   title = "TeenTimeGlow — Feel The Glow | Curated Fashion, Beauty & Lifestyle by Rini",
-  description = "Feel the vibes with TeenTimeGlow. Curated teen fashion lookbooks, glass skincare routines, cozy bedroom aesthetics, Prime Video rankings, daily quotes, and free 4K wallpapers by Rini."
+  description = "Feel the vibes with TeenTimeGlow. Curated teen fashion lookbooks, glass skincare routines, cozy bedroom aesthetics, Prime Video rankings, daily quotes, and free 4K wallpapers by Rini.",
+  ogImage = "https://teentimeglow.me/assets/hero-glow-creator.jpg"
 } = Astro.props;
+
+// Dynamic canonical URL calculation
+const cleanPath = Astro.url.pathname.replace(/\/+$/, '') || '';
+const canonicalUrl = `https://teentimeglow.me${cleanPath === '' ? '/' : cleanPath}`;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -23,16 +30,64 @@ const {
   <title>{title}</title>
   <meta name="description" content={description} />
   
+  <!-- Canonical URL -->
+  <link rel="canonical" href={canonicalUrl} />
+
   <!-- Google Search Console Site Verification -->
   <meta name="google-site-verification" content="tG2T-OkiuD6VDoDxBltWXnSLnxv3q6qMg2p1kzzT8BQ" />
   
   <!-- OpenGraph / Social Meta -->
-  <meta property="og:title" content="TeenTimeGlow — Feel The Glow" />
-  <meta property="og:description" content="Curated teen fashion lookbooks, glowing skincare routines, Prime Video rankings, daily mindset quotes, and free 4K wallpapers." />
-  <meta property="og:image" content="https://www.teentimeglow.me/assets/hero-glow-creator.jpg" />
-  <meta property="og:url" content="https://www.teentimeglow.me" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="TeenTimeGlow" />
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
   <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
+
+  <!-- Google Analytics 4 -->
+  <Analytics />
+
+  <!-- Structured Data (JSON-LD) for Google Rich Snippets & Search Ranking -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://teentimeglow.me/#website",
+        "url": "https://teentimeglow.me/",
+        "name": "TeenTimeGlow",
+        "description": "Curated teen fashion lookbooks, glass skincare routines, Prime Video rankings, daily mindset quotes, and free 4K wallpapers by Rini.",
+        "publisher": {
+          "@id": "https://teentimeglow.me/#organization"
+        },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://teentimeglow.me/edits?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://teentimeglow.me/#organization",
+        "name": "TeenTimeGlow",
+        "url": "https://teentimeglow.me/",
+        "logo": "https://teentimeglow.me/assets/logo.jpg",
+        "founder": {
+          "@type": "Person",
+          "name": "Rini"
+        },
+        "sameAs": [
+          "https://instagram.com/teentimeglow",
+          "https://pinterest.com/teentimeglow"
+        ]
+      }
+    ]
+  })} />
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />

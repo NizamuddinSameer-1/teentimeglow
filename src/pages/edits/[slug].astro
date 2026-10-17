@@ -30,7 +30,36 @@ const categoryLabels: Record<string, string> = {
 <BaseLayout
   title={`${post.title} — TeenTimeGlow Magazine`}
   description={post.excerpt}
+  ogImage={post.cover_image_url?.startsWith('http') ? post.cover_image_url : `https://teentimeglow.me${post.cover_image_url || '/assets/hero-glow-creator.jpg'}`}
 >
+  <!-- Google Rich Snippet: BlogPosting Schema -->
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.excerpt,
+    "image": post.cover_image_url?.startsWith('http') ? post.cover_image_url : `https://teentimeglow.me${post.cover_image_url || '/assets/hero-glow-creator.jpg'}`,
+    "datePublished": post.created_at || "2026-10-18T00:00:00Z",
+    "dateModified": post.updated_at || post.created_at || "2026-10-18T00:00:00Z",
+    "author": {
+      "@type": "Person",
+      "name": "Rini",
+      "url": "https://teentimeglow.me/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "TeenTimeGlow",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://teentimeglow.me/assets/logo.jpg"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://teentimeglow.me/edits/${post.slug}`
+    }
+  })} />
+
   <!-- Reading Progress Bar -->
   <div class="reading-progress-track">
     <div class="reading-progress-fill" id="readingProgress"></div>

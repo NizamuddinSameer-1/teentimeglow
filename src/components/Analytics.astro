@@ -1,0 +1,25 @@
+---
+// Google Analytics 4 (GA4) Integration Component
+// Set PUBLIC_GA_MEASUREMENT_ID in your .env or Vercel Environment Variables (e.g. G-XXXXXXXXXX)
+const gaMeasurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || '';
+---
+
+{gaMeasurementId ? (
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+  <script is:inline define:vars={{ gaMeasurementId }}>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', gaMeasurementId, {
+      send_page_view: true,
+      anonymize_ip: true
+    });
+  </script>
+) : (
+  <!-- Google Analytics stub to prevent client-side JS runtime errors when ID is not set -->
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+  </script>
+)}
