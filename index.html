@@ -18,13 +18,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
 
-  <!-- World-Class Animation & Motion Libraries (GSAP, ScrollTrigger, Lenis, SplitType, Canvas Confetti, Lucide) -->
-  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://unpkg.com/split-type"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
     :root {
@@ -2538,7 +2531,7 @@
       <div class="nav-wrap">
         <!-- Brand Logo & Two-Tone Wordmark -->
         <a href="/" class="brand-logo-wrap">
-          <img src="assets/logo.jpg" alt="Teen Time Glow Logo" class="brand-logo-img" />
+          <img src="assets/logo.jpg" alt="Teen Time Glow Logo" class="brand-logo-img" width="36" height="36" decoding="async" />
           <span class="brand-logo-text">teen time <span class="brand-logo-glow">glow.</span></span>
         </a>
 
@@ -2564,7 +2557,7 @@
               <circle cx="11" cy="11" r="8"></circle>
               <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Search..." oninput="handleNavSearch(this.value)" onkeydown="if(event.key==='Enter') executeNavSearch(this.value)" />
+            <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Search..." aria-label="Search TeenTimeGlow content" oninput="handleNavSearch(this.value)" onkeydown="if(event.key==='Enter') executeNavSearch(this.value)" />
           </div>
 
           <!-- Audio Sound Toggle -->
@@ -2573,7 +2566,7 @@
           </button>
 
           <!-- Heart / Saved Pill -->
-          <div class="saved-pill" onclick="showToast('♡ 4 items saved to your personal Glow Moodboard!')" title="View Saved">
+          <div class="saved-pill" onclick="showSavedMoodboardToast()" title="View Saved">
             <span class="saved-heart-icon">♡</span>
             <span id="savedCount">4</span>
           </div>
@@ -2590,7 +2583,7 @@
 
   <!-- Mobile Drawer Menu -->
   <div class="mobile-drawer" id="mobileDrawer">
-    <button class="drawer-close-btn" onclick="toggleDrawer(false)">&times;</button>
+    <button class="drawer-close-btn" onclick="toggleDrawer(false)" aria-label="Close menu">&times;</button>
     
     <!-- Mobile Search -->
     <div class="drawer-search-wrap">
@@ -2598,7 +2591,7 @@
         <circle cx="11" cy="11" r="8"></circle>
         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
       </svg>
-      <input type="text" placeholder="Search TeenTimeGlow..." onkeydown="if(event.key==='Enter') { executeNavSearch(this.value); toggleDrawer(false); }" />
+      <input type="text" placeholder="Search TeenTimeGlow..." aria-label="Search TeenTimeGlow content" onkeydown="if(event.key==='Enter') { executeNavSearch(this.value); toggleDrawer(false); }" />
     </div>
 
     <ul class="drawer-links">
@@ -2681,11 +2674,11 @@
         <!-- Right Visual Column -->
         <div class="hero-visual-col">
           <div class="hero-model-container" id="heroModelWrap">
-            <img src="assets/hero-glow-creator.jpg" alt="Rini — TeenTimeGlow Creator & Curator" class="hero-model-img" id="heroModelImg" />
+            <img src="assets/hero-glow-creator.jpg" alt="Rini — TeenTimeGlow Creator & Curator" class="hero-model-img" id="heroModelImg" fetchpriority="high" decoding="async" />
 
             <!-- Floating Glass Card 1 (Skincare Edit) -->
             <a href="#edits" class="floating-card floating-card-1" id="floatCard1">
-              <img src="assets/feature-skincare.jpg" alt="Skincare Glow Routine" class="floating-card-img" />
+              <img src="assets/feature-skincare.jpg" alt="Skincare Glow Routine" class="floating-card-img" loading="lazy" decoding="async" width="60" height="60" />
               <div class="floating-text-wrap">
                 <span class="floating-tag">✨ Skincare Edit</span>
                 <span class="floating-title">Glass Skin Morning</span>
@@ -2694,7 +2687,7 @@
 
             <!-- Floating Glass Card 2 (Free 4K Wallpapers) -->
             <a href="#wallpapers" class="floating-card floating-card-2" id="floatCard2">
-              <img src="assets/wallpaper-sunset.jpg" alt="Free 4K Wallpapers" class="floating-card-img" />
+              <img src="assets/wallpaper-sunset.jpg" alt="Free 4K Wallpapers" class="floating-card-img" loading="lazy" decoding="async" width="60" height="60" />
               <div class="floating-text-wrap">
                 <span class="floating-tag">📱 Free 4K Vault</span>
                 <span class="floating-title">Sunset Horizon Drop</span>
@@ -2762,7 +2755,7 @@
         <!-- Story 1: Glass Skin Routine -->
         <div class="edit-card tilt-card" data-cat="skincare" onclick="openStoryModal('skincare')">
           <div class="edit-img-wrap">
-            <img src="assets/feature-skincare.jpg" alt="Glass Skin Routine" class="edit-img parallax-img" />
+            <img src="assets/feature-skincare.jpg" alt="Glass Skin Routine" class="edit-img parallax-img" loading="lazy" decoding="async" />
           </div>
           <div class="edit-info">
             <span class="edit-category-badge">Beauty & Skincare</span>
@@ -2778,7 +2771,7 @@
         <!-- Story 2: Autumn Capsule Wardrobe -->
         <div class="edit-card tilt-card" data-cat="fashion" onclick="openStoryModal('fashion')">
           <div class="edit-img-wrap">
-            <img src="assets/feature-fashion.jpg" alt="Autumn Warm Layering & Knitwear Guide" class="edit-img parallax-img" />
+            <img src="assets/feature-fashion.jpg" alt="Autumn Warm Layering & Knitwear Guide" class="edit-img parallax-img" loading="lazy" decoding="async" />
           </div>
           <div class="edit-info">
             <span class="edit-category-badge">Fashion Lookbook</span>
@@ -2794,7 +2787,7 @@
         <!-- Story 3: Cozy Room Corner Inspo -->
         <div class="edit-card tilt-card" data-cat="decor" onclick="openStoryModal('decor')">
           <div class="edit-img-wrap">
-            <img src="assets/feature-decor.jpg" alt="Aesthetic Study Desk & Fairy Lights Setup" class="edit-img parallax-img" />
+            <img src="assets/feature-decor.jpg" alt="Aesthetic Study Desk & Fairy Lights Setup" class="edit-img parallax-img" loading="lazy" decoding="async" />
           </div>
           <div class="edit-info">
             <span class="edit-category-badge">Cozy Decor</span>
@@ -2828,7 +2821,7 @@
         <!-- Rank #1: The Summer I Turned Pretty -->
         <div class="ranking-card tilt-card">
           <div class="ranking-poster-frame">
-            <img src="assets/ranking-summer.jpg" alt="The Summer I Turned Pretty — Prime Video" class="ranking-poster-img parallax-img" />
+            <img src="assets/ranking-summer.jpg" alt="The Summer I Turned Pretty — Prime Video" class="ranking-poster-img parallax-img" loading="lazy" decoding="async" />
             <span class="ranking-badge-top">#1 TOP SERIES</span>
             <span class="ranking-type-tag">Prime Video • Drama</span>
           </div>
@@ -2845,7 +2838,7 @@
         <!-- Rank #2: The Seven Husbands of Evelyn Hugo -->
         <div class="ranking-card tilt-card">
           <div class="ranking-poster-frame">
-            <img src="assets/ranking-evelyn.jpg" alt="The Seven Husbands of Evelyn Hugo — Audiobook" class="ranking-poster-img parallax-img" />
+            <img src="assets/ranking-evelyn.jpg" alt="The Seven Husbands of Evelyn Hugo — Audiobook" class="ranking-poster-img parallax-img" loading="lazy" decoding="async" />
             <span class="ranking-badge-top">#1 AUDIOBOOK</span>
             <span class="ranking-type-tag">Audible • Fiction</span>
           </div>
@@ -2862,7 +2855,7 @@
         <!-- Rank #3: Daisy Jones & The Six -->
         <div class="ranking-card tilt-card">
           <div class="ranking-poster-frame">
-            <img src="assets/ranking-daisy.jpg" alt="Daisy Jones & The Six — Vintage Rock Series" class="ranking-poster-img parallax-img" />
+            <img src="assets/ranking-daisy.jpg" alt="Daisy Jones & The Six — Vintage Rock Series" class="ranking-poster-img parallax-img" loading="lazy" decoding="async" />
             <span class="ranking-badge-top">#2 TOP SERIES</span>
             <span class="ranking-type-tag">Prime Video • Music</span>
           </div>
@@ -2879,7 +2872,7 @@
         <!-- Rank #4: Atomic Habits for Teens -->
         <div class="ranking-card tilt-card">
           <div class="ranking-poster-frame">
-            <img src="assets/ranking-habits.jpg" alt="Atomic Habits for Teens — Mindset Edit" class="ranking-poster-img parallax-img" />
+            <img src="assets/ranking-habits.jpg" alt="Atomic Habits for Teens — Mindset Edit" class="ranking-poster-img parallax-img" loading="lazy" decoding="async" />
             <span class="ranking-badge-top">#2 AUDIOBOOK</span>
             <span class="ranking-type-tag">Audible • Mindset</span>
           </div>
@@ -2958,7 +2951,7 @@
         <!-- Wallpaper 1: Golden Sunset Horizon -->
         <div class="wallpaper-card tilt-card" data-device="mobile">
           <div class="wallpaper-thumb-frame">
-            <img src="assets/wallpaper-sunset.jpg" alt="Golden Sunset Horizon Wallpaper" class="wallpaper-img parallax-img" />
+            <img src="assets/wallpaper-sunset.jpg" alt="Golden Sunset Horizon Wallpaper" class="wallpaper-img parallax-img" loading="lazy" decoding="async" />
             <span class="wallpaper-res-badge">4K ULTRA HD</span>
             <span class="wallpaper-device-badge">iPhone / 9:16</span>
           </div>
@@ -2974,7 +2967,7 @@
         <!-- Wallpaper 2: Zen Matcha Foam Art -->
         <div class="wallpaper-card tilt-card" data-device="mobile">
           <div class="wallpaper-thumb-frame">
-            <img src="assets/wallpaper-matcha.jpg" alt="Zen Matcha Foam Art Wallpaper" class="wallpaper-img parallax-img" />
+            <img src="assets/wallpaper-matcha.jpg" alt="Zen Matcha Foam Art Wallpaper" class="wallpaper-img parallax-img" loading="lazy" decoding="async" />
             <span class="wallpaper-res-badge">4K ULTRA HD</span>
             <span class="wallpaper-device-badge">iPhone / 9:16</span>
           </div>
@@ -2990,7 +2983,7 @@
         <!-- Wallpaper 3: Dreamy Sunset Cloudscape -->
         <div class="wallpaper-card tilt-card" data-device="desktop">
           <div class="wallpaper-thumb-frame">
-            <img src="assets/wallpaper-clouds.jpg" alt="Dreamy Sunset Cloudscape Wallpaper" class="wallpaper-img parallax-img" />
+            <img src="assets/wallpaper-clouds.jpg" alt="Dreamy Sunset Cloudscape Wallpaper" class="wallpaper-img parallax-img" loading="lazy" decoding="async" />
             <span class="wallpaper-res-badge">4K ULTRA HD</span>
             <span class="wallpaper-device-badge">Desktop / 16:9</span>
           </div>
@@ -3006,7 +2999,7 @@
         <!-- Wallpaper 4: Dewy Sunbeam Glass Aura -->
         <div class="wallpaper-card tilt-card" data-device="mobile">
           <div class="wallpaper-thumb-frame">
-            <img src="assets/feature-skincare.jpg" alt="Dewy Sunbeam Glass Aura Wallpaper" class="wallpaper-img parallax-img" />
+            <img src="assets/feature-skincare.jpg" alt="Dewy Sunbeam Glass Aura Wallpaper" class="wallpaper-img parallax-img" loading="lazy" decoding="async" />
             <span class="wallpaper-res-badge">4K ULTRA HD</span>
             <span class="wallpaper-device-badge">Universal / 4K</span>
           </div>
@@ -3127,7 +3120,7 @@
         <!-- Community Card 1 -->
         <div class="gallery-card tilt-card" onclick="likeGalleryItem(1, event)">
           <div class="gallery-thumb">
-            <img src="assets/gallery-nails.jpg" alt="Chrome Glazed French Tips & Matcha" class="gallery-img parallax-img" />
+            <img src="assets/gallery-nails.jpg" alt="Chrome Glazed French Tips & Matcha" class="gallery-img parallax-img" loading="lazy" decoding="async" />
             <span class="gallery-creator-pill">by @clara.glaze</span>
           </div>
           <div class="gallery-info">
@@ -3139,7 +3132,7 @@
         <!-- Community Card 2 -->
         <div class="gallery-card tilt-card" onclick="likeGalleryItem(2, event)">
           <div class="gallery-thumb">
-            <img src="assets/gallery-aesthetic-ootd.jpg" alt="Golden Hour Street Style & Canvas Tote" class="gallery-img parallax-img" />
+            <img src="assets/gallery-aesthetic-ootd.jpg" alt="Golden Hour Street Style & Canvas Tote" class="gallery-img parallax-img" loading="lazy" decoding="async" />
             <span class="gallery-creator-pill">by @maya.fits</span>
           </div>
           <div class="gallery-info">
@@ -3151,7 +3144,7 @@
         <!-- Community Card 3 -->
         <div class="gallery-card tilt-card" onclick="likeGalleryItem(3, event)">
           <div class="gallery-thumb">
-            <img src="assets/feature-decor.jpg" alt="Cozy Bedroom Fairy Light Desk Corner" class="gallery-img parallax-img" />
+            <img src="assets/feature-decor.jpg" alt="Cozy Bedroom Fairy Light Desk Corner" class="gallery-img parallax-img" loading="lazy" decoding="async" />
             <span class="gallery-creator-pill">by @sophia_study</span>
           </div>
           <div class="gallery-info">
@@ -3163,7 +3156,7 @@
         <!-- Community Card 4 -->
         <div class="gallery-card tilt-card" onclick="likeGalleryItem(4, event)">
           <div class="gallery-thumb">
-            <img src="assets/gallery-journal.jpg" alt="Digital iPad Bullet Journal & Habit Planner" class="gallery-img parallax-img" />
+            <img src="assets/gallery-journal.jpg" alt="Digital iPad Bullet Journal & Habit Planner" class="gallery-img parallax-img" loading="lazy" decoding="async" />
             <span class="gallery-creator-pill">by @rini.journal</span>
           </div>
           <div class="gallery-info">
@@ -3188,22 +3181,22 @@
           <p class="footer-offer-desc">Weekly curated lookbook drops, secret 4K wallpapers, and teen mindset letters by Rini directly in your inbox.</p>
           
           <form class="newsletter-form" onsubmit="handleNewsletter(event)">
-            <input type="email" id="newsletterEmail" placeholder="your email address..." class="newsletter-input" required />
+            <input type="email" id="newsletterEmail" placeholder="your email address..." class="newsletter-input" aria-label="Your email address" required />
             <button type="submit" class="newsletter-btn" aria-label="Subscribe">&gt;</button>
           </form>
 
           <div class="social-row">
-            <a href="https://instagram.com" target="_blank" rel="noopener" class="social-circle-btn" title="Instagram">📸</a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener" class="social-circle-btn" title="TikTok">🎵</a>
-            <a href="https://pinterest.com" target="_blank" rel="noopener" class="social-circle-btn" title="Pinterest">P</a>
-            <a href="https://spotify.com" target="_blank" rel="noopener" class="social-circle-btn" title="Spotify">🎧</a>
-            <a href="https://youtube.com" target="_blank" rel="noopener" class="social-circle-btn" title="YouTube">▶</a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="Instagram">📸</a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="TikTok">🎵</a>
+            <a href="https://pinterest.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="Pinterest">P</a>
+            <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="Spotify">🎧</a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-circle-btn" title="YouTube">▶</a>
           </div>
         </div>
 
         <!-- Center: Aesthetic Iced Tumbler Mascot -->
         <div class="footer-center">
-          <img src="assets/footer-jar.jpg" alt="TeenTimeGlow Iced Jar Mascot" class="footer-jar-img" id="mascotJar" />
+          <img src="assets/footer-jar.jpg" alt="TeenTimeGlow Iced Jar Mascot" class="footer-jar-img" id="mascotJar" loading="lazy" decoding="async" />
           <p class="footer-mascot-caption">“Sip, glow, and romanticize everyday moments.”</p>
         </div>
 
@@ -3300,6 +3293,14 @@
     <span id="toastIcon">✨</span>
     <span id="toastMessage">Welcome to TeenTimeGlow!</span>
   </div>
+
+  <!-- World-Class Animation & Motion Libraries (GSAP, ScrollTrigger, Lenis, SplitType, Canvas Confetti, Lucide) -->
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/split-type"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- ========================================================================
        12. JAVASCRIPT MOTION DESIGN & ENGINE (WORLD-CLASS LIBRARIES)
@@ -3758,6 +3759,7 @@
       initCursorHearts();
       initMagneticButtons();
       init3DTilt();
+      restoreSavedLikes();
 
       if (typeof lucide !== 'undefined') {
         lucide.createIcons();
@@ -4273,7 +4275,43 @@
     }
 
     // --- 13. Community Likes with Floating Heart Particle Burst ---
-    const likedItems = {};
+    // --- 13. Community Likes with Persistent LocalStorage & Particle Burst ---
+    let likedItems = {};
+    try {
+      likedItems = JSON.parse(localStorage.getItem('ttg_liked_items') || '{}');
+    } catch (e) {
+      likedItems = {};
+    }
+
+    function updateSavedMoodboardCounter() {
+      const savedCountElem = document.getElementById('savedCount');
+      if (savedCountElem) {
+        const extraLikes = Object.values(likedItems).filter(Boolean).length;
+        savedCountElem.textContent = 4 + extraLikes;
+      }
+    }
+
+    function restoreSavedLikes() {
+      try {
+        Object.keys(likedItems).forEach(id => {
+          if (likedItems[id]) {
+            const likeElem = document.getElementById(`like-${id}`);
+            if (likeElem) {
+              let count = parseInt(likeElem.textContent.replace(/\D/g, '')) || 500;
+              likeElem.textContent = `♥ ${count + 1}`;
+              likeElem.style.color = '#E85D04';
+            }
+          }
+        });
+        updateSavedMoodboardCounter();
+      } catch (e) {}
+    }
+
+    function showSavedMoodboardToast() {
+      const count = document.getElementById('savedCount')?.textContent || '4';
+      showToast(`♡ ${count} items saved to your personal Glow Moodboard!`);
+    }
+
     function likeGalleryItem(id, e) {
       playBubblePop();
       const likeElem = document.getElementById(`like-${id}`);
@@ -4307,6 +4345,11 @@
         likeElem.textContent = `♡ ${count}`;
         likeElem.style.color = '#E85D04';
       }
+
+      try {
+        localStorage.setItem('ttg_liked_items', JSON.stringify(likedItems));
+      } catch (err) {}
+      updateSavedMoodboardCounter();
     }
 
     // --- 14. Editorial Quick-View Modals ---
