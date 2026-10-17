@@ -1,0 +1,28 @@
+---
+import { siteContent } from '@/config/siteContent';
+
+interface StatItem {
+  target: string;
+  suffix?: string;
+  decimals?: string;
+  label: string;
+}
+
+interface Props {
+  stats?: StatItem[];
+}
+
+const { stats = siteContent.stats } = Astro.props;
+---
+<section class="glow-stats-strip">
+  <div class="container">
+    <div class="stats-grid">
+      {stats.map((item) => (
+        <div class="stat-item">
+          <div class="stat-number" data-target={item.target} data-suffix={item.suffix || ''} data-decimals={item.decimals || '0'}>0</div>
+          <div class="stat-label">{item.label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

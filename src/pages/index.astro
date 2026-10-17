@@ -1,0 +1,38 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/Hero.astro';
+import StatsStrip from '@/components/StatsStrip.astro';
+import EditsSection from '@/components/EditsSection.astro';
+import RankingsSection from '@/components/RankingsSection.astro';
+import QuotesSection from '@/components/QuotesSection.astro';
+import WallpapersSection from '@/components/WallpapersSection.astro';
+import QuizSection from '@/components/QuizSection.astro';
+import GallerySection from '@/components/GallerySection.astro';
+
+import {
+  getPosts,
+  getRankings,
+  getQuotes,
+  getWallpapers,
+  getCommunityCreations
+} from '@/lib/api';
+
+// Hydrate dynamically from Supabase (with instant seed fallback)
+const [posts, rankings, quotes, wallpapers, creations] = await Promise.all([
+  getPosts(),
+  getRankings(),
+  getQuotes(),
+  getWallpapers(),
+  getCommunityCreations()
+]);
+---
+<BaseLayout>
+  <Hero />
+  <StatsStrip />
+  <EditsSection posts={posts} />
+  <RankingsSection rankings={rankings} />
+  <QuotesSection quotes={quotes} />
+  <WallpapersSection wallpapers={wallpapers} />
+  <QuizSection />
+  <GallerySection creations={creations} />
+</BaseLayout>

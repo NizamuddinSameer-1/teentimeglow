@@ -1,0 +1,61 @@
+---
+import type { StoryMemeQuote } from '@/types/database';
+import { siteContent } from '@/config/siteContent';
+
+interface Props {
+  quotes: StoryMemeQuote[];
+  tag?: string;
+  timestamp?: string;
+  defaultQuote?: string;
+  defaultAuthor?: string;
+}
+
+const {
+  quotes,
+  tag = siteContent.quotes.tag,
+  timestamp = siteContent.quotes.timestamp,
+  defaultQuote = siteContent.quotes.defaultQuote,
+  defaultAuthor = siteContent.quotes.defaultAuthor
+} = Astro.props;
+
+const initialQuote = quotes[0] || {
+  content_text: defaultQuote,
+  author: defaultAuthor
+};
+---
+<section class="container" id="quotes">
+  <div class="quote-section-wrap tilt-card" id="quoteCard">
+    <!-- Ambient Morphing Liquid Blob -->
+    <div class="morph-liquid-blob quote-morph-blob"></div>
+    <div class="quote-layout">
+      <div class="quote-content-col">
+        <div class="quote-badge-row">
+          <span class="quote-category-tag" id="quoteCategory">{tag}</span>
+          <span class="quote-timestamp" id="quoteDate">{timestamp}</span>
+        </div>
+        <div class="quote-mark">“</div>
+        <p class="quote-text" id="quoteDisplay">
+          {initialQuote.content_text}
+        </p>
+        <div class="quote-author" id="quoteAuthor">
+          <span>— {initialQuote.author}</span>
+        </div>
+      </div>
+
+      <div class="quote-actions-col">
+        <button class="btn-quote-action btn-quote-shuffle magnetic-btn" onclick="shuffleQuote(event)">
+          <span>Shuffle Quote</span>
+          <span>↻</span>
+        </button>
+        <button class="btn-quote-action btn-quote-copy magnetic-btn" onclick="copyQuote(event)">
+          <span>Copy Quote</span>
+          <span>📋</span>
+        </button>
+        <button class="btn-quote-action btn-quote-copy magnetic-btn" onclick="shareQuote()">
+          <span>Share Story</span>
+          <span>📱</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

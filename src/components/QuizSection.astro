@@ -1,0 +1,27 @@
+---
+import QuizPlayer from '@/components/interactive/QuizPlayer';
+import { siteContent } from '@/config/siteContent';
+
+interface Props {
+  headerPill?: string;
+  heading?: string;
+  description?: string;
+  trustPills?: string[];
+}
+
+const {
+  headerPill = siteContent.quiz.headerPill,
+  heading = siteContent.quiz.heading,
+  description = siteContent.quiz.description,
+  trustPills = siteContent.quiz.trustPills
+} = Astro.props;
+---
+<section class="container" id="quiz">
+  <QuizPlayer
+    client:visible
+    headerPill={headerPill}
+    heading={heading}
+    description={description}
+    trustPills={trustPills}
+  />
+</section>

@@ -1,0 +1,101 @@
+---
+import { siteContent } from '@/config/siteContent';
+
+interface NavLink {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  brandTitle?: string;
+  brandGlow?: string;
+  logoSrc?: string;
+  homeText?: string;
+  links?: NavLink[];
+  searchPlaceholder?: string;
+  quizCtaText?: string;
+}
+
+const {
+  brandTitle = siteContent.brand.title,
+  brandGlow = siteContent.brand.glowWord,
+  logoSrc = '/assets/logo.jpg',
+  homeText = siteContent.navbar.homePillText,
+  links = siteContent.navbar.links,
+  searchPlaceholder = siteContent.navbar.searchPlaceholder,
+  quizCtaText = siteContent.navbar.quizCtaText
+} = Astro.props;
+---
+<header id="siteHeader">
+  <div class="nav-container">
+    <div class="nav-wrap">
+      <!-- Brand Logo & Two-Tone Wordmark -->
+      <a href="/" class="brand-logo-wrap">
+        <img src={logoSrc} alt="Teen Time Glow Logo" class="brand-logo-img" width="36" height="36" decoding="async" />
+        <span class="brand-logo-text">{brandTitle} <span class="brand-logo-glow">{brandGlow}</span></span>
+      </a>
+
+      <!-- Center Nav Items with Active Home Pill -->
+      <ul class="nav-links">
+        <li><a href="/" class="nav-pill-home">{homeText}</a></li>
+        {links.map((link) => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+
+      <!-- Subtle Vertical Divider -->
+      <div class="nav-divider"></div>
+
+      <!-- Right Actions -->
+      <div class="nav-actions">
+        <!-- Rounded Search Pill -->
+        <div class="nav-search-wrap">
+          <svg class="nav-search-icon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" class="nav-search-input" id="navSearchInput" placeholder={searchPlaceholder} aria-label="Search TeenTimeGlow content" oninput="handleNavSearch(this.value)" onkeydown="if(event.key==='Enter') executeNavSearch(this.value)" />
+        </div>
+
+        <!-- Audio Sound Toggle -->
+        <button class="sound-toggle-btn" id="soundToggleBtn" onclick="toggleSound()" aria-label="Toggle Sound">
+          <span id="soundIcon">🔊</span>
+        </button>
+
+        <!-- Heart / Saved Pill -->
+        <div class="saved-pill" onclick="showSavedMoodboardToast()" title="View Saved">
+          <span class="saved-heart-icon">♡</span>
+          <span id="savedCount">{siteContent.navbar.savedCountDefault}</span>
+        </div>
+
+        <!-- Take Quiz CTA Button -->
+        <a href="#quiz" class="quiz-pill-btn magnetic-btn">{quizCtaText}</a>
+
+        <!-- Mobile Hamburger -->
+        <button class="mobile-menu-toggle" onclick="toggleDrawer(true)" aria-label="Open navigation menu">☰</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Drawer Menu -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <button class="drawer-close-btn" onclick="toggleDrawer(false)" aria-label="Close menu">&times;</button>
+  
+  <!-- Mobile Search -->
+  <div class="drawer-search-wrap">
+    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input type="text" placeholder={searchPlaceholder} aria-label="Search TeenTimeGlow content" onkeydown="if(event.key==='Enter') { executeNavSearch(this.value); toggleDrawer(false); }" />
+  </div>
+
+  <ul class="drawer-links">
+    <li><a href="/" onclick="toggleDrawer(false)" style="color: var(--sunset-accent); font-weight: 800;">✦ {homeText}</a></li>
+    {links.map((link) => (
+      <li><a href={link.href} onclick="toggleDrawer(false)">{link.label}</a></li>
+    ))}
+    <li><a href="#newsletter" onclick="toggleDrawer(false)">Join Glow Club</a></li>
+  </ul>
+</div>

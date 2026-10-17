@@ -1,0 +1,67 @@
+---
+import type { Post } from '@/types/database';
+import { siteContent } from '@/config/siteContent';
+
+interface Props {
+  posts: Post[];
+  tag?: string;
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  posts,
+  tag = siteContent.edits.tag,
+  title = siteContent.edits.title,
+  subtitle = siteContent.edits.subtitle
+} = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  beauty: 'Beauty & Skincare',
+  fashion: 'Fashion Lookbook',
+  decor: 'Cozy Decor'
+};
+
+const filterKeys: Record<string, string> = {
+  beauty: 'skincare',
+  fashion: 'fashion',
+  decor: 'decor'
+};
+---
+<section class="section-block" id="edits">
+  <div class="container">
+    <div class="section-header reveal-header">
+      <div class="section-title-wrap">
+        <span class="section-pill-tag">{tag}</span>
+        <h2 class="section-title split-title">{title}</h2>
+        <p class="section-subtitle">{subtitle}</p>
+      </div>
+      <div class="filter-tabs">
+        {siteContent.edits.filterTabs.map((tab, idx) => (
+          <button class={`filter-btn ${idx === 0 ? 'active' : ''}`} onclick={`filterEdits('${tab.key}', this)`}>
+            {tab.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="edits-grid">
+      {posts.map((post) => (
+        <div class="edit-card tilt-card" data-cat={filterKeys[post.category] || post.category} onclick={`openStoryModal('${filterKeys[post.category] || post.category}')`}>
+          <div class="edit-img-wrap">
+            <img src={post.cover_image_url} alt={post.title} class="edit-img parallax-img" loading="lazy" decoding="async" />
+          </div>
+          <div class="edit-info">
+            <span class="edit-category-badge">{categoryLabels[post.category] || post.category}</span>
+            <h3 class="edit-title">{post.title}</h3>
+            <div class="edit-meta-row">
+              <span class="stars">★★★★★</span>
+              <span class="meta-time">• {post.read_time_minutes} min read</span>
+            </div>
+            <span class="btn-read-edit">Read Full Edit &rarr;</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

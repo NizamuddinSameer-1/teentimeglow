@@ -1,0 +1,37 @@
+---
+import CommunitySubmitModal from '@/components/interactive/CommunitySubmitModal';
+
+interface Props {
+  submitTitle?: string;
+  submitDescription?: string;
+}
+
+const {
+  submitTitle,
+  submitDescription
+} = Astro.props;
+---
+<!-- Interactive Story Detail Modal -->
+<div class="modal-overlay" id="storyModal" onclick="closeStoryModal(event)">
+  <div class="modal-box">
+    <button class="modal-close-btn" onclick="closeStoryModalDirect()">&times;</button>
+    <div id="modalStoryContent">
+      <!-- Injected via JavaScript -->
+    </div>
+  </div>
+</div>
+
+<!-- Community Submit Modal with Astro client:idle directive -->
+<div class="modal-overlay" id="submitModal" onclick="closeSubmitModal(event)">
+  <CommunitySubmitModal
+    client:idle
+    title={submitTitle}
+    description={submitDescription}
+  />
+</div>
+
+<!-- Toast Notification Pill -->
+<div class="toast-pill" id="toastPill">
+  <span id="toastIcon">✨</span>
+  <span id="toastMessage">Welcome to TeenTimeGlow!</span>
+</div>
