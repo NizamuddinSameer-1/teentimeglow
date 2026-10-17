@@ -1,0 +1,32 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1792236206.8503485,
+    "seen": 1792236221.3795483,
+    "ast_hash": "cd40b7b7a38769a3d576581cbc955e5a",
+    "semantic_hash": "cd40b7b7a38769a3d576581cbc955e5a"
+  },
+  ".codex/hooks.json": {
+    "mtime": 1792236207.32743,
+    "seen": 1792236221.3795483,
+    "ast_hash": "839dcaf0cd76e42f1f5b63011149977e",
+    "semantic_hash": "839dcaf0cd76e42f1f5b63011149977e"
+  },
+  ".gemini/settings.json": {
+    "mtime": 1792236207.882848,
+    "seen": 1792236221.3795483,
+    "ast_hash": "beb86bda1c63eb49d21fafeda2f31254",
+    "semantic_hash": "beb86bda1c63eb49d21fafeda2f31254"
+  },
+  "vercel.json": {
+    "mtime": 1792177913.8492055,
+    "seen": 1792236221.3795483,
+    "ast_hash": "bcd389b64911e867fd81e31f5ebb3351",
+    "semantic_hash": "bcd389b64911e867fd81e31f5ebb3351"
+  },
+  "BrandKit/wmi8aqxh7svj0wpv5qp8.mp4": {
+    "mtime": 1792222200.7535102,
+    "seen": 1792236221.3795483,
+    "ast_hash": "98219e4104953b1ffdcee7c544398f30",
+    "semantic_hash": "98219e4104953b1ffdcee7c544398f30"
+  }
+}

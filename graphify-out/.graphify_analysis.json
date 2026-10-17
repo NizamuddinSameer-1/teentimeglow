@@ -1,0 +1,32 @@
+{
+  "communities": {
+    "0": [
+      "vercel",
+      "vercel_cleanurls",
+      "vercel_headers"
+    ]
+  },
+  "cohesion": {
+    "0": 0.6666666666666666
+  },
+  "gods": [
+    {
+      "id": "vercel_cleanurls",
+      "label": "cleanUrls",
+      "degree": 1
+    },
+    {
+      "id": "vercel_headers",
+      "label": "headers",
+      "degree": 1
+    }
+  ],
+  "surprises": [],
+  "questions": [
+    {
+      "type": "no_signal",
+      "question": null,
+      "why": "Not enough signal to generate questions. This usually means the corpus has no AMBIGUOUS edges, no bridge nodes, no INFERRED relationships, and all communities are tightly cohesive. Add more files or run with --mode deep to extract richer edges."
+    }
+  ]
+}
