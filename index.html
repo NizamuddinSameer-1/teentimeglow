@@ -306,11 +306,17 @@
       -webkit-backdrop-filter: blur(14px);
       transition: transform 0.3s ease, background 0.3s ease;
     }
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
     .nav-wrap {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+      width: 100%;
     }
     .brand-logo-wrap {
       display: flex;
@@ -318,6 +324,7 @@
       gap: 12px;
       text-decoration: none;
       transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
     }
     .brand-logo-wrap:hover {
       transform: scale(1.04);
@@ -346,25 +353,47 @@
       display: inline-flex;
       align-items: baseline;
     }
-    .brand-logo-dot {
-      color: var(--sunset-accent);
-      font-style: normal;
-      margin-left: 1px;
+    .brand-logo-glow {
+      color: #C8523A;
+      margin-left: 3px;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 26px;
+      gap: 14px;
       list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .nav-pill-home {
+      background: #FDF0E9;
+      color: #1F2937 !important;
+      font-weight: 700 !important;
+      padding: 6px 18px !important;
+      border-radius: 999px !important;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(200, 82, 58, 0.12);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .nav-pill-home:hover {
+      background: #FCE6DA !important;
+      transform: translateY(-1px);
+    }
+    .nav-pill-home::after {
+      display: none !important;
     }
     .nav-links a {
-      color: #1F2937;
+      color: #374151;
       text-decoration: none;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       font-weight: 600;
       transition: color 0.2s ease;
       position: relative;
+      white-space: nowrap;
     }
     .nav-links a:hover {
       color: var(--sunset-accent);
@@ -383,24 +412,68 @@
       width: 100%;
     }
 
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: rgba(17, 24, 39, 0.12);
+      flex-shrink: 0;
+      margin: 0 2px;
+    }
+
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
+      flex-shrink: 0;
     }
-    .sound-toggle-btn {
-      display: inline-flex;
+    .nav-search-wrap {
+      display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+      background: #FFFFFF;
+      border: 1px solid rgba(17, 24, 39, 0.12);
+      border-radius: 999px;
+      padding: 6px 14px;
+      width: 135px;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, width 0.3s ease;
+    }
+    .nav-search-wrap:focus-within {
+      border-color: #C8523A;
+      box-shadow: 0 0 0 3px rgba(200, 82, 58, 0.12);
+      width: 175px;
+    }
+    .nav-search-icon {
+      color: #8E8E93;
+      flex-shrink: 0;
+    }
+    .nav-search-input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: var(--font-body);
+      font-size: 0.84rem;
+      color: #1F2937;
+      width: 100%;
+    }
+    .nav-search-input::placeholder {
+      color: #9CA3AF;
+      font-weight: 500;
+    }
+
+    .sound-toggle-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: #F3F4F6;
       border: none;
-      padding: 8px 12px;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: #374151;
+      font-size: 1rem;
       cursor: pointer;
       transition: background 0.2s ease, transform 0.2s ease;
+      flex-shrink: 0;
     }
     .sound-toggle-btn:hover {
       background: #E5E7EB;
@@ -410,39 +483,48 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: #000000;
+      background: #082820;
       color: #FFFFFF;
-      padding: 8px 18px;
+      padding: 9px 20px;
       border-radius: 999px;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 700;
       text-decoration: none;
-      transition: background 0.2s ease, box-shadow 0.2s ease;
+      transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
       position: relative;
       cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .quiz-pill-btn:hover {
-      background: var(--sunset-accent);
-      box-shadow: 0 6px 18px rgba(232, 93, 4, 0.3);
+      background: #0E3D31;
+      transform: scale(1.03);
+      box-shadow: 0 4px 14px rgba(8, 40, 32, 0.25);
     }
     .saved-pill {
       display: flex;
       align-items: center;
       gap: 6px;
       background: #F3F4F6;
-      padding: 8px 14px;
+      padding: 7px 14px;
       border-radius: 999px;
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.88rem;
+      font-weight: 700;
       color: #374151;
       cursor: pointer;
       border: 1px solid transparent;
       transition: background 0.2s ease, transform 0.2s ease;
+      flex-shrink: 0;
     }
     .saved-pill:hover {
       background: #FFFFFF;
       border-color: #E5E7EB;
       transform: translateY(-1px);
+    }
+    .saved-heart-icon {
+      color: #C8523A;
+      font-size: 1.05rem;
+      line-height: 1;
     }
     .saved-pill:active {
       transform: scale(0.95);
@@ -2051,7 +2133,28 @@
     @media (max-width: 1024px) {
       .container { padding: 0 20px; }
       .nav-links { display: none; }
+      .nav-divider { display: none; }
+      .nav-search-wrap { display: none; }
+      .quiz-pill-btn { display: none; }
       .mobile-menu-toggle { display: flex; }
+      .drawer-search-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #F3F4F6;
+        border: 1px solid rgba(0,0,0,0.08);
+        border-radius: 999px;
+        padding: 10px 16px;
+        margin-bottom: 8px;
+      }
+      .drawer-search-wrap input {
+        border: none;
+        background: transparent;
+        outline: none;
+        font-size: 0.95rem;
+        color: #111827;
+        width: 100%;
+      }
       .hero-banner-wrap {
         padding: 40px 28px;
         min-height: auto;
@@ -2431,14 +2534,17 @@
        1. TOP HEADER NAVIGATION
        ======================================================================== -->
   <header id="siteHeader">
-    <div class="container">
+    <div class="nav-container">
       <div class="nav-wrap">
+        <!-- Brand Logo & Two-Tone Wordmark -->
         <a href="/" class="brand-logo-wrap">
           <img src="assets/logo.jpg" alt="Teen Time Glow Logo" class="brand-logo-img" />
-          <span class="brand-logo-text">teen time glow<span class="brand-logo-dot">.</span></span>
+          <span class="brand-logo-text">teen time <span class="brand-logo-glow">glow.</span></span>
         </a>
 
+        <!-- Center Nav Items with Active Home Pill -->
         <ul class="nav-links">
+          <li><a href="/" class="nav-pill-home">Home</a></li>
           <li><a href="#edits">Editorial Edits</a></li>
           <li><a href="#rankings">Curated Rankings</a></li>
           <li><a href="#quotes">Daily Quote</a></li>
@@ -2447,18 +2553,35 @@
           <li><a href="#gallery">Community Gallery</a></li>
         </ul>
 
+        <!-- Subtle Vertical Divider -->
+        <div class="nav-divider"></div>
+
+        <!-- Right Actions -->
         <div class="nav-actions">
-          <!-- Audio ASMR Toggle -->
-          <button class="sound-toggle-btn" id="soundToggleBtn" onclick="toggleSound()">
+          <!-- Rounded Search Pill -->
+          <div class="nav-search-wrap">
+            <svg class="nav-search-icon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="nav-search-input" id="navSearchInput" placeholder="Search..." oninput="handleNavSearch(this.value)" onkeydown="if(event.key==='Enter') executeNavSearch(this.value)" />
+          </div>
+
+          <!-- Audio Sound Toggle -->
+          <button class="sound-toggle-btn" id="soundToggleBtn" onclick="toggleSound()" aria-label="Toggle Sound">
             <span id="soundIcon">🔊</span>
-            <span id="soundLabel">Sound</span>
           </button>
 
+          <!-- Heart / Saved Pill -->
           <div class="saved-pill" onclick="showToast('♡ 4 items saved to your personal Glow Moodboard!')" title="View Saved">
-            <span>♡</span>
+            <span class="saved-heart-icon">♡</span>
             <span id="savedCount">4</span>
           </div>
+
+          <!-- Take Quiz CTA Button -->
           <a href="#quiz" class="quiz-pill-btn magnetic-btn">Take Quiz ✨</a>
+
+          <!-- Mobile Hamburger -->
           <button class="mobile-menu-toggle" onclick="toggleDrawer(true)" aria-label="Open navigation menu">☰</button>
         </div>
       </div>
@@ -2468,7 +2591,18 @@
   <!-- Mobile Drawer Menu -->
   <div class="mobile-drawer" id="mobileDrawer">
     <button class="drawer-close-btn" onclick="toggleDrawer(false)">&times;</button>
+    
+    <!-- Mobile Search -->
+    <div class="drawer-search-wrap">
+      <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" placeholder="Search TeenTimeGlow..." onkeydown="if(event.key==='Enter') { executeNavSearch(this.value); toggleDrawer(false); }" />
+    </div>
+
     <ul class="drawer-links">
+      <li><a href="/" onclick="toggleDrawer(false)" style="color: var(--sunset-accent); font-weight: 800;">✦ Home</a></li>
       <li><a href="#edits" onclick="toggleDrawer(false)">Editorial Edits</a></li>
       <li><a href="#rankings" onclick="toggleDrawer(false)">Curated Rankings</a></li>
       <li><a href="#quotes" onclick="toggleDrawer(false)">Daily Quote</a></li>
@@ -4307,6 +4441,39 @@
       }
       showToast(`💌 Welcome ${email} to The Glow Club! First edit on its way.`, '✨');
       e.target.reset();
+    }
+
+    // --- 16.5. Interactive Nav Search Handler ---
+    function handleNavSearch(query) {
+      // Optional live indicator
+    }
+
+    function executeNavSearch(query) {
+      const q = (query || '').trim().toLowerCase();
+      if (!q) return;
+
+      if (q.includes('edit') || q.includes('fashion') || q.includes('lookbook') || q.includes('skincare') || q.includes('decor')) {
+        document.getElementById('edits')?.scrollIntoView({ behavior: 'smooth' });
+        showToast(`✨ Jumped to Editorial Edits for "${query}"`);
+      } else if (q.includes('rank') || q.includes('book') || q.includes('series') || q.includes('prime') || q.includes('audio')) {
+        document.getElementById('rankings')?.scrollIntoView({ behavior: 'smooth' });
+        showToast(`✨ Jumped to Curated Rankings for "${query}"`);
+      } else if (q.includes('quote') || q.includes('mindset') || q.includes('reflect')) {
+        document.getElementById('quotes')?.scrollIntoView({ behavior: 'smooth' });
+        showToast(`✨ Jumped to Daily Mindset Quote for "${query}"`);
+      } else if (q.includes('wall') || q.includes('photo') || q.includes('4k') || q.includes('download')) {
+        document.getElementById('wallpapers')?.scrollIntoView({ behavior: 'smooth' });
+        showToast(`✨ Jumped to 4K Wallpapers for "${query}"`);
+      } else if (q.includes('quiz') || q.includes('vibe') || q.includes('aura')) {
+        document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth' });
+        showToast(`✨ Jumped to Glow Quiz for "${query}"`);
+      } else if (q.includes('gallery') || q.includes('nail') || q.includes('community') || q.includes('ootd')) {
+        document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
+        showToast(`✨ Jumped to Community Gallery for "${query}"`);
+      } else {
+        showToast(`✨ Searching inspiration for "${query}"`);
+        document.getElementById('edits')?.scrollIntoView({ behavior: 'smooth' });
+      }
     }
 
     // --- 17. Mobile Drawer Menu Toggle ---
