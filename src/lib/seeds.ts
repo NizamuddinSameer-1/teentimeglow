@@ -128,7 +128,7 @@ export const fallbackWallpapers: Wallpaper[] = [
     thumbnail_url: '/assets/wallpaper-clouds.jpg',
     download_url: '/assets/wallpaper-clouds.jpg',
     resolution_label: '4K Ultra-HD',
-    download_count: 1240,
+    download_count: 1420,
     created_at: new Date().toISOString()
   },
   {
@@ -148,7 +148,57 @@ export const fallbackWallpapers: Wallpaper[] = [
     thumbnail_url: '/assets/wallpaper-sunset.jpg',
     download_url: '/assets/wallpaper-sunset.jpg',
     resolution_label: '4K Ultra-HD',
-    download_count: 1650,
+    download_count: 1850,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '4',
+    title: 'Cozy Sunday Autumn Warmth',
+    device_type: 'mobile',
+    thumbnail_url: '/assets/feature-decor.jpg',
+    download_url: '/assets/feature-decor.jpg',
+    resolution_label: '4K Ultra-HD',
+    download_count: 730,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '5',
+    title: 'Vintage Editorial Studio Glow',
+    device_type: 'desktop',
+    thumbnail_url: '/assets/hero-model.jpg',
+    download_url: '/assets/hero-model.jpg',
+    resolution_label: '4K Ultra-HD',
+    download_count: 1210,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '6',
+    title: 'Parisian Rosewater & Linen',
+    device_type: 'mobile',
+    thumbnail_url: '/assets/arrival-2.jpg',
+    download_url: '/assets/arrival-2.jpg',
+    resolution_label: '4K Ultra-HD',
+    download_count: 640,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '7',
+    title: 'Clean Girl Dewy Glass Aesthetic',
+    device_type: 'desktop',
+    thumbnail_url: '/assets/feature-skincare.jpg',
+    download_url: '/assets/feature-skincare.jpg',
+    resolution_label: '4K Ultra-HD',
+    download_count: 1105,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '8',
+    title: 'Midnight Mindset & Journal',
+    device_type: 'mobile',
+    thumbnail_url: '/assets/gallery-journal.jpg',
+    download_url: '/assets/gallery-journal.jpg',
+    resolution_label: '4K Ultra-HD',
+    download_count: 890,
     created_at: new Date().toISOString()
   }
 ];
