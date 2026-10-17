@@ -3,30 +3,50 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TeenTimeGlow — Feel The Glow | Curated Fashion, Beauty & Lifestyle</title>
-  <meta name="description" content="Feel the vibes with TeenTimeGlow. Curated teen fashion lookbooks, glowing skincare routines, cozy room decor, Prime Video rankings, and free 4K wallpapers by Rini." />
+  <title>TeenTimeGlow — Feel The Glow | Curated Fashion, Beauty & Lifestyle by Rini</title>
+  <meta name="description" content="Feel the vibes with TeenTimeGlow. Curated teen fashion lookbooks, glass skincare routines, cozy bedroom aesthetics, Prime Video rankings, daily quotes, and free 4K wallpapers by Rini." />
+  
+  <!-- OpenGraph / Social Meta -->
+  <meta property="og:title" content="TeenTimeGlow — Feel The Glow" />
+  <meta property="og:description" content="Curated teen fashion lookbooks, glowing skincare routines, Prime Video rankings, daily mindset quotes, and free 4K wallpapers." />
+  <meta property="og:image" content="https://www.teentimeglow.me/assets/hero-model.jpg" />
+  <meta property="og:url" content="https://www.teentimeglow.me" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --bg-white: #FFFFFF;
-      --bg-offwhite: #F9F9FB;
+      --bg-offwhite: #FAF9F6;
+      --bg-cream: #FAF7F2;
       --text-dark: #0F1115;
       --text-muted: #6B7280;
       --text-light: #9CA3AF;
       --sunset-gradient: linear-gradient(135deg, #8E1B1B 0%, #C43826 30%, #E85D04 65%, #F48C06 90%, #FAA307 100%);
-      --sunset-warm: linear-gradient(180deg, #A72828 0%, #E85D04 60%, #FAA307 100%);
+      --sunset-warm: linear-gradient(180deg, #9C2222 0%, #E85D04 55%, #FAA307 100%);
+      --sunset-accent: #E85D04;
+      --brand-green: #0C3B2E;
       --accent-gold: #FFBA00;
+      --border-subtle: rgba(17, 24, 39, 0.08);
       --card-radius: 20px;
-      --font-display: 'Anton', 'Plus Jakarta Sans', sans-serif;
+      --font-display: 'Anton', sans-serif;
+      --font-editorial: 'Playfair Display', serif;
       --font-body: 'Plus Jakarta Sans', sans-serif;
+      --font-syne: 'Syne', sans-serif;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -47,13 +67,14 @@
        1. TOP HEADER & NAVIGATION
        ========================================================================== */
     header {
-      background: #FFFFFF;
-      padding: 18px 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      background: rgba(255, 255, 255, 0.94);
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-subtle);
       position: sticky;
       top: 0;
       z-index: 100;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
     .nav-wrap {
       display: flex;
@@ -64,7 +85,7 @@
     .brand-logo-wrap {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       text-decoration: none;
     }
     .brand-logo-img {
@@ -72,107 +93,103 @@
       width: 44px;
       object-fit: contain;
       border-radius: 50%;
-      border: 1px solid rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     }
     .brand-logo-text {
-      font-family: 'Playfair Display', serif;
+      font-family: var(--font-editorial);
       font-size: 1.45rem;
       font-weight: 700;
-      color: #0C3B2E;
+      color: var(--brand-green);
       letter-spacing: -0.02em;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 28px;
+      gap: 26px;
       list-style: none;
     }
     .nav-links a {
       color: #1F2937;
       text-decoration: none;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
       transition: color 0.2s ease;
+      position: relative;
     }
     .nav-links a:hover {
-      color: #E85D04;
+      color: var(--sunset-accent);
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--sunset-accent);
+      transition: width 0.2s ease;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
-    .lang-pill {
+    .quiz-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #000000;
+      color: #FFFFFF;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .quiz-pill-btn:hover {
+      background: var(--sunset-accent);
+      transform: translateY(-1px);
+    }
+    .saved-pill {
       display: flex;
       align-items: center;
       gap: 6px;
+      background: #F3F4F6;
+      padding: 8px 14px;
+      border-radius: 999px;
       font-size: 0.85rem;
       font-weight: 600;
       color: #374151;
-      padding: 6px 10px;
-      border-radius: 20px;
-      background: #F3F4F6;
       cursor: pointer;
-    }
-    .search-pill {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #F3F4F6;
-      border-radius: 999px;
-      padding: 8px 16px;
-      color: var(--text-muted);
-      font-size: 0.88rem;
       border: 1px solid transparent;
-      transition: border 0.2s ease, background 0.2s ease;
-      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
-    .search-pill:hover {
+    .saved-pill:hover {
       background: #FFFFFF;
       border-color: #E5E7EB;
     }
-    .icon-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #F3F4F6;
+    .mobile-menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
       color: #111827;
-      text-decoration: none;
-      font-size: 1.05rem;
-      transition: transform 0.2s ease, background 0.2s ease;
-      position: relative;
-    }
-    .icon-btn:hover {
-      background: #E5E7EB;
-      transform: scale(1.05);
-    }
-    .icon-badge {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background: #E85D04;
-      color: white;
-      font-size: 0.65rem;
-      font-weight: 800;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     /* ==========================================================================
-       2. GIANT HERO TYPOGRAPHY & TICKER STRIP
+       2. GIANT HERO TYPOGRAPHY & MARQUEE TICKER
        ========================================================================== */
     .giant-title-wrap {
       text-align: center;
-      padding: 32px 0 12px;
+      padding: 28px 0 10px;
     }
     .giant-hero-title {
       font-family: var(--font-display);
@@ -181,6 +198,7 @@
       color: #000000;
       letter-spacing: 0.01em;
       text-transform: uppercase;
+      user-select: none;
     }
 
     .ticker-bar {
@@ -195,8 +213,11 @@
     .ticker-track {
       display: inline-flex;
       align-items: center;
-      animation: marquee 22s linear infinite;
+      animation: marquee 24s linear infinite;
       gap: 32px;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
     }
     .ticker-item {
       font-family: var(--font-body);
@@ -210,7 +231,7 @@
     }
     .ticker-star {
       color: #FF5A36;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
     }
 
     @keyframes marquee {
@@ -219,10 +240,9 @@
     }
 
     /* ==========================================================================
-       3. SUNSET HERO SHOWCASE
+       3. SUNSET HERO BANNER & SPOTLIGHT GLASS CARDS
        ========================================================================== */
     .hero-banner-wrap {
-      margin-top: 0;
       position: relative;
       border-radius: 0 0 var(--card-radius) var(--card-radius);
       overflow: hidden;
@@ -231,6 +251,7 @@
       display: flex;
       align-items: flex-end;
       justify-content: center;
+      box-shadow: 0 16px 36px rgba(232, 93, 4, 0.18);
     }
     .hero-model-container {
       position: relative;
@@ -246,7 +267,11 @@
       max-height: 620px;
       object-fit: contain;
       display: block;
-      filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.35));
+      filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.38));
+      transition: transform 0.4s ease;
+    }
+    .hero-model-container:hover .hero-model-img {
+      transform: scale(1.02);
     }
 
     /* Left Text Overlay */
@@ -254,23 +279,46 @@
       position: absolute;
       bottom: 48px;
       left: 48px;
-      max-width: 380px;
+      max-width: 420px;
       z-index: 10;
       color: #FFFFFF;
     }
+    .hero-issue-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: #FFDE59;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+    }
     .hero-left-heading {
       font-family: var(--font-body);
-      font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+      font-size: clamp(1.4rem, 2.6vw, 1.95rem);
       font-weight: 800;
       line-height: 1.25;
       margin-bottom: 12px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     }
     .hero-left-subtext {
       font-size: 0.95rem;
-      line-height: 1.5;
-      color: rgba(255, 255, 255, 0.88);
-      margin-bottom: 20px;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.92);
+      margin-bottom: 22px;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+    .hero-btn-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .btn-black-pill {
       display: inline-flex;
@@ -278,64 +326,101 @@
       gap: 8px;
       background: #000000;
       color: #FFFFFF;
-      padding: 12px 26px;
+      padding: 12px 24px;
       border-radius: 999px;
       font-size: 0.92rem;
       font-weight: 700;
       text-decoration: none;
       transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
     }
     .btn-black-pill:hover {
       background: #1F2937;
       transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.38);
+    }
+    .btn-glass-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: #FFFFFF;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .btn-glass-pill:hover {
+      background: rgba(255, 255, 255, 0.35);
+      transform: translateY(-2px);
     }
 
     /* Floating Micro-Cards */
     .floating-card {
       position: absolute;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
       border-radius: 16px;
-      padding: 8px 10px;
+      padding: 8px 12px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+      gap: 10px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.22);
       z-index: 10;
-      animation: floatSlow 4s ease-in-out infinite alternate;
+      animation: floatSlow 4.5s ease-in-out infinite alternate;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease;
+      text-decoration: none;
+    }
+    .floating-card:hover {
+      background: rgba(255, 255, 255, 0.38);
+      transform: scale(1.05) !important;
     }
     .floating-card-1 {
       top: 22%;
-      left: 28%;
+      left: 26%;
     }
     .floating-card-2 {
       bottom: 22%;
-      right: 28%;
-      animation-delay: 2s;
+      right: 26%;
+      animation-delay: 2.2s;
     }
     .floating-card-img {
-      width: 90px;
-      height: 70px;
+      width: 48px;
+      height: 48px;
       border-radius: 10px;
       object-fit: cover;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.18);
     }
-    .floating-badge {
-      font-size: 0.68rem;
+    .floating-text-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+    .floating-tag {
+      font-size: 0.65rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
+      color: #FFDE59;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .floating-title {
+      font-size: 0.82rem;
+      font-weight: 700;
       color: #FFFFFF;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
     }
 
     @keyframes floatSlow {
       0% { transform: translateY(0); }
-      100% { transform: translateY(-8px); }
+      100% { transform: translateY(-10px); }
     }
 
     .slider-dots {
@@ -349,29 +434,47 @@
       z-index: 10;
     }
     .slider-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       background: rgba(255, 255, 255, 0.5);
       border-radius: 50%;
       transition: all 0.3s ease;
+      cursor: pointer;
     }
     .slider-dot.active {
-      height: 22px;
+      height: 24px;
       border-radius: 999px;
       background: #FFFFFF;
     }
 
     /* ==========================================================================
-       4. SECTION HEADERS ("NEW ARRIVAL" & "BEST SELLER")
+       4. SECTION SHARED UTILITIES
        ========================================================================== */
     .section-block {
-      padding: 64px 0 24px;
+      padding: 72px 0 28px;
     }
     .section-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
       margin-bottom: 32px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .section-title-wrap {
+      max-width: 640px;
+    }
+    .section-pill-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--sunset-accent);
+      background: rgba(232, 93, 4, 0.08);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 8px;
     }
     .section-title {
       font-family: var(--font-body);
@@ -379,73 +482,104 @@
       font-weight: 800;
       color: #000000;
       letter-spacing: -0.02em;
+      line-height: 1.15;
     }
-    .btn-see-all {
-      background: #000000;
-      color: #FFFFFF;
-      padding: 8px 20px;
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: #F3F4F6;
+      border: 1px solid transparent;
+      padding: 8px 16px;
       border-radius: 999px;
       font-size: 0.85rem;
-      font-weight: 700;
-      text-decoration: none;
-      transition: transform 0.2s ease, background 0.2s ease;
+      font-weight: 600;
+      color: #4B5563;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .btn-see-all:hover {
-      background: #374151;
-      transform: scale(1.03);
+    .filter-btn:hover {
+      background: #E5E7EB;
+      color: #111827;
+    }
+    .filter-btn.active {
+      background: #000000;
+      color: #FFFFFF;
     }
 
     /* ==========================================================================
-       5. HORIZONTAL CARDS ("NEW ARRIVAL")
+       5. FEATURE 1: LATEST EDITORIAL EDITS & LOOKBOOKS (3 HORIZONTAL CARDS)
        ========================================================================== */
-    .arrivals-grid {
+    .edits-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
     }
-    .arrival-card {
+    .edit-card {
       background: #FFFFFF;
       border-radius: 18px;
       padding: 16px;
-      border: 1px solid #F3F4F6;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
       display: flex;
       align-items: center;
       gap: 16px;
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
       cursor: pointer;
+      position: relative;
     }
-    .arrival-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    .edit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 32px rgba(232, 93, 4, 0.12);
+      border-color: rgba(232, 93, 4, 0.3);
     }
-    .arrival-img-wrap {
-      width: 105px;
-      height: 125px;
+    .edit-img-wrap {
+      width: 110px;
+      height: 135px;
       flex-shrink: 0;
       border-radius: 14px;
       overflow: hidden;
       background: #F9FAFB;
+      position: relative;
     }
-    .arrival-img {
+    .edit-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s ease;
+      transition: transform 0.4s ease;
     }
-    .arrival-card:hover .arrival-img {
-      transform: scale(1.05);
+    .edit-card:hover .edit-img {
+      transform: scale(1.08);
     }
-    .arrival-info {
+    .edit-info {
       flex: 1;
     }
-    .arrival-title {
+    .edit-category-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--sunset-accent);
+      margin-bottom: 4px;
+    }
+    .edit-title {
       font-size: 1.05rem;
-      font-weight: 700;
+      font-weight: 800;
       color: #111827;
       margin-bottom: 6px;
+      line-height: 1.3;
     }
-    .stars-wrap {
+    .edit-meta-row {
       display: flex;
       align-items: center;
       gap: 6px;
@@ -456,68 +590,555 @@
       font-size: 0.88rem;
       letter-spacing: 1px;
     }
-    .review-count {
-      color: #9CA3AF;
-      font-size: 0.8rem;
-      font-weight: 500;
+    .meta-time {
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 600;
     }
-    .arrival-price {
-      font-size: 1.1rem;
-      font-weight: 800;
+    .btn-read-edit {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      font-weight: 700;
       color: #000000;
+      text-decoration: none;
+      transition: color 0.2s ease, gap 0.2s ease;
+    }
+    .edit-card:hover .btn-read-edit {
+      color: var(--sunset-accent);
+      gap: 8px;
     }
 
     /* ==========================================================================
-       6. VERTICAL CARDS ("BEST SELLER")
+       6. FEATURE 2: CURATED RANKINGS (PRIME VIDEO & AUDIOBOOKS)
        ========================================================================== */
-    .bestsellers-grid {
+    .rankings-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 22px;
     }
-    .bestseller-card {
-      transition: transform 0.25s ease;
-      cursor: pointer;
-    }
-    .bestseller-card:hover {
-      transform: translateY(-6px);
-    }
-    .bestseller-frame {
+    .ranking-card {
+      background: #FFFFFF;
       border-radius: 20px;
       overflow: hidden;
-      background: var(--sunset-warm);
-      aspect-ratio: 3 / 4;
-      position: relative;
-      margin-bottom: 14px;
-      box-shadow: 0 8px 24px rgba(232, 93, 4, 0.15);
+      border: 1px solid var(--border-subtle);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
     }
-    .bestseller-img {
+    .ranking-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
+    }
+    .ranking-poster-frame {
+      position: relative;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      background: var(--sunset-warm);
+    }
+    .ranking-poster-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.35s ease;
+      transition: transform 0.4s ease;
     }
-    .bestseller-card:hover .bestseller-img {
-      transform: scale(1.04);
+    .ranking-card:hover .ranking-poster-img {
+      transform: scale(1.05);
     }
-    .bestseller-title {
-      font-size: 1.05rem;
+    .ranking-badge-top {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: #000000;
+      color: #FFDE59;
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .ranking-type-tag {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(8px);
+      color: #111827;
+      font-size: 0.7rem;
       font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .ranking-details {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .ranking-title {
+      font-size: 1.05rem;
+      font-weight: 800;
       color: #111827;
       margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .ranking-synopsis {
+      font-size: 0.82rem;
+      color: #4B5563;
+      line-height: 1.45;
+      margin-bottom: 12px;
+      flex: 1;
+    }
+    .ranking-footer-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #F3F4F6;
+      padding-top: 10px;
+    }
+    .ranking-action-link {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--brand-green);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s ease;
+    }
+    .ranking-action-link:hover {
+      color: var(--sunset-accent);
+    }
+
+    /* ==========================================================================
+       7. FEATURE 3: DAILY AESTHETIC QUOTE WIDGET ("in motion")
+       ========================================================================== */
+    .quote-section-wrap {
+      background: var(--bg-cream);
+      border-radius: 28px;
+      padding: 48px;
+      border: 1px solid #EFEAE1;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.03);
+    }
+    .quote-layout {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 36px;
+      align-items: center;
+    }
+    .quote-content-col {
+      max-width: 780px;
+    }
+    .quote-badge-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .quote-category-tag {
+      background: #0C3B2E;
+      color: #FFFFFF;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.08em;
+    }
+    .quote-timestamp {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .quote-mark {
+      font-family: var(--font-editorial);
+      font-size: 3.5rem;
+      line-height: 0.8;
+      color: var(--sunset-accent);
+      margin-bottom: 6px;
+    }
+    .quote-text {
+      font-family: var(--font-editorial);
+      font-size: clamp(1.4rem, 2.8vw, 2.1rem);
+      font-weight: 600;
+      font-style: italic;
+      line-height: 1.35;
+      color: #111827;
+      margin-bottom: 16px;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .quote-author {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #374151;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .quote-actions-col {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .btn-quote-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-quote-shuffle {
+      background: #000000;
+      color: #FFFFFF;
+      border: 1px solid #000000;
+    }
+    .btn-quote-shuffle:hover {
+      background: var(--sunset-accent);
+      border-color: var(--sunset-accent);
+      transform: translateY(-2px);
+    }
+    .btn-quote-copy {
+      background: #FFFFFF;
+      color: #111827;
+      border: 1px solid #D1D5DB;
+    }
+    .btn-quote-copy:hover {
+      background: #F9FAFB;
+      border-color: #9CA3AF;
+      transform: translateY(-2px);
+    }
+
+    /* ==========================================================================
+       8. FEATURE 4: FREE 4K AESTHETIC WALLPAPER VAULT (1-CLICK DOWNLOAD)
+       ========================================================================== */
+    .wallpapers-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    .wallpaper-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .wallpaper-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 36px rgba(232, 93, 4, 0.12);
+    }
+    .wallpaper-thumb-frame {
+      position: relative;
+      aspect-ratio: 9 / 14;
+      overflow: hidden;
+      background: #111827;
+    }
+    .wallpaper-thumb-frame.landscape {
+      aspect-ratio: 16 / 10;
+    }
+    .wallpaper-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .wallpaper-card:hover .wallpaper-img {
+      transform: scale(1.06);
+    }
+    .wallpaper-res-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(8px);
+      color: #FFFFFF;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+    }
+    .wallpaper-device-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      color: #111827;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .wallpaper-info {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .wallpaper-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #111827;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .bestseller-price {
-      font-size: 1.15rem;
-      font-weight: 800;
-      color: #000000;
+    .btn-download-wallpaper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: #000000;
+      color: #FFFFFF;
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .btn-download-wallpaper:hover {
+      background: var(--sunset-accent);
+      transform: translateY(-2px);
     }
 
     /* ==========================================================================
-       7. CHAMBERLAIN COFFEE STYLE FOOTER
+       9. FEATURE 5: INTERACTIVE AESTHETIC QUIZ ("Discover Your Glow Vibe")
+       ========================================================================== */
+    .quiz-section-wrap {
+      background: linear-gradient(135deg, #0C3B2E 0%, #154D3D 100%);
+      color: #FFFFFF;
+      border-radius: 28px;
+      padding: 48px;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(12, 59, 46, 0.22);
+    }
+    .quiz-inner-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .quiz-intro-col {
+      max-width: 440px;
+    }
+    .quiz-pill-header {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #FFDE59;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .quiz-heading {
+      font-family: var(--font-editorial);
+      font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+    .quiz-desc {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.55;
+      margin-bottom: 24px;
+    }
+    .quiz-card-container {
+      background: #FFFFFF;
+      color: #111827;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+    .quiz-step-indicator {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--sunset-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .quiz-question-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 18px;
+      line-height: 1.35;
+    }
+    .quiz-options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .quiz-option-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid #E5E7EB;
+      background: #F9FAFB;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #374151;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+    .quiz-option-btn:hover {
+      background: #FFFFFF;
+      border-color: var(--sunset-accent);
+      color: var(--sunset-accent);
+      transform: translateX(4px);
+    }
+    .quiz-option-btn.selected {
+      background: #FFF7ED;
+      border-color: var(--sunset-accent);
+      color: var(--sunset-accent);
+    }
+    .quiz-result-view {
+      display: none;
+      text-align: center;
+      padding: 12px 0;
+    }
+    .quiz-result-badge {
+      display: inline-block;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--sunset-accent);
+      background: #FFF7ED;
+      padding: 8px 24px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(232, 93, 4, 0.2);
+    }
+    .quiz-result-title {
+      font-family: var(--font-editorial);
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+    .quiz-result-desc {
+      font-size: 0.9rem;
+      color: #4B5563;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .btn-retake-quiz {
+      background: #000000;
+      color: #FFFFFF;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .btn-retake-quiz:hover {
+      background: var(--sunset-accent);
+    }
+
+    /* ==========================================================================
+       10. FEATURE 6: THE TEEN GALLERY (COMMUNITY CREATIONS)
+       ========================================================================== */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .gallery-card {
+      background: #FFFFFF;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+      transition: transform 0.25s ease;
+      cursor: pointer;
+    }
+    .gallery-card:hover {
+      transform: translateY(-5px);
+    }
+    .gallery-thumb {
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: #F3F4F6;
+      position: relative;
+    }
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+    .gallery-card:hover .gallery-img {
+      transform: scale(1.06);
+    }
+    .gallery-creator-pill {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px);
+      color: #FFFFFF;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .gallery-info {
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .gallery-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #111827;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .gallery-likes {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--sunset-accent);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* ==========================================================================
+       11. CHAMBERLAIN COFFEE STYLE FOOTER
        ========================================================================== */
     footer {
       background: #FAF8F5;
@@ -538,10 +1159,10 @@
       max-width: 360px;
     }
     .footer-arched-logo {
-      font-family: 'Playfair Display', serif;
+      font-family: var(--font-editorial);
       font-size: 1.95rem;
       font-weight: 800;
-      color: #0C3B2E;
+      color: var(--brand-green);
       letter-spacing: -0.02em;
       margin-bottom: 12px;
       display: inline-block;
@@ -552,6 +1173,7 @@
       font-weight: 800;
       color: #000000;
       margin-bottom: 8px;
+      letter-spacing: -0.02em;
     }
     .footer-offer-desc {
       font-size: 0.9rem;
@@ -567,10 +1189,11 @@
       overflow: hidden;
       background: #FFFFFF;
       margin-bottom: 24px;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
     .newsletter-form:focus-within {
-      border-color: #0C3B2E;
+      border-color: var(--brand-green);
+      box-shadow: 0 0 0 3px rgba(12, 59, 46, 0.12);
     }
     .newsletter-input {
       flex: 1;
@@ -582,7 +1205,7 @@
       font-family: var(--font-body);
     }
     .newsletter-btn {
-      background: #0C3B2E;
+      background: var(--brand-green);
       color: #FFFFFF;
       border: none;
       padding: 12px 20px;
@@ -603,7 +1226,7 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: #0C3B2E;
+      background: var(--brand-green);
       color: #FFFFFF;
       display: flex;
       align-items: center;
@@ -613,21 +1236,33 @@
       transition: transform 0.2s ease, background 0.2s ease;
     }
     .social-circle-btn:hover {
-      background: #E85D04;
+      background: var(--sunset-accent);
       transform: translateY(-2px);
     }
 
     /* Center Jar Mascot */
     .footer-center {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      text-align: center;
     }
     .footer-jar-img {
       max-width: 210px;
       height: auto;
       object-fit: contain;
-      filter: drop-shadow(0 10px 20px rgba(12, 59, 46, 0.08));
+      filter: drop-shadow(0 12px 24px rgba(12, 59, 46, 0.1));
+      transition: transform 0.3s ease;
+    }
+    .footer-jar-img:hover {
+      transform: rotate(-3deg) scale(1.04);
+    }
+    .footer-mascot-caption {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: #4B5563;
+      margin-top: 10px;
     }
 
     /* Right Link Columns */
@@ -656,7 +1291,7 @@
       transition: color 0.2s ease;
     }
     .footer-links a:hover {
-      color: #E85D04;
+      color: var(--sunset-accent);
     }
 
     .footer-bottom {
@@ -674,22 +1309,152 @@
     }
 
     /* ==========================================================================
+       12. INTERACTIVE MODAL & TOAST COMPONENT
+       ========================================================================== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 17, 21, 0.7);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active {
+      display: flex;
+    }
+    .modal-box {
+      background: #FFFFFF;
+      border-radius: 24px;
+      max-width: 620px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 32px;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+      animation: modalFadeIn 0.25s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: #F3F4F6;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+    .modal-close-btn:hover {
+      background: #E5E7EB;
+    }
+
+    /* Toast Notification */
+    .toast-pill {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: #000000;
+      color: #FFFFFF;
+      padding: 12px 22px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    .toast-pill.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 280px;
+      height: 100%;
+      background: #FFFFFF;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.15);
+      z-index: 1500;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .mobile-drawer.open {
+      transform: translateX(0);
+    }
+    .drawer-close-btn {
+      align-self: flex-end;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .drawer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+    .drawer-links a {
+      color: #111827;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    /* ==========================================================================
        RESPONSIVE BREAKPOINTS
        ========================================================================== */
     @media (max-width: 1024px) {
       .nav-links { display: none; }
-      .arrivals-grid { grid-template-columns: 1fr; }
-      .bestsellers-grid { grid-template-columns: repeat(2, 1fr); }
+      .mobile-menu-toggle { display: block; }
+      .edits-grid { grid-template-columns: 1fr; }
+      .rankings-grid { grid-template-columns: repeat(2, 1fr); }
+      .wallpapers-grid { grid-template-columns: repeat(2, 1fr); }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
       .footer-layout { grid-template-columns: 1fr; gap: 40px; }
       .footer-center { order: -1; }
+      .quiz-inner-grid { grid-template-columns: 1fr; }
+      .quote-layout { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 768px) {
       .hero-banner-wrap { min-height: 480px; }
-      .hero-left-overlay { left: 24px; bottom: 24px; }
-      .floating-card-1 { left: 10%; top: 15%; }
-      .floating-card-2 { right: 10%; bottom: 15%; }
-      .bestsellers-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .hero-left-overlay { left: 20px; bottom: 20px; max-width: 320px; }
+      .hero-btn-group { flex-direction: column; align-items: flex-start; }
+      .floating-card-1 { left: 6%; top: 14%; }
+      .floating-card-2 { right: 6%; bottom: 14%; }
+      .rankings-grid { grid-template-columns: 1fr; }
+      .wallpapers-grid { grid-template-columns: 1fr; }
+      .quote-section-wrap { padding: 28px 20px; }
+      .quiz-section-wrap { padding: 28px 20px; }
       .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
     }
   </style>
@@ -708,29 +1473,39 @@
         </a>
 
         <ul class="nav-links">
-          <li><a href="#new-arrivals">New In</a></li>
-          <li><a href="#best-sellers">Lookbooks</a></li>
-          <li><a href="#beauty">Beauty & Skincare</a></li>
-          <li><a href="#decor">Cozy Decor</a></li>
-          <li><a href="#rankings">Top Rankings</a></li>
+          <li><a href="#edits">Editorial Edits</a></li>
+          <li><a href="#rankings">Curated Rankings</a></li>
+          <li><a href="#quotes">Daily Quote</a></li>
           <li><a href="#wallpapers">4K Wallpapers</a></li>
+          <li><a href="#quiz">Glow Quiz</a></li>
+          <li><a href="#gallery">Community Gallery</a></li>
         </ul>
 
         <div class="nav-actions">
-          <div class="lang-pill">🌐 EN ▾</div>
-          <div class="search-pill">
-            <span>🔍</span>
-            <span>Search</span>
+          <div class="saved-pill" onclick="showToast('♡ 4 items saved to your personal Glow Moodboard!')" title="View Saved">
+            <span>♡</span>
+            <span id="savedCount">4</span>
           </div>
-          <a href="#saved" class="icon-btn" title="Saved Favorites">♡</a>
-          <a href="#bag" class="icon-btn" title="Drops & Freebies">
-            🛍️
-            <span class="icon-badge">3</span>
-          </a>
+          <a href="#quiz" class="quiz-pill-btn">Take Quiz ✨</a>
+          <button class="mobile-menu-toggle" onclick="toggleDrawer(true)" aria-label="Open navigation menu">☰</button>
         </div>
       </div>
     </div>
   </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer" id="mobileDrawer">
+    <button class="drawer-close-btn" onclick="toggleDrawer(false)">&times;</button>
+    <ul class="drawer-links">
+      <li><a href="#edits" onclick="toggleDrawer(false)">Editorial Edits</a></li>
+      <li><a href="#rankings" onclick="toggleDrawer(false)">Curated Rankings</a></li>
+      <li><a href="#quotes" onclick="toggleDrawer(false)">Daily Quote</a></li>
+      <li><a href="#wallpapers" onclick="toggleDrawer(false)">4K Wallpapers</a></li>
+      <li><a href="#quiz" onclick="toggleDrawer(false)">Glow Quiz</a></li>
+      <li><a href="#gallery" onclick="toggleDrawer(false)">Community Gallery</a></li>
+      <li><a href="#newsletter" onclick="toggleDrawer(false)">Join Glow Club</a></li>
+    </ul>
+  </div>
 
   <!-- ========================================================================
        2. GIANT HERO TYPOGRAPHY & MARQUEE TICKER
@@ -746,24 +1521,29 @@
       <span class="ticker-item">CATCH THE STYLE <span class="ticker-star">✦</span></span>
       <span class="ticker-item">CATCH THE GLOW <span class="ticker-star">✦</span></span>
       <span class="ticker-item">FEEL THE VIBES <span class="ticker-star">✦</span></span>
-      <span class="ticker-item">NEW SEASON DROPS <span class="ticker-star">✦</span></span>
+      <span class="ticker-item">CURATED BY RINI <span class="ticker-star">✦</span></span>
+      <span class="ticker-item">FREE 4K WALLPAPERS <span class="ticker-star">✦</span></span>
+      <span class="ticker-item">DAILY TEEN MINDSET <span class="ticker-star">✦</span></span>
       <span class="ticker-item">CATCH THE STYLE <span class="ticker-star">✦</span></span>
       <span class="ticker-item">CATCH THE GLOW <span class="ticker-star">✦</span></span>
       <span class="ticker-item">FEEL THE VIBES <span class="ticker-star">✦</span></span>
-      <span class="ticker-item">NEW SEASON DROPS <span class="ticker-star">✦</span></span>
+      <span class="ticker-item">CURATED BY RINI <span class="ticker-star">✦</span></span>
     </div>
   </div>
 
   <!-- ========================================================================
-       3. SUNSET HERO BANNER WITH MODEL & FLOATING GLASS CARDS
+       3. SUNSET HERO BANNER & SPOTLIGHT GLASS CARDS
        ======================================================================== -->
   <div class="container">
     <div class="hero-banner-wrap">
       <!-- Floating Glass Card 1 (Top-Left) -->
-      <div class="floating-card floating-card-1">
-        <img src="assets/arrival-2.jpg" alt="New Arrival Preview" class="floating-card-img" />
-        <span class="floating-badge">New Arrival</span>
-      </div>
+      <a href="#edits" class="floating-card floating-card-1">
+        <img src="assets/feature-skincare.jpg" alt="Skincare Glow Routine" class="floating-card-img" />
+        <div class="floating-text-wrap">
+          <span class="floating-tag">✨ Skincare Edit</span>
+          <span class="floating-title">Glass Skin Morning</span>
+        </div>
+      </a>
 
       <!-- Central Hero Fashion Model -->
       <div class="hero-model-container">
@@ -771,80 +1551,99 @@
       </div>
 
       <!-- Floating Glass Card 2 (Bottom-Right) -->
-      <div class="floating-card floating-card-2">
-        <img src="assets/arrival-1.jpg" alt="Trending Drop Preview" class="floating-card-img" />
-        <span class="floating-badge">Trending Drop</span>
-      </div>
+      <a href="#wallpapers" class="floating-card floating-card-2">
+        <img src="assets/wallpaper-sunset.jpg" alt="Free 4K Wallpapers" class="floating-card-img" />
+        <div class="floating-text-wrap">
+          <span class="floating-tag">📱 Free 4K Vault</span>
+          <span class="floating-title">Sunset Horizon Drop</span>
+        </div>
+      </a>
 
-      <!-- Left Text Overlay & Black Pill Button -->
+      <!-- Left Text Overlay -->
       <div class="hero-left-overlay">
-        <h2 class="hero-left-heading">Get ready for new season with TeenTimeGlow</h2>
-        <p class="hero-left-subtext">Rini curates the freshest teen fashion, glowing beauty routines, and cozy space inspiration.</p>
-        <a href="#best-sellers" class="btn-black-pill">Explore items &rarr;</a>
+        <span class="hero-issue-badge">Issue #28 • Golden Hour Edition</span>
+        <h2 class="hero-left-heading">Get ready for the new season with TeenTimeGlow</h2>
+        <p class="hero-left-subtext">Rini curates the freshest teen fashion lookbooks, glowing skincare routines, bingeable Prime Video rankings, and cozy space inspiration.</p>
+        <div class="hero-btn-group">
+          <a href="#edits" class="btn-black-pill">Explore The Glow &rarr;</a>
+          <a href="#quiz" class="btn-glass-pill">Discover Your Vibe ✨</a>
+        </div>
       </div>
 
       <!-- Right Slider Dots -->
       <div class="slider-dots">
-        <span class="slider-dot active"></span>
-        <span class="slider-dot"></span>
-        <span class="slider-dot"></span>
+        <span class="slider-dot active" onclick="showToast('Viewing Feature 1 of 3: Golden Hour Series')"></span>
+        <span class="slider-dot" onclick="showToast('Viewing Feature 2 of 3: Glass Skin Rituals')"></span>
+        <span class="slider-dot" onclick="showToast('Viewing Feature 3 of 3: Cozy Room Aesthetic')"></span>
       </div>
     </div>
   </div>
 
   <!-- ========================================================================
-       4. NEW ARRIVAL SECTION (3 HORIZONTAL CARDS)
+       4. FEATURE 1: LATEST EDITORIAL EDITS & LOOKBOOKS (3 HORIZONTAL CARDS)
        ======================================================================== -->
-  <section class="section-block" id="new-arrivals">
+  <section class="section-block" id="edits">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">New Arrival</h2>
-        <a href="#all-arrivals" class="btn-see-all">See All</a>
+        <div class="section-title-wrap">
+          <span class="section-pill-tag">Editorial Magazine</span>
+          <h2 class="section-title">Featured Edits & Lookbooks</h2>
+          <p class="section-subtitle">Deep-dive guides on dewy skincare rituals, effortless autumn layering, and cozy bedroom aesthetic corners.</p>
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-btn active" onclick="filterEdits('all', this)">All Stories</button>
+          <button class="filter-btn" onclick="filterEdits('skincare', this)">Beauty & Glow</button>
+          <button class="filter-btn" onclick="filterEdits('fashion', this)">Fashion Lookbooks</button>
+          <button class="filter-btn" onclick="filterEdits('decor', this)">Cozy Spaces</button>
+        </div>
       </div>
 
-      <div class="arrivals-grid">
-        <!-- Card 1 -->
-        <div class="arrival-card">
-          <div class="arrival-img-wrap">
-            <img src="assets/arrival-1.jpg" alt="Daisy Shirt" class="arrival-img" />
+      <div class="edits-grid">
+        <!-- Story 1: Glass Skin Routine -->
+        <div class="edit-card" data-cat="skincare" onclick="openStoryModal('skincare')">
+          <div class="edit-img-wrap">
+            <img src="assets/feature-skincare.jpg" alt="Glass Skin Routine" class="edit-img" />
           </div>
-          <div class="arrival-info">
-            <h3 class="arrival-title">Daisy Shirt</h3>
-            <div class="stars-wrap">
+          <div class="edit-info">
+            <span class="edit-category-badge">Beauty & Skincare</span>
+            <h3 class="edit-title">The 5-Step Glass Skin Morning Ritual</h3>
+            <div class="edit-meta-row">
               <span class="stars">★★★★★</span>
-              <span class="review-count">(129 Reviews)</span>
+              <span class="meta-time">• 4 min read</span>
             </div>
-            <div class="arrival-price">$58.00</div>
+            <span class="btn-read-edit">Read Full Edit &rarr;</span>
           </div>
         </div>
 
-        <!-- Card 2 -->
-        <div class="arrival-card">
-          <div class="arrival-img-wrap">
-            <img src="assets/arrival-2.jpg" alt="Rei Blue Jacket" class="arrival-img" />
+        <!-- Story 2: Autumn Capsule Wardrobe -->
+        <div class="edit-card" data-cat="fashion" onclick="openStoryModal('fashion')">
+          <div class="edit-img-wrap">
+            <img src="assets/arrival-1.jpg" alt="Autumn Warm Layering Guide" class="edit-img" />
           </div>
-          <div class="arrival-info">
-            <h3 class="arrival-title">Rei Blue Jac...</h3>
-            <div class="stars-wrap">
+          <div class="edit-info">
+            <span class="edit-category-badge">Fashion Lookbook</span>
+            <h3 class="edit-title">Autumn Warm Layering: Trench & Oversized Knits</h3>
+            <div class="edit-meta-row">
               <span class="stars">★★★★★</span>
-              <span class="review-count">(92 Reviews)</span>
+              <span class="meta-time">• 5 min read</span>
             </div>
-            <div class="arrival-price">$67.00</div>
+            <span class="btn-read-edit">Read Full Edit &rarr;</span>
           </div>
         </div>
 
-        <!-- Card 3 -->
-        <div class="arrival-card">
-          <div class="arrival-img-wrap">
-            <img src="assets/arrival-3.jpg" alt="Rozz Jacket" class="arrival-img" />
+        <!-- Story 3: Cozy Room Corner Inspo -->
+        <div class="edit-card" data-cat="decor" onclick="openStoryModal('decor')">
+          <div class="edit-img-wrap">
+            <img src="assets/arrival-3.jpg" alt="Cozy Bedroom Setup" class="edit-img" />
           </div>
-          <div class="arrival-info">
-            <h3 class="arrival-title">Rozz Jacket</h3>
-            <div class="stars-wrap">
+          <div class="edit-info">
+            <span class="edit-category-badge">Cozy Decor</span>
+            <h3 class="edit-title">How To Romanticize Your Study Corner</h3>
+            <div class="edit-meta-row">
               <span class="stars">★★★★★</span>
-              <span class="review-count">(72 Reviews)</span>
+              <span class="meta-time">• 3 min read</span>
             </div>
-            <div class="arrival-price">$55.00</div>
+            <span class="btn-read-edit">Read Full Edit &rarr;</span>
           </div>
         </div>
       </div>
@@ -852,141 +1651,835 @@
   </section>
 
   <!-- ========================================================================
-       5. BEST SELLER SECTION (4 VERTICAL SUNSET CARDS)
+       5. FEATURE 2: CURATED RANKINGS (PRIME VIDEO & AUDIOBOOKS)
        ======================================================================== -->
-  <section class="section-block" id="best-sellers">
+  <section class="section-block" id="rankings">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Best Seller</h2>
-        <a href="#all-bestsellers" class="btn-see-all">See All</a>
+        <div class="section-title-wrap">
+          <span class="section-pill-tag">Rini's Leaderboard</span>
+          <h2 class="section-title">Top Ranked: Prime Video & Audiobooks</h2>
+          <p class="section-subtitle">The top-tier shows and captivating audiobook narrations that defined our aesthetic this season.</p>
+        </div>
+        <a href="#newsletter" class="quiz-pill-btn">Get Next Month's List ↗</a>
       </div>
 
-      <div class="bestsellers-grid">
-        <!-- Vertical Card 1 -->
-        <div class="bestseller-card">
-          <div class="bestseller-frame">
-            <img src="assets/bestseller-1.jpg" alt="Molly Jacket" class="bestseller-img" />
+      <div class="rankings-grid">
+        <!-- Rank #1: The Summer I Turned Pretty -->
+        <div class="ranking-card">
+          <div class="ranking-poster-frame">
+            <img src="assets/bestseller-1.jpg" alt="The Summer I Turned Pretty" class="ranking-poster-img" />
+            <span class="ranking-badge-top">#1 TOP SERIES</span>
+            <span class="ranking-type-tag">Prime Video • Drama</span>
           </div>
-          <h3 class="bestseller-title">Molly Jacket</h3>
-          <div class="stars-wrap">
-            <span class="stars">★★★★★</span>
-            <span class="review-count">(3k Reviews)</span>
+          <div class="ranking-details">
+            <h3 class="ranking-title">The Summer I Turned Pretty</h3>
+            <p class="ranking-synopsis">The quintessential coastal summer romance, seaside sunsets, and unforgettable teen emotional growth.</p>
+            <div class="ranking-footer-row">
+              <span class="stars">★★★★★ 4.9</span>
+              <a href="https://www.amazon.com/The-Summer-I-Turned-Pretty-Season-1/dp/B09NF21759" target="_blank" rel="noopener noreferrer" class="ranking-action-link">Watch on Prime ↗</a>
+            </div>
           </div>
-          <div class="bestseller-price">$48.00</div>
         </div>
 
-        <!-- Vertical Card 2 -->
-        <div class="bestseller-card">
-          <div class="bestseller-frame">
-            <img src="assets/bestseller-2.jpg" alt="Pop Star Neon Jacket" class="bestseller-img" />
+        <!-- Rank #2: The Seven Husbands of Evelyn Hugo -->
+        <div class="ranking-card">
+          <div class="ranking-poster-frame">
+            <img src="assets/bestseller-2.jpg" alt="The Seven Husbands of Evelyn Hugo" class="ranking-poster-img" />
+            <span class="ranking-badge-top">#1 AUDIOBOOK</span>
+            <span class="ranking-type-tag">Audible • Fiction</span>
           </div>
-          <h3 class="bestseller-title">Pop Star Neon Ja...</h3>
-          <div class="stars-wrap">
-            <span class="stars">★★★★★</span>
-            <span class="review-count">(2k Reviews)</span>
+          <div class="ranking-details">
+            <h3 class="ranking-title">The Seven Husbands of Evelyn Hugo</h3>
+            <p class="ranking-synopsis">Glamorous Old Hollywood mystery narrated with deeply raw voice acting and unforgettable emotional power.</p>
+            <div class="ranking-footer-row">
+              <span class="stars">★★★★★ 5.0</span>
+              <a href="https://www.audible.com/pd/The-Seven-Husbands-of-Evelyn-Hugo-Audiobook/B071P3KBJ8" target="_blank" rel="noopener noreferrer" class="ranking-action-link">Listen Sample ↗</a>
+            </div>
           </div>
-          <div class="bestseller-price">$70.00</div>
         </div>
 
-        <!-- Vertical Card 3 -->
-        <div class="bestseller-card">
-          <div class="bestseller-frame">
-            <img src="assets/bestseller-3.jpg" alt="Gaby Half-Zipped" class="bestseller-img" />
+        <!-- Rank #3: Daisy Jones & The Six -->
+        <div class="ranking-card">
+          <div class="ranking-poster-frame">
+            <img src="assets/bestseller-3.jpg" alt="Daisy Jones & The Six" class="ranking-poster-img" />
+            <span class="ranking-badge-top">#2 TOP SERIES</span>
+            <span class="ranking-type-tag">Prime Video • Music</span>
           </div>
-          <h3 class="bestseller-title">Gaby Half-Zipped</h3>
-          <div class="stars-wrap">
-            <span class="stars">★★★★★</span>
-            <span class="review-count">(3k Reviews)</span>
+          <div class="ranking-details">
+            <h3 class="ranking-title">Daisy Jones & The Six</h3>
+            <p class="ranking-synopsis">70s rock-and-roll aura, vintage flared silhouettes, golden hour soundtrack, and magnetic group dynamics.</p>
+            <div class="ranking-footer-row">
+              <span class="stars">★★★★★ 4.8</span>
+              <a href="https://www.amazon.com/Daisy-Jones-The-Six-Season-1/dp/B0B8SGM2TN" target="_blank" rel="noopener noreferrer" class="ranking-action-link">Watch on Prime ↗</a>
+            </div>
           </div>
-          <div class="bestseller-price">$45.00</div>
         </div>
 
-        <!-- Vertical Card 4 -->
-        <div class="bestseller-card">
-          <div class="bestseller-frame">
-            <img src="assets/bestseller-4.jpg" alt="Smith Sweatshirt" class="bestseller-img" />
+        <!-- Rank #4: Atomic Habits for Teens -->
+        <div class="ranking-card">
+          <div class="ranking-poster-frame">
+            <img src="assets/bestseller-4.jpg" alt="Atomic Habits for Teens" class="ranking-poster-img" />
+            <span class="ranking-badge-top">#2 AUDIOBOOK</span>
+            <span class="ranking-type-tag">Audible • Mindset</span>
           </div>
-          <h3 class="bestseller-title">Smith Sweatshirt</h3>
-          <div class="stars-wrap">
-            <span class="stars">★★★★★</span>
-            <span class="review-count">(5k Reviews)</span>
+          <div class="ranking-details">
+            <h3 class="ranking-title">Atomic Habits (Teen Mindset Edit)</h3>
+            <p class="ranking-synopsis">How tiny 1% daily changes transform your study flow, skincare consistency, and everyday self-worth.</p>
+            <div class="ranking-footer-row">
+              <span class="stars">★★★★★ 4.9</span>
+              <a href="https://www.audible.com/pd/Atomic-Habits-Audiobook/B07J1B6CQX" target="_blank" rel="noopener noreferrer" class="ranking-action-link">Listen Sample ↗</a>
+            </div>
           </div>
-          <div class="bestseller-price">$39.00</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ========================================================================
-       6. CHAMBERLAIN COFFEE STYLE FOOTER
+       6. FEATURE 3: DAILY AESTHETIC QUOTE WIDGET ("in motion")
        ======================================================================== -->
-  <footer>
+  <section class="container" id="quotes">
+    <div class="quote-section-wrap">
+      <div class="quote-layout">
+        <div class="quote-content-col">
+          <div class="quote-badge-row">
+            <span class="quote-category-tag" id="quoteCategory">✨ Daily Mindset</span>
+            <span class="quote-timestamp" id="quoteDate">Updated for today</span>
+          </div>
+          <div class="quote-mark">“</div>
+          <p class="quote-text" id="quoteDisplay">
+            You do not just exist; you arrive, you radiate, and you create your own light in every room you step into.
+          </p>
+          <div class="quote-author" id="quoteAuthor">
+            <span>— Rini’s Golden Hour Reflection</span>
+          </div>
+        </div>
+
+        <div class="quote-actions-col">
+          <button class="btn-quote-action btn-quote-shuffle" onclick="shuffleQuote()">
+            <span>Shuffle Quote</span>
+            <span>↻</span>
+          </button>
+          <button class="btn-quote-action btn-quote-copy" onclick="copyQuote()">
+            <span>Copy Quote</span>
+            <span>📋</span>
+          </button>
+          <button class="btn-quote-action btn-quote-copy" onclick="shareQuote()">
+            <span>Share Story</span>
+            <span>📱</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       7. FEATURE 4: FREE 4K AESTHETIC WALLPAPER VAULT (1-CLICK DOWNLOAD)
+       ======================================================================== -->
+  <section class="section-block" id="wallpapers">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-pill-tag">Free Aesthetic Downloads</span>
+          <h2 class="section-title">Free 4K Aesthetic Wallpaper Vault</h2>
+          <p class="section-subtitle">Handcrafted ultra high-resolution wallpapers for iPhone, iPad, and Desktop. 1-click free download forever.</p>
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-btn active" onclick="filterWallpapers('all', this)">All Wallpapers (4)</button>
+          <button class="filter-btn" onclick="filterWallpapers('mobile', this)">iPhone (9:16)</button>
+          <button class="filter-btn" onclick="filterWallpapers('desktop', this)">Desktop 4K</button>
+        </div>
+      </div>
+
+      <div class="wallpapers-grid">
+        <!-- Wallpaper 1: Golden Sunset Horizon -->
+        <div class="wallpaper-card" data-device="mobile">
+          <div class="wallpaper-thumb-frame">
+            <img src="assets/wallpaper-sunset.jpg" alt="Golden Sunset Horizon Wallpaper" class="wallpaper-img" />
+            <span class="wallpaper-res-badge">4K ULTRA HD</span>
+            <span class="wallpaper-device-badge">iPhone / 9:16</span>
+          </div>
+          <div class="wallpaper-info">
+            <h3 class="wallpaper-title">Golden Sunset Horizon</h3>
+            <a href="assets/wallpaper-sunset.jpg" download="TeenTimeGlow-Sunset-4K.jpg" class="btn-download-wallpaper" onclick="trackDownload('Golden Sunset Horizon')">
+              <span>Download 4K</span>
+              <span>↓</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Wallpaper 2: Zen Matcha Foam Art -->
+        <div class="wallpaper-card" data-device="mobile">
+          <div class="wallpaper-thumb-frame">
+            <img src="assets/wallpaper-matcha.jpg" alt="Zen Matcha Foam Art Wallpaper" class="wallpaper-img" />
+            <span class="wallpaper-res-badge">4K ULTRA HD</span>
+            <span class="wallpaper-device-badge">iPhone / 9:16</span>
+          </div>
+          <div class="wallpaper-info">
+            <h3 class="wallpaper-title">Zen Matcha Foam Art</h3>
+            <a href="assets/wallpaper-matcha.jpg" download="TeenTimeGlow-Matcha-4K.jpg" class="btn-download-wallpaper" onclick="trackDownload('Zen Matcha Foam Art')">
+              <span>Download 4K</span>
+              <span>↓</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Wallpaper 3: Dreamy Sunset Cloudscape -->
+        <div class="wallpaper-card" data-device="desktop">
+          <div class="wallpaper-thumb-frame">
+            <img src="assets/wallpaper-clouds.jpg" alt="Dreamy Sunset Cloudscape Wallpaper" class="wallpaper-img" />
+            <span class="wallpaper-res-badge">4K ULTRA HD</span>
+            <span class="wallpaper-device-badge">Desktop / 16:9</span>
+          </div>
+          <div class="wallpaper-info">
+            <h3 class="wallpaper-title">Dreamy Sunset Clouds</h3>
+            <a href="assets/wallpaper-clouds.jpg" download="TeenTimeGlow-Clouds-4K.jpg" class="btn-download-wallpaper" onclick="trackDownload('Dreamy Sunset Clouds')">
+              <span>Download 4K</span>
+              <span>↓</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Wallpaper 4: Dewy Sunbeam Glass Aura -->
+        <div class="wallpaper-card" data-device="mobile">
+          <div class="wallpaper-thumb-frame">
+            <img src="assets/feature-skincare.jpg" alt="Dewy Sunbeam Glass Aura Wallpaper" class="wallpaper-img" />
+            <span class="wallpaper-res-badge">4K ULTRA HD</span>
+            <span class="wallpaper-device-badge">Universal / 4K</span>
+          </div>
+          <div class="wallpaper-info">
+            <h3 class="wallpaper-title">Dewy Sunbeam Aura</h3>
+            <a href="assets/feature-skincare.jpg" download="TeenTimeGlow-Sunbeam-4K.jpg" class="btn-download-wallpaper" onclick="trackDownload('Dewy Sunbeam Aura')">
+              <span>Download 4K</span>
+              <span>↓</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       8. FEATURE 5: INTERACTIVE AESTHETIC QUIZ ("Discover Your Glow Vibe")
+       ======================================================================== -->
+  <section class="container" id="quiz">
+    <div class="quiz-section-wrap">
+      <div class="quiz-inner-grid">
+        <div class="quiz-intro-col">
+          <span class="quiz-pill-header">✨ Interactive Experience</span>
+          <h2 class="quiz-heading">Discover Your Glow Vibe</h2>
+          <p class="quiz-desc">Answer 3 intuitive questions to find your personal aesthetic aura, wardrobe match, and signature playlist vibe.</p>
+          <div style="display: flex; gap: 16px;">
+            <div style="font-size: 0.85rem; color: #FFDE59; font-weight: 700;">✦ 100% Free</div>
+            <div style="font-size: 0.85rem; color: #FFDE59; font-weight: 700;">✦ Instant Badge</div>
+            <div style="font-size: 0.85rem; color: #FFDE59; font-weight: 700;">✦ 14k+ Teens Quizzed</div>
+          </div>
+        </div>
+
+        <div class="quiz-card-container">
+          <!-- Step 1 View -->
+          <div id="quizStep1">
+            <div class="quiz-step-indicator">
+              <span>Question 1 of 3</span>
+              <span>Morning Ritual</span>
+            </div>
+            <h3 class="quiz-question-title">What is your dream Saturday morning ritual?</h3>
+            <div class="quiz-options-list">
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(1, 'matcha')">🍵 Iced matcha latte & slow aesthetic journaling</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(1, 'thrift')">🧥 Oversized hoodie & thrift store hunting</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(1, 'sunset')">🌅 Golden hour rooftop photography with friends</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(1, 'vinyl')">🎧 Cozy bed, fairy lights & nostalgic vinyl records</button>
+            </div>
+          </div>
+
+          <!-- Step 2 View -->
+          <div id="quizStep2" style="display: none;">
+            <div class="quiz-step-indicator">
+              <span>Question 2 of 3</span>
+              <span>Signature Piece</span>
+            </div>
+            <h3 class="quiz-question-title">Pick your ultimate go-to wardrobe essential:</h3>
+            <div class="quiz-options-list">
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(2, 'skincare')">✨ Glazed lip oil, gold hoops & clean linen</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(2, 'street')">👟 Chunky vintage sneakers & boxy denim</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(2, 'sunset')">🧥 Flowing sunset trench coat & tinted sunglasses</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(2, 'knit')">🧶 Soft chunky knit cardigan & wired earphones</button>
+            </div>
+          </div>
+
+          <!-- Step 3 View -->
+          <div id="quizStep3" style="display: none;">
+            <div class="quiz-step-indicator">
+              <span>Question 3 of 3</span>
+              <span>Soundtrack</span>
+            </div>
+            <h3 class="quiz-question-title">What soundtrack best matches your soul right now?</h3>
+            <div class="quiz-options-list">
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(3, 'indie')">🎶 Indie bedroom pop & coastal acoustic melodies</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(3, 'lofi')">☕ Warm study lo-fi beats & soft rainy piano</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(3, 'rock')">🎸 70s vintage rock & high-energy golden hour anthems</button>
+              <button class="quiz-option-btn" onclick="selectQuizAnswer(3, 'rnb')">✨ Dreamy atmospheric R&B and night-drive synth</button>
+            </div>
+          </div>
+
+          <!-- Result View -->
+          <div id="quizResult" class="quiz-result-view">
+            <span class="quiz-result-badge" id="quizResultAura">Aura: Sunset Muse ✨</span>
+            <h3 class="quiz-result-title" id="quizResultTitle">The Golden Hour Tastemaker</h3>
+            <p class="quiz-result-desc" id="quizResultDesc">
+              You thrive on warm golden hour sunsets, effortless layered style, and romanticizing everyday teenage moments. You inspire confidence in everyone around you.
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+              <button class="btn-retake-quiz" onclick="restartQuiz()">Take Again ↻</button>
+              <a href="#edits" class="btn-black-pill" style="padding: 10px 20px; font-size: 0.85rem;">View Your Recommended Edit &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       9. FEATURE 6: THE TEEN GALLERY (COMMUNITY CREATOR SHOWCASE)
+       ======================================================================== -->
+  <section class="section-block" id="gallery">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-title-wrap">
+          <span class="section-pill-tag">Community Creations</span>
+          <h2 class="section-title">The Teen Gallery</h2>
+          <p class="section-subtitle">Aesthetic nail art, room setups, and style submissions by 12,000+ teen creators. Tag #TeenTimeGlow to be featured.</p>
+        </div>
+        <button class="quiz-pill-btn" onclick="openSubmitModal()">✨ Submit Your Creation</button>
+      </div>
+
+      <div class="gallery-grid">
+        <!-- Community Card 1 -->
+        <div class="gallery-card" onclick="likeGalleryItem(1, this)">
+          <div class="gallery-thumb">
+            <img src="assets/arrival-2.jpg" alt="Chrome Glazed Nails" class="gallery-img" />
+            <span class="gallery-creator-pill">by @clara.glaze</span>
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title">Chrome Glazed French Tips</h4>
+            <span class="gallery-likes" id="like-1">♡ 482</span>
+          </div>
+        </div>
+
+        <!-- Community Card 2 -->
+        <div class="gallery-card" onclick="likeGalleryItem(2, this)">
+          <div class="gallery-thumb">
+            <img src="assets/bestseller-3.jpg" alt="Thrifted Autumn Layering" class="gallery-img" />
+            <span class="gallery-creator-pill">by @maya.fits</span>
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title">Thrifted Fall Layering Fit</h4>
+            <span class="gallery-likes" id="like-2">♡ 614</span>
+          </div>
+        </div>
+
+        <!-- Community Card 3 -->
+        <div class="gallery-card" onclick="likeGalleryItem(3, this)">
+          <div class="gallery-thumb">
+            <img src="assets/arrival-3.jpg" alt="Desk Fairy Light Corner" class="gallery-img" />
+            <span class="gallery-creator-pill">by @sophia_study</span>
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title">Cozy Desk Fairy Light Setup</h4>
+            <span class="gallery-likes" id="like-3">♡ 538</span>
+          </div>
+        </div>
+
+        <!-- Community Card 4 -->
+        <div class="gallery-card" onclick="likeGalleryItem(4, this)">
+          <div class="gallery-thumb">
+            <img src="assets/wallpaper-matcha.jpg" alt="Ceramic Matcha Morning" class="gallery-img" />
+            <span class="gallery-creator-pill">by @rini.vibes</span>
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title">Ceramic Matcha Foam Art</h4>
+            <span class="gallery-likes" id="like-4">♡ 892</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       10. CHAMBERLAIN COFFEE STYLE FOOTER
+       ======================================================================== -->
+  <footer id="newsletter">
     <div class="container">
       <div class="footer-layout">
         <!-- Left: Newsletter & Socials -->
         <div class="footer-left">
           <div class="footer-arched-logo">Teen Time Glow</div>
-          <h3 class="footer-offer-title">Get 10% off</h3>
-          <p class="footer-offer-desc">Never miss any drops, lookbooks, or free wallpapers when you join our email list.</p>
+          <h3 class="footer-offer-title">Join The Glow Club</h3>
+          <p class="footer-offer-desc">Weekly curated lookbook drops, secret 4K wallpapers, and teen mindset letters by Rini directly in your inbox.</p>
           
-          <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✨ Welcome to the Glow Club!');">
-            <input type="email" placeholder="email address" class="newsletter-input" required />
-            <button type="submit" class="newsletter-btn">&gt;</button>
+          <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+            <input type="email" id="newsletterEmail" placeholder="your email address..." class="newsletter-input" required />
+            <button type="submit" class="newsletter-btn" aria-label="Subscribe">&gt;</button>
           </form>
 
           <div class="social-row">
-            <a href="#" class="social-circle-btn" title="Facebook">f</a>
-            <a href="#" class="social-circle-btn" title="Instagram">📸</a>
-            <a href="#" class="social-circle-btn" title="YouTube">▶</a>
-            <a href="#" class="social-circle-btn" title="Pinterest">P</a>
-            <a href="#" class="social-circle-btn" title="Twitter">𝕏</a>
-            <a href="#" class="social-circle-btn" title="TikTok">🎵</a>
+            <a href="https://instagram.com" target="_blank" rel="noopener" class="social-circle-btn" title="Instagram">📸</a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener" class="social-circle-btn" title="TikTok">🎵</a>
+            <a href="https://pinterest.com" target="_blank" rel="noopener" class="social-circle-btn" title="Pinterest">P</a>
+            <a href="https://spotify.com" target="_blank" rel="noopener" class="social-circle-btn" title="Spotify">🎧</a>
+            <a href="https://youtube.com" target="_blank" rel="noopener" class="social-circle-btn" title="YouTube">▶</a>
           </div>
         </div>
 
         <!-- Center: Aesthetic Iced Tumbler Mascot -->
         <div class="footer-center">
           <img src="assets/footer-jar.jpg" alt="TeenTimeGlow Iced Jar Mascot" class="footer-jar-img" />
+          <p class="footer-mascot-caption">“Sip, glow, and romanticize everyday moments.”</p>
         </div>
 
-        <!-- Right: Four Columns of Links -->
+        <!-- Right: Link Columns -->
         <div class="footer-right">
           <div>
-            <h4 class="footer-col-title">Shop & Curations</h4>
+            <h4 class="footer-col-title">Features & Edits</h4>
             <ul class="footer-links">
-              <li><a href="#">Beauty Routines</a></li>
-              <li><a href="#">Lookbooks</a></li>
-              <li><a href="#">Cozy Decor</a></li>
-              <li><a href="#">Prime Video Picks</a></li>
-              <li><a href="#">Audiobook Ranks</a></li>
-              <li><a href="#">Free 4K Wallpapers</a></li>
+              <li><a href="#edits">Glass Skin Rituals</a></li>
+              <li><a href="#edits">Autumn Lookbooks</a></li>
+              <li><a href="#edits">Cozy Room Inspo</a></li>
+              <li><a href="#rankings">Prime Video Rankings</a></li>
+              <li><a href="#rankings">Audiobook Recommendations</a></li>
+              <li><a href="#wallpapers">Free 4K Wallpapers</a></li>
             </ul>
           </div>
 
           <div>
             <h4 class="footer-col-title">TeenTimeGlow</h4>
             <ul class="footer-links">
-              <li><a href="#">About Rini</a></li>
-              <li><a href="#">The Teen Gallery</a></li>
-              <li><a href="#">Aesthetic Quizzes</a></li>
-              <li><a href="#">Daily Quotes</a></li>
-              <li><a href="#">Relatable Stories</a></li>
-              <li><a href="#">Creator FAQ</a></li>
+              <li><a href="#" onclick="openStoryModal('about')">About Rini</a></li>
+              <li><a href="#quiz">The Glow Quiz</a></li>
+              <li><a href="#quotes">Daily Teen Mindset</a></li>
+              <li><a href="#gallery">Community Showcase</a></li>
+              <li><a href="#" onclick="openSubmitModal()">Submit Your Work</a></li>
+              <li><a href="#" onclick="showToast('Contact: hello@teentimeglow.me')">Get in Touch</a></li>
             </ul>
           </div>
         </div>
       </div>
 
       <div class="footer-bottom">
-        <div>&copy; 2026 <strong>TeenTimeGlow</strong> (teentimeglow.me). All rights reserved.</div>
+        <div>&copy; 2026 <strong>TeenTimeGlow</strong> (teentimeglow.me). Curated with love by Rini. All rights reserved.</div>
         <div style="display: flex; gap: 20px;">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Service</a>
-          <a href="#">Creator Guidelines</a>
+          <a href="#" onclick="showToast('Privacy Policy: We never sell your personal data.')">Privacy Policy</a>
+          <a href="#" onclick="showToast('Terms: Content is for aesthetic inspiration.')">Terms of Service</a>
+          <a href="#" onclick="showToast('Community Guidelines: Be kind, radiant & supportive.')">Community Guidelines</a>
         </div>
       </div>
     </div>
   </footer>
 
+  <!-- ========================================================================
+       11. INTERACTIVE STORY DETAIL MODAL
+       ======================================================================== -->
+  <div class="modal-overlay" id="storyModal" onclick="closeStoryModal(event)">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeStoryModalDirect()">&times;</button>
+      <div id="modalStoryContent">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Community Submit Modal -->
+  <div class="modal-overlay" id="submitModal" onclick="closeSubmitModal(event)">
+    <div class="modal-box">
+      <button class="modal-close-btn" onclick="closeSubmitModalDirect()">&times;</button>
+      <div style="margin-bottom: 20px;">
+        <span class="section-pill-tag">Community Showcase</span>
+        <h3 style="font-size: 1.5rem; font-weight: 800; margin-top: 8px;">✨ Submit Your Creation</h3>
+        <p style="font-size: 0.9rem; color: #4B5563; margin-top: 4px;">Share your nail art, outfit check, room setup, or digital sketch to be featured on TeenTimeGlow.</p>
+      </div>
+
+      <form onsubmit="handleSubmitCreation(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Your Name / Handle *</label>
+          <input type="text" id="submitName" placeholder="@yourhandle" required style="width: 100%; padding: 10px 14px; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 0.9rem;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Creation Title *</label>
+          <input type="text" id="submitTitle" placeholder="e.g. Cozy Bedroom Desk Corner" required style="width: 100%; padding: 10px 14px; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 0.9rem;" />
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Category *</label>
+          <select id="submitCategory" style="width: 100%; padding: 10px 14px; border: 1px solid #D1D5DB; border-radius: 8px; font-size: 0.9rem; background: #fff;">
+            <option>Nail Art & Beauty</option>
+            <option>Fashion & OOTD</option>
+            <option>Cozy Room Decor</option>
+            <option>Digital Art & Sketch</option>
+          </select>
+        </div>
+        <div>
+          <label style="display: block; font-size: 0.85rem; font-weight: 700; margin-bottom: 6px;">Upload Photo / Mockup</label>
+          <input type="file" accept="image/*" style="font-size: 0.85rem; color: #4B5563;" />
+        </div>
+        <button type="submit" class="btn-black-pill" style="justify-content: center; padding: 12px; margin-top: 10px;">Submit To Rini's Gallery ✨</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Pill -->
+  <div class="toast-pill" id="toastPill">
+    <span id="toastIcon">✨</span>
+    <span id="toastMessage">Welcome to TeenTimeGlow!</span>
+  </div>
+
+  <!-- ========================================================================
+       12. JAVASCRIPT LOGIC & INTERACTIONS ("in motion")
+       ======================================================================== -->
+  <script>
+    // --- 1. Toast Notification System ---
+    let toastTimeout;
+    function showToast(msg, icon = '✨') {
+      const pill = document.getElementById('toastPill');
+      const msgElem = document.getElementById('toastMessage');
+      const iconElem = document.getElementById('toastIcon');
+      
+      msgElem.textContent = msg;
+      iconElem.textContent = icon;
+      pill.classList.add('show');
+      
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        pill.classList.remove('show');
+      }, 3500);
+    }
+
+    // --- 2. Daily Aesthetic Quotes Collection & Shuffler ---
+    const quotes = [
+      {
+        text: "You do not just exist; you arrive, you radiate, and you create your own light in every room you step into.",
+        author: "— Rini’s Golden Hour Reflection",
+        category: "✨ Daily Mindset"
+      },
+      {
+        text: "Romanticize the warm mug between your palms, the golden sunbeams on your floor, and the quiet comfort of becoming who you are.",
+        author: "— Rini’s Autumn Journal",
+        category: "☕ Gentle Living"
+      },
+      {
+        text: "Your vibe isn’t about being loud; it’s the quiet calm confidence of someone who knows their worth doesn't depend on anyone else.",
+        author: "— Teen Self-Worth Letter",
+        category: "🌿 Confidence"
+      },
+      {
+        text: "Don't rush the season you're in. The prettiest flowers take time to root before they bloom under the sun.",
+        author: "— Mindset for Exams & Growth",
+        category: "🌸 Growth"
+      },
+      {
+        text: "Drink your water, do your skincare, protect your peace, and never apologize for having high standards for your happiness.",
+        author: "— Sunday Reset Diary",
+        category: "🧴 Self-Care"
+      },
+      {
+        text: "The aesthetic you are looking for is already inside you: kindness, creativity, and the courage to wear what makes you smile.",
+        author: "— Rini’s Style Philosophy",
+        category: "👗 Style & Aura"
+      }
+    ];
+    let currentQuoteIdx = 0;
+
+    function shuffleQuote() {
+      const display = document.getElementById('quoteDisplay');
+      const author = document.getElementById('quoteAuthor');
+      const cat = document.getElementById('quoteCategory');
+
+      display.style.opacity = '0';
+      display.style.transform = 'translateY(10px)';
+
+      setTimeout(() => {
+        currentQuoteIdx = (currentQuoteIdx + 1) % quotes.length;
+        const q = quotes[currentQuoteIdx];
+        display.textContent = q.text;
+        author.textContent = q.author;
+        cat.textContent = q.category;
+
+        display.style.opacity = '1';
+        display.style.transform = 'translateY(0)';
+        showToast('✨ New quote refreshed!');
+      }, 250);
+    }
+
+    function copyQuote() {
+      const text = document.getElementById('quoteDisplay').textContent.trim();
+      const author = document.getElementById('quoteAuthor').textContent.trim();
+      const full = `"${text}" ${author} (via TeenTimeGlow.me)`;
+
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(full).then(() => {
+          showToast('📋 Quote copied to clipboard! Share the glow.');
+        }).catch(() => {
+          showToast('📋 Quote copied!');
+        });
+      } else {
+        showToast('📋 Quote copied to clipboard!');
+      }
+    }
+
+    function shareQuote() {
+      const text = document.getElementById('quoteDisplay').textContent.trim();
+      if (navigator.share) {
+        navigator.share({
+          title: 'TeenTimeGlow Daily Quote',
+          text: `"${text}" — TeenTimeGlow.me`,
+          url: 'https://www.teentimeglow.me'
+        }).catch(() => {});
+      } else {
+        copyQuote();
+      }
+    }
+
+    // --- 3. Filter Edits & Lookbooks ---
+    function filterEdits(category, btn) {
+      document.querySelectorAll('#edits .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.edit-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-cat') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // --- 4. Filter Wallpapers ---
+    function filterWallpapers(device, btn) {
+      document.querySelectorAll('#wallpapers .filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const cards = document.querySelectorAll('.wallpaper-card');
+      cards.forEach(card => {
+        if (device === 'all' || card.getAttribute('data-device') === device) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function trackDownload(name) {
+      showToast(`📱 Downloading "${name}" in 4K resolution!`, '📥');
+    }
+
+    // --- 5. Interactive Aesthetic Quiz ---
+    let quizAnswers = {};
+
+    function selectQuizAnswer(step, answer) {
+      quizAnswers[step] = answer;
+
+      if (step === 1) {
+        document.getElementById('quizStep1').style.display = 'none';
+        document.getElementById('quizStep2').style.display = 'block';
+      } else if (step === 2) {
+        document.getElementById('quizStep2').style.display = 'none';
+        document.getElementById('quizStep3').style.display = 'block';
+      } else if (step === 3) {
+        document.getElementById('quizStep3').style.display = 'none';
+        calculateQuizResult();
+      }
+    }
+
+    function calculateQuizResult() {
+      const resultView = document.getElementById('quizResult');
+      const aura = document.getElementById('quizResultAura');
+      const title = document.getElementById('quizResultTitle');
+      const desc = document.getElementById('quizResultDesc');
+
+      const ans1 = quizAnswers[1] || 'sunset';
+      const ans2 = quizAnswers[2] || 'skincare';
+
+      if (ans1 === 'matcha' || ans2 === 'skincare') {
+        aura.textContent = 'Aura: Matcha Minimalist 🌿';
+        title.textContent = 'The Clean & Mindful Glow';
+        desc.textContent = 'You find serene beauty in glass skincare routines, quiet iced matcha mornings, gentle journaling, and clean porcelain pastel aesthetics. Your presence is soothing and calming.';
+      } else if (ans1 === 'thrift' || ans2 === 'street') {
+        aura.textContent = 'Aura: Vintage Street Muse 🧥';
+        title.textContent = 'The Fearless Stylist';
+        desc.textContent = 'You love unexpected thrifted treasures, oversized layered silhouettes, chunky loafers, and walking through autumn city streets with your favorite playlist on repeat.';
+      } else if (ans1 === 'vinyl' || ans2 === 'knit') {
+        aura.textContent = 'Aura: Cozy Bookish Soul 🎧';
+        title.textContent = 'The Nostalgic Romantic';
+        desc.textContent = 'You romanticize fairy lights, warm chunky knits, rainy Sunday study corners, and audiobooks that transport you straight into glamorous vintage eras.';
+      } else {
+        aura.textContent = 'Aura: Golden Sunset Muse ✨';
+        title.textContent = 'The Radiant Visionary';
+        desc.textContent = 'You embody high-energy golden hour warmth, unapologetic style, radiant confidence, and inspiring everyone around you to embrace their true glow.';
+      }
+
+      resultView.style.display = 'block';
+      showToast('🎉 Quiz complete! Your Glow Archetype is revealed.');
+    }
+
+    function restartQuiz() {
+      quizAnswers = {};
+      document.getElementById('quizResult').style.display = 'none';
+      document.getElementById('quizStep2').style.display = 'none';
+      document.getElementById('quizStep3').style.display = 'none';
+      document.getElementById('quizStep1').style.display = 'block';
+    }
+
+    // --- 6. Community Likes ---
+    const likedItems = {};
+    function likeGalleryItem(id, card) {
+      const likeElem = document.getElementById(`like-${id}`);
+      let count = parseInt(likeElem.textContent.replace(/\D/g, '')) || 500;
+
+      if (!likedItems[id]) {
+        likedItems[id] = true;
+        count += 1;
+        likeElem.textContent = `♥ ${count}`;
+        likeElem.style.color = '#E85D04';
+        showToast('♥ Liked! Added to trending community creations.');
+      } else {
+        likedItems[id] = false;
+        count -= 1;
+        likeElem.textContent = `♡ ${count}`;
+        likeElem.style.color = '#E85D04';
+      }
+    }
+
+    // --- 7. Editorial Quick-View Modals ---
+    const storyData = {
+      skincare: {
+        tag: 'Beauty & Skincare',
+        title: 'The 5-Step Glass Skin Morning Ritual',
+        image: 'assets/feature-skincare.jpg',
+        readTime: '4 min read • ★ 4.9 by 340 teens',
+        content: `
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Achieving luminous, glazed "glass skin" isn't about covering up; it’s about deep hydration, gentle barrier protection, and nourishing your skin while you’re young.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Step 1: Gentle Low-pH Cleanser</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Skip harsh stripping foams. Use a gentle lukewarm water rinse or a soothing milky cleanser that respects your natural microbiome.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Step 2: Hydrating Toner Layering (The 3-Skin Method)</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Pat 2 to 3 thin layers of hyaluronic or heartleaf toner into damp skin. Notice how plump and refreshed your skin feels immediately.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Step 3: Snail Mucin & Barrier Serums</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Lock in deep cellular moisture with ceramide or snail peptide essence to prevent redness and seasonal dry patches.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Step 4: Non-Greasy Dewy Sunscreen (SPF 50+)</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">The golden rule of teen skincare: your future self will thank you for daily sunscreen, even on overcast school mornings.</p>
+        `
+      },
+      fashion: {
+        tag: 'Fashion Lookbook',
+        title: 'Autumn Warm Layering: Trench & Oversized Knits',
+        image: 'assets/arrival-1.jpg',
+        readTime: '5 min read • ★ 5.0 by 512 teens',
+        content: `
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Autumn is the ultimate season for style experimentation. The secret to looking effortlessly chic lies in playing with contrasting textures and balanced silhouettes.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">The Rule of Proportions</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Pair an oversized outer layer (like a long thrifted trench or vintage puffer) with sleek inner garments: ribbed turtlenecks or straight-leg dark denim.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Warm Earth Tone Palette</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Stick to creamy oatmeals, burnt terracotta, forest matcha greens, and espresso browns for that timeless Pinterest autumn board look.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Accessorizing Like A Pro</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Add chunky gold hoop earrings, a structured canvas tote bag, and wired headphones around your neck for that effortless high-school movie protagonist energy.</p>
+        `
+      },
+      decor: {
+        tag: 'Cozy Decor',
+        title: 'How To Romanticize Your Study Corner',
+        image: 'assets/arrival-3.jpg',
+        readTime: '3 min read • ★ 4.8 by 290 teens',
+        content: `
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Your bedroom desk doesn't have to feel like a high-stress exam prison. With just 3 intentional tweaks, you can turn study hours into your most peaceful ritual.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">1. Warm Ambient Lighting Only</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Turn off the harsh overhead fluorescent ceiling light! Use a 2700K warm desk lamp paired with delicate amber fairy lights pinned to your corkboard.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">2. Botanical Touches & Print Collages</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Tape mini postcard prints of impressionist art, Polaroid photos with best friends, and a small pothos or succulent plant in a ceramic mug.</p>
+          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">3. The Study Beverage Station</h4>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Keep an aesthetic glass tumbler with a glass straw filled with iced herbal tea or matcha. Hydration keeps focus sharp without afternoon crashes.</p>
+        `
+      },
+      about: {
+        tag: 'Creator Story',
+        title: 'About Rini & TeenTimeGlow',
+        image: 'assets/hero-model.jpg',
+        readTime: '2 min read',
+        content: `
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Hey loves! Welcome to <strong>TeenTimeGlow</strong> — a dedicated sanctuary for teenage self-expression, glowing beauty, aesthetic spaces, and daily positive mindset.</p>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">I created this website because so many teen blogs were either overloaded with aggressive advertisements or felt fake and disconnected from real high-school life. Here, everything is handpicked: genuine skincare routines that don't destroy your skin barrier, cozy book and show rankings, and free 4K wallpapers for your phones.</p>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Remember: you are growing, blooming, and writing your own story. Stay glowing, always!</p>
+        `
+      }
+    };
+
+    function openStoryModal(key) {
+      const data = storyData[key];
+      if (!data) return;
+
+      const content = document.getElementById('modalStoryContent');
+      content.innerHTML = `
+        <span class="section-pill-tag">${data.tag}</span>
+        <h2 style="font-size: 1.75rem; font-weight: 800; margin: 10px 0; line-height: 1.25;">${data.title}</h2>
+        <div style="font-size: 0.82rem; color: #6B7280; font-weight: 600; margin-bottom: 18px;">${data.readTime}</div>
+        <img src="${data.image}" alt="${data.title}" style="width: 100%; max-height: 320px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);" />
+        <div>${data.content}</div>
+        <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 0.85rem; font-weight: 700; color: #0C3B2E;">Tag #TeenTimeGlow on TikTok</span>
+          <button class="btn-black-pill" onclick="closeStoryModalDirect()">Close Edit</button>
+        </div>
+      `;
+
+      document.getElementById('storyModal').classList.add('active');
+    }
+
+    function closeStoryModal(e) {
+      if (e.target.id === 'storyModal') {
+        document.getElementById('storyModal').classList.remove('active');
+      }
+    }
+    function closeStoryModalDirect() {
+      document.getElementById('storyModal').classList.remove('active');
+    }
+
+    // --- 8. Community Submit Modal ---
+    function openSubmitModal() {
+      document.getElementById('submitModal').classList.add('active');
+    }
+    function closeSubmitModal(e) {
+      if (e.target.id === 'submitModal') {
+        document.getElementById('submitModal').classList.remove('active');
+      }
+    }
+    function closeSubmitModalDirect() {
+      document.getElementById('submitModal').classList.remove('active');
+    }
+
+    function handleSubmitCreation(e) {
+      e.preventDefault();
+      const name = document.getElementById('submitName').value;
+      const title = document.getElementById('submitTitle').value;
+
+      closeSubmitModalDirect();
+      showToast(`✨ Thanks ${name}! "${title}" has been submitted for review!`, '🎉');
+      e.target.reset();
+    }
+
+    // --- 9. Newsletter Handler ---
+    function handleNewsletter(e) {
+      e.preventDefault();
+      const email = document.getElementById('newsletterEmail').value;
+      showToast(`💌 Welcome ${email} to The Glow Club! First edit on its way.`, '✨');
+      e.target.reset();
+    }
+
+    // --- 10. Mobile Drawer Menu Toggle ---
+    function toggleDrawer(open) {
+      const drawer = document.getElementById('mobileDrawer');
+      if (open) {
+        drawer.classList.add('open');
+      } else {
+        drawer.classList.remove('open');
+      }
+    }
+  </script>
 </body>
 </html>
