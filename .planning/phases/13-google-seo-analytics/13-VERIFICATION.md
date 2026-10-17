@@ -11,7 +11,7 @@
 | **JSON-LD WebSite & Org Schema** | Global in `BaseLayout.astro` | **PASSED** |
 | **JSON-LD BlogPosting Schema** | `src/pages/edits/[slug].astro` | **PASSED** |
 | **JSON-LD ItemList Schema** | `src/pages/rankings/index.astro` | **PASSED** |
-| **Google Analytics 4 Script** | `src/components/Analytics.astro` non-blocking loader | **PASSED** |
+| **Google Analytics 4 Script** | `src/components/Analytics.astro` with active tag `G-3L1L8THSDR` | **PASSED** (Live in production) |
 | **Production Build** | `npm run build` compiled 0 errors, output copied to `.vercel/output/static` | **PASSED** |
 
 ## Next User Action
