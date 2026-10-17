@@ -1,0 +1,235 @@
+---
+import '@/styles/global.css';
+
+export const prerender = false;
+
+// If already logged in, redirect to /admin directly
+const adminSession = Astro.cookies.get('ttg_admin_session')?.value;
+const expectedSecret = process.env.ADMIN_SECRET_KEY || 'rini-glow-2026';
+if (adminSession && adminSession === expectedSecret) {
+  return Astro.redirect('/admin');
+}
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login — TeenTimeGlow Cockpit</title>
+  <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    body {
+      background: radial-gradient(circle at top right, rgba(232, 93, 4, 0.08), transparent 60%),
+                  radial-gradient(circle at bottom left, rgba(12, 59, 46, 0.05), transparent 60%),
+                  #FAF7F2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-body);
+      color: #0F1115;
+      margin: 0;
+      padding: 24px;
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      border-radius: 24px;
+      padding: 44px 36px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px -15px rgba(232, 93, 4, 0.12), 0 0 1px 1px rgba(0,0,0,0.03);
+      text-align: center;
+    }
+
+    .login-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .login-brand img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--sunset-accent);
+    }
+
+    .login-title {
+      font-family: var(--font-editorial);
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 0 0 8px 0;
+    }
+
+    .login-subtitle {
+      font-size: 0.92rem;
+      color: #6B7280;
+      margin: 0 0 32px 0;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 24px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      box-sizing: border-box;
+      transition: all 0.2s ease;
+      background: #F9FAFB;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--sunset-accent);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 4px rgba(232, 93, 4, 0.12);
+    }
+
+    .btn-login {
+      width: 100%;
+      background: var(--sunset-gradient);
+      color: #FFFFFF;
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -4px rgba(232, 93, 4, 0.4);
+      transition: all 0.2s ease;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 24px -4px rgba(232, 93, 4, 0.5);
+    }
+
+    .login-error {
+      display: none;
+      background: #FEE2E2;
+      color: #DC2626;
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 24px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #6B7280;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .back-link:hover {
+      color: var(--sunset-accent);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="login-card">
+    <a href="/" class="login-brand">
+      <img src="/assets/logo.jpg" alt="Logo" />
+      <span style="font-family: var(--font-editorial); font-size: 1.3rem; font-weight: 700;">
+        teen time <span style="font-style: italic; color: var(--sunset-accent);">glow.</span>
+      </span>
+    </a>
+
+    <h1 class="login-title">Admin Cockpit</h1>
+    <p class="login-subtitle">Enter your private passkey to moderate submissions and publish new content.</p>
+
+    <div id="loginError" class="login-error"></div>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label" for="password">Admin Secret Passkey</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          placeholder="••••••••••••"
+          class="form-input"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn-login">
+        Unlock Cockpit ✨
+      </button>
+    </form>
+
+    <a href="/" class="back-link">← Return to TeenTimeGlow Public Site</a>
+  </div>
+
+  <script is:inline>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const passwordInput = document.getElementById('password');
+      const errorDiv = document.getElementById('loginError');
+      const submitBtn = document.getElementById('submitBtn');
+
+      const password = passwordInput.value;
+      if (!password) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Verifying...';
+      errorDiv.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          window.location.href = '/admin';
+        } else {
+          errorDiv.textContent = data.error || 'Invalid credentials';
+          errorDiv.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Unlock Cockpit ✨';
+        }
+      } catch (err) {
+        errorDiv.textContent = 'Network error: ' + err.message;
+        errorDiv.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Unlock Cockpit ✨';
+      }
+    }
+  </script>
+</body>
+</html>
