@@ -69,14 +69,14 @@
   3. [x] Implement `POST /api/wallpapers/download.ts` for download analytics.
   4. [x] Wire "Share Your Creation" modal form in `GallerySection.astro` and wallpapers download tracking to endpoints.
 
-### Phase 5: Rini's Zero-Code Admin Dashboard (`/admin`)
+### Phase 5: Rini's Zero-Code Admin Dashboard (`/admin`) [x] (Completed: 2026-10-17)
 * **Goal**: Provide Rini with a private, zero-code moderation and publishing cockpit.
 * **Tasks**:
-  1. Create `src/pages/admin/login.astro` with Supabase passwordless / email-password auth.
-  2. Create `src/pages/admin/index.astro` dashboard with tabs:
+  1. [x] Create `src/pages/admin/login.astro` and session API routes with passkey and cookie protection.
+  2. [x] Create and protect `src/pages/admin/index.astro` dashboard with tabs:
      - **Moderation Inbox**: View pending community submissions with 1-tap "Approve" / "Reject".
-     - **Quick Publisher**: Form to publish new edits, rankings, or wallpapers without touching code.
-  3. Implement `POST /api/admin/moderate.ts` (protected by admin session).
+     - **Quick Publisher**: Multi-category form to publish edits, wallpapers, or quotes without touching code.
+  3. [x] Implement `POST /api/admin/moderate.ts` (protected by admin session).
 
 ### Phase 6: Verification, Security Audit & Build Quality
 * **Goal**: Verify production readiness, security compliance, and zero build warnings.
