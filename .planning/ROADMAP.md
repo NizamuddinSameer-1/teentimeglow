@@ -61,13 +61,13 @@
   4. Create content fetchers (`getPosts()`, `getRankings()`, `getWallpapers()`, `getQuizzes()`, `getQuotes()`, `getCommunity()`).
   5. Bind components to the data layer.
 
-### Phase 4: Serverless API Endpoints & Community Uploads
+### Phase 4: Serverless API Endpoints & Community Uploads [x] (Completed: 2026-10-17)
 * **Goal**: Implement serverless backend handlers for user interactions and content submissions.
 * **Tasks**:
-  1. Implement `POST /api/community/submit.ts` with file size/type validation and pending status.
-  2. Implement `POST /api/community/like.ts` for like counters.
-  3. Implement `POST /api/wallpapers/download.ts` for download analytics.
-  4. Wire "Share Your Creation" modal form in `GallerySection.astro` to the endpoint.
+  1. [x] Implement `POST /api/community/submit.ts` with file size/type validation, Supabase Storage uploads, and quarantine pending status.
+  2. [x] Implement `POST /api/community/like.ts` for atomic like counters.
+  3. [x] Implement `POST /api/wallpapers/download.ts` for download analytics.
+  4. [x] Wire "Share Your Creation" modal form in `GallerySection.astro` and wallpapers download tracking to endpoints.
 
 ### Phase 5: Rini's Zero-Code Admin Dashboard (`/admin`)
 * **Goal**: Provide Rini with a private, zero-code moderation and publishing cockpit.
