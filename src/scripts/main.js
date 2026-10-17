@@ -1020,22 +1020,24 @@
       showToast(`♡ ${count} items saved to your personal Glow Moodboard!`);
     }
 
-    function likeGalleryItem(id, e) {
+    async function likeGalleryItem(id, e) {
       playBubblePop();
+      if (e && e.stopPropagation) e.stopPropagation();
       const likeElem = document.getElementById(`like-${id}`);
-      let count = parseInt(likeElem.textContent.replace(/\D/g, '')) || 500;
+      let count = likeElem ? (parseInt(likeElem.textContent.replace(/\D/g, '')) || 500) : 500;
 
       if (!likedItems[id]) {
         likedItems[id] = true;
         count += 1;
-        likeElem.textContent = `♥ ${count}`;
-        likeElem.style.color = '#E85D04';
-
-        if (typeof gsap !== 'undefined') {
-          gsap.fromTo(likeElem, { scale: 1.4 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+        if (likeElem) {
+          likeElem.textContent = `♥ ${count}`;
+          likeElem.style.color = '#E85D04';
+          if (typeof gsap !== 'undefined') {
+            gsap.fromTo(likeElem, { scale: 1.4 }, { scale: 1, duration: 0.35, ease: 'back.out(2)' });
+          }
         }
 
-        if (e) {
+        if (e && e.clientX) {
           const heart = document.createElement('div');
           heart.className = 'floating-heart';
           heart.textContent = '♥';
@@ -1047,11 +1049,26 @@
         }
 
         showToast('♥ Liked! Added to trending creations.');
+
+        // Persist live to Supabase backend API
+        if (id) {
+          try {
+            await fetch('/api/community/like', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id })
+            });
+          } catch (err) {
+            console.warn('Like sync failed:', err);
+          }
+        }
       } else {
         likedItems[id] = false;
-        count -= 1;
-        likeElem.textContent = `♡ ${count}`;
-        likeElem.style.color = '#E85D04';
+        count = Math.max(0, count - 1);
+        if (likeElem) {
+          likeElem.textContent = `♡ ${count}`;
+          likeElem.style.color = '#E85D04';
+        }
       }
 
       try {

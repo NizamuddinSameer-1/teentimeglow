@@ -1,0 +1,56 @@
+---
+import type { Wallpaper } from '@/types/database';
+import { siteContent } from '@/config/siteContent';
+
+interface Props {
+  wallpapers: Wallpaper[];
+  tag?: string;
+  title?: string;
+  subtitle?: string;
+}
+
+const {
+  wallpapers,
+  tag = siteContent.wallpapers.tag,
+  title = siteContent.wallpapers.title,
+  subtitle = siteContent.wallpapers.subtitle
+} = Astro.props;
+---
+<section class="section-block" id="wallpapers">
+  <div class="container">
+    <div class="section-header reveal-header">
+      <div class="section-title-wrap">
+        <span class="section-pill-tag">{tag}</span>
+        <h2 class="section-title split-title">{title}</h2>
+        <p class="section-subtitle">{subtitle}</p>
+      </div>
+      <div class="filter-tabs">
+        <button class="filter-btn active" onclick="filterWallpapers('all', this)">All Wallpapers ({wallpapers.length})</button>
+        <button class="filter-btn" onclick="filterWallpapers('mobile', this)">iPhone (9:16)</button>
+        <button class="filter-btn" onclick="filterWallpapers('desktop', this)">Desktop 4K</button>
+      </div>
+    </div>
+
+    <div class="wallpapers-grid">
+      {wallpapers.map((wp) => {
+        const deviceBadge = wp.device_type === 'desktop' ? 'Desktop / 16:9' : 'iPhone / 9:16';
+        return (
+          <div class="wallpaper-card tilt-card" data-device={wp.device_type}>
+            <div class="wallpaper-thumb-frame">
+              <img src={wp.thumbnail_url} alt={wp.title} class="wallpaper-img parallax-img" loading="lazy" decoding="async" />
+              <span class="wallpaper-res-badge">{wp.resolution_label || '4K ULTRA HD'}</span>
+              <span class="wallpaper-device-badge">{deviceBadge}</span>
+            </div>
+            <div class="wallpaper-info">
+              <h3 class="wallpaper-title">{wp.title}</h3>
+              <a href={wp.download_url} download={`TeenTimeGlow-${wp.title.replace(/\s+/g, '-')}-4K.jpg`} class="btn-download-wallpaper magnetic-btn" onclick={`trackDownload('${wp.title}', event)`}>
+                <span>Download 4K</span>
+                <span>↓</span>
+              </a>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

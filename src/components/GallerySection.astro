@@ -1,0 +1,47 @@
+---
+import type { CommunityCreation } from '@/types/database';
+import { siteContent } from '@/config/siteContent';
+
+interface Props {
+  creations: CommunityCreation[];
+  tag?: string;
+  title?: string;
+  subtitle?: string;
+  submitBtnText?: string;
+}
+
+const {
+  creations,
+  tag = siteContent.gallery.tag,
+  title = siteContent.gallery.title,
+  subtitle = siteContent.gallery.subtitle,
+  submitBtnText = siteContent.gallery.submitBtnText
+} = Astro.props;
+---
+<section class="section-block" id="gallery">
+  <div class="container">
+    <div class="section-header reveal-header">
+      <div class="section-title-wrap">
+        <span class="section-pill-tag">{tag}</span>
+        <h2 class="section-title split-title">{title}</h2>
+        <p class="section-subtitle">{subtitle}</p>
+      </div>
+      <button class="quiz-pill-btn magnetic-btn" onclick="openSubmitModal()">{submitBtnText}</button>
+    </div>
+
+    <div class="gallery-grid">
+      {creations.map((item) => (
+        <div class="gallery-card tilt-card" onclick={`likeGalleryItem('${item.id}', event)`}>
+          <div class="gallery-thumb">
+            <img src={item.image_url} alt={item.caption || item.author_name} class="gallery-img parallax-img" loading="lazy" decoding="async" />
+            <span class="gallery-creator-pill">by {item.author_social || item.author_name}</span>
+          </div>
+          <div class="gallery-info">
+            <h4 class="gallery-title">{item.caption || item.author_name}</h4>
+            <span class="gallery-likes" id={`like-${item.id}`}>♡ {item.likes_count}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
