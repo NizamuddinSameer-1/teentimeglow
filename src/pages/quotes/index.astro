@@ -1,0 +1,833 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getQuotes } from '@/lib/api';
+import type { StoryMemeQuote } from '@/types/database';
+
+export const prerender = false;
+
+// Hydrate live quotes with fallback seeds
+const quotes: StoryMemeQuote[] = await getQuotes();
+
+const featuredQuote = quotes[0] || {
+  content_text: "You do not just exist; you arrive, you radiate, and you create your own light in every room you step into. ✨",
+  author: "Rini • Golden Hour Energy",
+  likes_count: 615
+};
+
+const quotesJson = JSON.stringify(quotes.map(q => ({
+  text: q.content_text,
+  author: q.author,
+  likes: q.likes_count || 0,
+  category: q.author.includes('•') ? q.author.split('•')[1].trim() : 'Mindset'
+})));
+---
+
+<BaseLayout
+  title="Daily Mindset & Aesthetic Quotes Hub — TeenTimeGlow by Rini"
+  description="Discover uplifting teen mindset reflections, morning affirmations, and aesthetic quote cards curated by Rini. Shuffle daily vibes and copy inspiring reminders."
+>
+  <main class="quotes-page-container">
+    <!-- Breadcrumb & Back Bar -->
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Daily Mindset & Quotes</span>
+      </nav>
+      <a href="/" class="btn-back-home magnetic-btn">
+        <span>← Back to Main Magazine</span>
+      </a>
+    </div>
+
+    <!-- Hero Header -->
+    <section class="quotes-hero">
+      <div class="container text-center">
+        <div class="hero-badge-wrap">
+          <span class="section-pill-tag">✦ DAILY MINDSET & REFLECTIONS</span>
+          <span class="hero-live-badge">UPDATED EVERY MORNING</span>
+        </div>
+        <h1 class="quotes-hero-title">Words That Radiate.<br /><span class="glow-gradient-text">Curated Daily Inspo.</span></h1>
+        <p class="quotes-hero-subtitle">
+          Uplifting affirmations, gentle reminders, and golden-hour reflections curated by Rini to center your spirit and romanticize your journey.
+        </p>
+      </div>
+    </section>
+
+    <!-- Interactive Featured "Vibe of the Day" Generator Card -->
+    <section class="quotes-featured-section">
+      <div class="container">
+        <div class="featured-quote-card tilt-card" id="featuredQuoteBox">
+          <!-- Ambient Liquid Blob Background -->
+          <div class="morph-liquid-blob quote-featured-blob"></div>
+
+          <div class="quote-card-header">
+            <span class="quote-topic-badge" id="featuredTopic">✦ TODAY'S GOLDEN REFLECTION</span>
+            <span class="quote-likes-pill" id="featuredLikes">♡ {featuredQuote.likes_count || 450} loved</span>
+          </div>
+
+          <div class="quote-body-wrap">
+            <div class="quote-large-mark">“</div>
+            <p class="featured-quote-content" id="featuredText">
+              {featuredQuote.content_text}
+            </p>
+            <div class="featured-author-wrap">
+              <span class="author-dash">—</span>
+              <span class="featured-author-text" id="featuredAuthor">{featuredQuote.author}</span>
+            </div>
+          </div>
+
+          <!-- Card Actions Toolbar -->
+          <div class="featured-actions-row">
+            <button class="btn-quote-main btn-shuffle-quote magnetic-btn" onclick="shuffleDailyVibe(event)">
+              <span class="btn-icon">↻</span>
+              <span>Shuffle Next Vibe</span>
+            </button>
+            <button class="btn-quote-secondary magnetic-btn" onclick="copyFeaturedQuote(event)">
+              <span class="btn-icon">📋</span>
+              <span>Copy Reflection</span>
+            </button>
+            <button class="btn-quote-secondary magnetic-btn" onclick="shareFeaturedQuote(event)">
+              <span class="btn-icon">✨</span>
+              <span>Share Story</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quotes Catalog & Archive Section -->
+    <section class="quotes-archive-section">
+      <div class="container">
+        <div class="archive-header-row">
+          <div>
+            <span class="section-pill-tag">✦ EXPLORE BY MOOD</span>
+            <h2 class="archive-title">Curated Mindset Archives</h2>
+          </div>
+
+          <!-- Keyword Search -->
+          <div class="quotes-search-wrap">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              id="quoteSearchInput"
+              class="quote-search-field"
+              placeholder="Filter by keyword (e.g. blooming, peace, study)..."
+              oninput="handleQuoteSearch(this.value)"
+            />
+          </div>
+        </div>
+
+        <!-- Filter Mood Tabs -->
+        <div class="mood-tabs-wrap">
+          <button class="mood-tab-btn active" data-filter="all" onclick="filterQuotesByMood('all', this)">
+            All Quotes ({quotes.length})
+          </button>
+          <button class="mood-tab-btn" data-filter="growth" onclick="filterQuotesByMood('growth', this)">
+            🌱 Blooming & Growth
+          </button>
+          <button class="mood-tab-btn" data-filter="morning" onclick="filterQuotesByMood('morning', this)">
+            🌸 Morning Rituals
+          </button>
+          <button class="mood-tab-btn" data-filter="confidence" onclick="filterQuotesByMood('confidence', this)">
+            💫 Confidence & Glow
+          </button>
+          <button class="mood-tab-btn" data-filter="study" onclick="filterQuotesByMood('study', this)">
+            ☕ Study & Peace
+          </button>
+        </div>
+
+        <!-- Quotes Grid -->
+        <div class="quotes-grid" id="quotesGrid">
+          {quotes.map((q, idx) => {
+            const rawAuthor = q.author || 'Rini';
+            const category = rawAuthor.includes('•') ? rawAuthor.split('•')[1].trim() : 'Mindset';
+            const safeText = (q.content_text || '').replace(/'/g, "\\'");
+            return (
+              <div
+                class="quote-grid-card tilt-card"
+                data-text={q.content_text?.toLowerCase() || ''}
+                data-category={category.toLowerCase()}
+              >
+                <div class="card-top-meta">
+                  <span class="card-cat-pill">{category}</span>
+                  <span class="card-heart-tag">♡ {q.likes_count || (300 + idx * 35)}</span>
+                </div>
+                <div class="card-quote-mark">“</div>
+                <p class="card-quote-text">{q.content_text}</p>
+                <div class="card-bottom-row">
+                  <span class="card-author-lbl">— {rawAuthor}</span>
+                  <button
+                    class="btn-copy-card-mini"
+                    onclick={`copyDirectQuote('${safeText}', '${rawAuthor}', event)`}
+                    title="Copy to clipboard"
+                  >
+                    <span>📋</span>
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <!-- Empty Results -->
+        <div id="noQuotesFound" class="no-results-state" style="display: none;">
+          <div class="no-results-icon">💬</div>
+          <h3>No quotes match that keyword</h3>
+          <p>Try searching for a different topic or reset your mood filter.</p>
+          <button class="btn-reset-filters" onclick="resetQuoteFilters()">Show All Quotes</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editorial Mindset Guide -->
+    <section class="quotes-guide-section">
+      <div class="container">
+        <div class="guide-box">
+          <div class="guide-header">
+            <span class="section-pill-tag">✦ DAILY RITUAL</span>
+            <h2 class="guide-title">How To Romanticize Your Daily Mindset</h2>
+            <p class="guide-subtitle">Three gentle morning habits to protect your energy and radiate from within.</p>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-card">
+              <span class="guide-num">01</span>
+              <h4>Morning Brain Dump</h4>
+              <p>Write three unfiltered pages in your aesthetic journal before opening social media. Release lingering doubts.</p>
+            </div>
+            <div class="guide-card">
+              <span class="guide-num">02</span>
+              <h4>Ambient Audio Focus</h4>
+              <p>Put on lo-fi acoustic tones or rain ambience during study sessions. Let your nervous system settle into calm focus.</p>
+            </div>
+            <div class="guide-card">
+              <span class="guide-num">03</span>
+              <h4>Golden Hour Gratitude</h4>
+              <p>Write down three small things that brought you peace today. Joy is found in the softest moments.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<!-- Client Data & Logic Store -->
+<script is:inline define:vars={{ quotesJson }}>
+  window.__TTG_QUOTES = JSON.parse(quotesJson || '[]');
+  let currentQuoteIndex = 0;
+
+  function shuffleDailyVibe(e) {
+    if (!window.__TTG_QUOTES || window.__TTG_QUOTES.length === 0) return;
+    
+    // Play tone chime
+    if (typeof window.playTone === 'function') {
+      window.playTone(520, 'sine', 0.12);
+    }
+
+    currentQuoteIndex = (currentQuoteIndex + 1) % window.__TTG_QUOTES.length;
+    const nextQ = window.__TTG_QUOTES[currentQuoteIndex];
+
+    const textEl = document.getElementById('featuredText');
+    const authorEl = document.getElementById('featuredAuthor');
+    const topicEl = document.getElementById('featuredTopic');
+    const likesEl = document.getElementById('featuredLikes');
+
+    if (textEl && nextQ) {
+      // Smooth fade transition
+      textEl.style.opacity = '0';
+      textEl.style.transform = 'translateY(6px)';
+      setTimeout(() => {
+        textEl.textContent = nextQ.text;
+        if (authorEl) authorEl.textContent = nextQ.author;
+        if (topicEl) topicEl.textContent = `✦ ${nextQ.category.toUpperCase()} REFLECTION`;
+        if (likesEl) likesEl.textContent = `♡ ${nextQ.likes || 420} loved`;
+        textEl.style.opacity = '1';
+        textEl.style.transform = 'translateY(0)';
+      }, 150);
+    }
+  }
+
+  function copyFeaturedQuote(e) {
+    const textEl = document.getElementById('featuredText');
+    const authorEl = document.getElementById('featuredAuthor');
+    if (!textEl) return;
+
+    const fullStr = `"${textEl.textContent.trim()}" — ${authorEl ? authorEl.textContent.trim() : 'TeenTimeGlow'}`;
+    navigator.clipboard.writeText(fullStr).then(() => {
+      if (typeof window.playTone === 'function') window.playTone(660, 'sine', 0.15);
+      if (typeof window.showToast === 'function') {
+        window.showToast('Reflection copied to clipboard! ✨');
+      }
+    });
+  }
+
+  function shareFeaturedQuote(e) {
+    const textEl = document.getElementById('featuredText');
+    const authorEl = document.getElementById('featuredAuthor');
+    const quoteText = textEl ? textEl.textContent.trim() : '';
+    const authorText = authorEl ? authorEl.textContent.trim() : 'Rini';
+
+    if (navigator.share) {
+      navigator.share({
+        title: 'TeenTimeGlow Daily Mindset',
+        text: `"${quoteText}" — ${authorText}`,
+        url: window.location.href
+      }).catch(() => {});
+    } else {
+      copyFeaturedQuote(e);
+    }
+  }
+
+  function copyDirectQuote(text, author, event) {
+    event.stopPropagation();
+    const fullStr = `"${text}" — ${author} (via TeenTimeGlow)`;
+    navigator.clipboard.writeText(fullStr).then(() => {
+      if (typeof window.playTone === 'function') window.playTone(700, 'sine', 0.15);
+      if (typeof window.showToast === 'function') {
+        window.showToast('Quote copied to clipboard! 🌸');
+      }
+    });
+  }
+
+  function filterQuotesByMood(mood, btn) {
+    document.querySelectorAll('.mood-tab-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const cards = document.querySelectorAll('#quotesGrid .quote-grid-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cat = card.getAttribute('data-category') || '';
+      const matches = mood === 'all' || cat.includes(mood);
+      if (matches) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const empty = document.getElementById('noQuotesFound');
+    if (empty) empty.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  function handleQuoteSearch(val) {
+    const q = val.toLowerCase().trim();
+    const cards = document.querySelectorAll('#quotesGrid .quote-grid-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const text = card.getAttribute('data-text') || '';
+      if (!q || text.includes(q)) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const empty = document.getElementById('noQuotesFound');
+    if (empty) empty.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  function resetQuoteFilters() {
+    const input = document.getElementById('quoteSearchInput');
+    if (input) input.value = '';
+    const allBtn = document.querySelector('.mood-tab-btn[data-filter="all"]');
+    filterQuotesByMood('all', allBtn);
+  }
+</script>
+
+<style>
+  /* ==========================================================================
+     Dedicated Quotes Page Styles
+     ========================================================================== */
+  .quotes-page-container {
+    padding-top: 100px;
+    padding-bottom: 80px;
+    background: #FAF7F2;
+    min-height: 100vh;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .breadcrumb-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .breadcrumb-link:hover {
+    color: var(--sunset-accent);
+  }
+  .breadcrumb-sep {
+    color: #CBD5E1;
+  }
+  .breadcrumb-current {
+    color: #111827;
+  }
+  .btn-back-home {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #111827;
+    text-decoration: none;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+  }
+  .btn-back-home:hover {
+    border-color: var(--sunset-accent);
+    color: var(--sunset-accent);
+    transform: translateX(-2px);
+  }
+
+  /* Hero Section */
+  .quotes-hero {
+    padding: 40px 0 30px;
+  }
+  .hero-badge-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .hero-live-badge {
+    background: #E85D04;
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  .quotes-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    line-height: 1.05;
+    color: #0F1115;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .glow-gradient-text {
+    background: linear-gradient(135deg, #E85D04 0%, #FAA307 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .quotes-hero-subtitle {
+    font-size: 1.08rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto 10px;
+    line-height: 1.6;
+  }
+
+  /* Featured Generator Card */
+  .quotes-featured-section {
+    padding: 24px 0 50px;
+  }
+  .featured-quote-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 32px;
+    padding: 50px 48px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 45px -10px rgba(232, 93, 4, 0.08), 0 0 1px 1px rgba(0,0,0,0.02);
+  }
+  .quote-featured-blob {
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    top: -120px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(232, 93, 4, 0.12) 0%, rgba(250, 163, 7, 0.06) 60%, transparent 75%);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .quote-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .quote-topic-badge {
+    background: rgba(232, 93, 4, 0.08);
+    color: var(--sunset-accent);
+    font-size: 0.76rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+  }
+  .quote-likes-pill {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .quote-body-wrap {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 36px;
+  }
+  .quote-large-mark {
+    font-family: var(--font-editorial);
+    font-size: 5rem;
+    line-height: 1;
+    color: rgba(232, 93, 4, 0.25);
+    margin-bottom: -20px;
+  }
+  .featured-quote-content {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+    line-height: 1.45;
+    color: #111827;
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+  }
+  .featured-author-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--brand-green);
+  }
+  .author-dash {
+    color: var(--sunset-accent);
+  }
+  .featured-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .btn-quote-main {
+    background: #000000;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 0.92rem;
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+  }
+  .btn-quote-main:hover {
+    background: var(--sunset-accent);
+    transform: translateY(-2px);
+  }
+  .btn-quote-secondary {
+    background: #FAF9F6;
+    border: 1px solid var(--border-subtle);
+    color: #111827;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 12px 20px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-quote-secondary:hover {
+    background: #FFFFFF;
+    border-color: var(--sunset-accent);
+    color: var(--sunset-accent);
+  }
+  .btn-icon {
+    font-size: 1.1rem;
+  }
+
+  /* Quotes Archive Section */
+  .quotes-archive-section {
+    padding: 40px 0 60px;
+  }
+  .archive-header-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .archive-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    color: #0F1115;
+    margin-top: 6px;
+  }
+  .quotes-search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 10px 18px;
+    min-width: 280px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+  .quote-search-field {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: #111827;
+    width: 100%;
+  }
+  .mood-tabs-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .mood-tab-btn {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .mood-tab-btn:hover {
+    color: #111827;
+    background: #FAF9F6;
+  }
+  .mood-tab-btn.active {
+    background: #0C3B2E;
+    color: #FFFFFF;
+    border-color: #0C3B2E;
+  }
+
+  /* Quotes Grid */
+  .quotes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .quote-grid-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.02);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .quote-grid-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(232, 93, 4, 0.1);
+    border-color: rgba(232, 93, 4, 0.3);
+  }
+  .card-top-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .card-cat-pill {
+    background: #FAF9F6;
+    color: var(--sunset-accent);
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+  .card-heart-tag {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .card-quote-mark {
+    font-family: var(--font-editorial);
+    font-size: 2.4rem;
+    line-height: 1;
+    color: rgba(232, 93, 4, 0.3);
+    margin-bottom: -8px;
+  }
+  .card-quote-text {
+    font-family: var(--font-editorial);
+    font-size: 1.08rem;
+    font-style: italic;
+    color: #111827;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  .card-bottom-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .card-author-lbl {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .btn-copy-card-mini {
+    background: #FAF9F6;
+    border: 1px solid var(--border-subtle);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+  }
+  .btn-copy-card-mini:hover {
+    background: var(--sunset-accent);
+    color: #FFFFFF;
+    border-color: var(--sunset-accent);
+  }
+
+  /* No Results */
+  .no-results-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px dashed var(--border-subtle);
+  }
+  .no-results-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+  }
+  .btn-reset-filters {
+    margin-top: 16px;
+    background: var(--sunset-accent);
+    color: #FFFFFF;
+    border: none;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  /* Guide Box */
+  .quotes-guide-section {
+    padding: 40px 0 20px;
+  }
+  .guide-box {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 36px 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  }
+  .guide-header {
+    margin-bottom: 28px;
+  }
+  .guide-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    color: #0F1115;
+    margin-top: 8px;
+  }
+  .guide-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .guide-card {
+    background: #FAF9F6;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-subtle);
+  }
+  .guide-num {
+    font-family: var(--font-syne);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .guide-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 6px;
+  }
+  .guide-card p {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 900px) {
+    .quotes-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .guide-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .quotes-grid {
+      grid-template-columns: 1fr;
+    }
+    .featured-quote-card {
+      padding: 32px 24px;
+    }
+    .featured-actions-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .btn-quote-main, .btn-quote-secondary {
+      justify-content: center;
+      width: 100%;
+    }
+  }
+</style>

@@ -98,7 +98,7 @@ export const fallbackQuotes: StoryMemeQuote[] = [
     id: '1',
     type: 'quote',
     content_text: 'You do not need to have everything figured out right now. Just focus on blooming in your own season. ✨',
-    author: 'Rini',
+    author: 'Rini • Blooming Mindset',
     likes_count: 284,
     created_at: new Date().toISOString()
   },
@@ -106,7 +106,7 @@ export const fallbackQuotes: StoryMemeQuote[] = [
     id: '2',
     type: 'quote',
     content_text: 'Small daily habits create massive transformations. Romanticize your mornings and protect your peace. 🌸',
-    author: 'Rini',
+    author: 'Rini • Morning Rituals',
     likes_count: 412,
     created_at: new Date().toISOString()
   },
@@ -114,8 +114,48 @@ export const fallbackQuotes: StoryMemeQuote[] = [
     id: '3',
     type: 'quote',
     content_text: 'True confidence comes from being comfortable with who you are when no one is watching. 💫',
-    author: 'Rini',
+    author: 'Rini • Confidence & Glow',
     likes_count: 356,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '4',
+    type: 'quote',
+    content_text: 'Your energy is your sacred aesthetic. Do not give it away to places that do not nurture your light. 🌿',
+    author: 'Rini • Self-Care & Peace',
+    likes_count: 520,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '5',
+    type: 'quote',
+    content_text: 'Quiet study sessions with hot matcha and big dreams are building the life you are going to live tomorrow. ☕',
+    author: 'Rini • Study Aesthetic',
+    likes_count: 468,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '6',
+    type: 'quote',
+    content_text: 'You do not just exist; you arrive, you radiate, and you create your own light in every room you step into. 🌅',
+    author: 'Rini • Golden Hour Reflection',
+    likes_count: 615,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '7',
+    type: 'quote',
+    content_text: 'Be the kind of girl who celebrates other girls and never dims her own sparkle. 💖',
+    author: 'Rini • Sisterhood & Light',
+    likes_count: 389,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: '8',
+    type: 'quote',
+    content_text: 'Perfection is boring; glowing with authenticity and messy joy is unforgettable. 🎨',
+    author: 'Rini • Creative Spirit',
+    likes_count: 495,
     created_at: new Date().toISOString()
   }
 ];
