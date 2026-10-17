@@ -166,27 +166,34 @@ if (adminSession && adminSession === expectedSecret) {
       </span>
     </a>
 
-    <h1 class="login-title">Admin Cockpit</h1>
-    <p class="login-subtitle">Enter your private passkey to moderate submissions and publish new content.</p>
+    <h1 class="login-title">Welcome, Rini ✨</h1>
+    <p class="login-subtitle">Enter your 4-digit PIN (<strong>2026</strong>) or secret passkey to access your personal Studio.</p>
 
     <div id="loginError" class="login-error"></div>
 
     <form onsubmit="handleLogin(event)">
       <div class="form-group">
-        <label class="form-label" for="password">Admin Secret Passkey</label>
+        <label class="form-label" for="password">Studio Passcode or PIN</label>
         <input
           type="password"
           id="password"
           name="password"
           required
-          placeholder="••••••••••••"
+          placeholder="Enter 2026 or secret key..."
           class="form-input"
           autocomplete="current-password"
         />
       </div>
 
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 24px; text-align: left;">
+        <input type="checkbox" id="rememberMe" checked style="width: 18px; height: 18px; accent-color: var(--sunset-accent); cursor: pointer;" />
+        <label for="rememberMe" style="font-size: 0.88rem; color: #4B5563; font-weight: 600; cursor: pointer; user-select: none;">
+          Keep me signed in on this device (30 days)
+        </label>
+      </div>
+
       <button type="submit" id="submitBtn" class="btn-login">
-        Unlock Cockpit ✨
+        Open Studio ✨
       </button>
     </form>
 
@@ -197,21 +204,23 @@ if (adminSession && adminSession === expectedSecret) {
     async function handleLogin(e) {
       e.preventDefault();
       const passwordInput = document.getElementById('password');
+      const rememberMeInput = document.getElementById('rememberMe');
       const errorDiv = document.getElementById('loginError');
       const submitBtn = document.getElementById('submitBtn');
 
       const password = passwordInput.value;
+      const rememberMe = rememberMeInput ? rememberMeInput.checked : true;
       if (!password) return;
 
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Verifying...';
+      submitBtn.textContent = 'Opening Studio... ✨';
       errorDiv.style.display = 'none';
 
       try {
         const res = await fetch('/api/admin/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ password })
+          body: JSON.stringify({ password, rememberMe })
         });
         const data = await res.json();
 
@@ -221,13 +230,13 @@ if (adminSession && adminSession === expectedSecret) {
           errorDiv.textContent = data.error || 'Invalid credentials';
           errorDiv.style.display = 'block';
           submitBtn.disabled = false;
-          submitBtn.textContent = 'Unlock Cockpit ✨';
+          submitBtn.textContent = 'Open Studio ✨';
         }
       } catch (err) {
         errorDiv.textContent = 'Network error: ' + err.message;
         errorDiv.style.display = 'block';
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Unlock Cockpit ✨';
+        submitBtn.textContent = 'Open Studio ✨';
       }
     }
   </script>
