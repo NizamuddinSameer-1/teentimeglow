@@ -97,6 +97,202 @@
     }
 
     /* ==========================================================================
+       0. CINEMATIC PRELOADER & MORPHING LOADING ANIMATION
+       ========================================================================== */
+    .site-preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #FAF7F2;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      pointer-events: all;
+      will-change: transform;
+    }
+    .site-preloader::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(255, 105, 180, 0.16) 0%, rgba(232, 93, 4, 0.12) 40%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(50px);
+      pointer-events: none;
+    }
+    .preloader-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+    .preloader-morph-orb {
+      width: 90px;
+      height: 90px;
+      position: relative;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 14px 28px rgba(232, 93, 4, 0.32));
+    }
+    .preloader-morph-inner {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #FF6584 0%, #E85D04 60%, #FAA307 100%);
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: morphLiquidOrb 4s ease-in-out infinite alternate;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.4);
+    }
+    @keyframes morphLiquidOrb {
+      0% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        transform: rotate(0deg) scale(1);
+      }
+      50% {
+        border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+        transform: rotate(180deg) scale(1.06);
+      }
+      100% {
+        border-radius: 70% 30% 50% 50% / 30% 40% 60% 70%;
+        transform: rotate(360deg) scale(0.96);
+      }
+    }
+    .preloader-heart-icon {
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15));
+      animation: preloaderHeartPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes preloaderHeartPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.18); }
+    }
+    .preloader-brand-title {
+      font-family: var(--font-editorial);
+      font-size: 2.2rem;
+      font-style: italic;
+      font-weight: 700;
+      color: var(--brand-green);
+      letter-spacing: -0.015em;
+      margin-bottom: 6px;
+    }
+    .preloader-dot {
+      color: var(--sunset-accent);
+      font-style: normal;
+    }
+    .preloader-tagline {
+      font-size: 0.75rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #9CA3AF;
+      margin-bottom: 24px;
+    }
+    .preloader-progress-wrap {
+      width: 160px;
+      height: 3px;
+      background: rgba(12, 59, 46, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .preloader-progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #FF6584, #E85D04, #FAA307);
+      border-radius: 999px;
+      transition: width 0.08s linear;
+      box-shadow: 0 0 10px rgba(232, 93, 4, 0.5);
+    }
+    .preloader-percent {
+      font-family: var(--font-body);
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--brand-green);
+      letter-spacing: 0.02em;
+    }
+
+    /* ==========================================================================
+       ORGANIC MORPHING ANIMATIONS (LIQUID GLASS BLOBS & MORPHING PILLS)
+       ========================================================================== */
+    .morph-liquid-blob {
+      position: absolute;
+      border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      animation: morphShape 11s ease-in-out infinite alternate;
+      pointer-events: none;
+      will-change: border-radius, transform;
+    }
+    @keyframes morphShape {
+      0% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        transform: rotate(0deg) scale(1);
+      }
+      33% {
+        border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+        transform: rotate(120deg) scale(1.08) translate(14px, -10px);
+      }
+      66% {
+        border-radius: 70% 30% 50% 50% / 30% 40% 60% 70%;
+        transform: rotate(240deg) scale(0.95) translate(-10px, 14px);
+      }
+      100% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        transform: rotate(360deg) scale(1);
+      }
+    }
+    .hero-morph-blob-1 {
+      top: -40px;
+      right: -20px;
+      width: 340px;
+      height: 340px;
+      background: radial-gradient(circle, rgba(255, 105, 180, 0.28) 0%, rgba(232, 93, 4, 0.16) 50%, transparent 75%);
+      filter: blur(40px);
+      z-index: 1;
+    }
+    .hero-morph-blob-2 {
+      bottom: -50px;
+      left: -30px;
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, rgba(250, 163, 7, 0.25) 0%, rgba(255, 105, 180, 0.14) 50%, transparent 75%);
+      filter: blur(45px);
+      z-index: 1;
+      animation-duration: 15s;
+      animation-direction: alternate-reverse;
+    }
+    .quiz-morph-blob {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(255, 105, 180, 0.22) 0%, rgba(232, 93, 4, 0.15) 50%, transparent 75%);
+      filter: blur(35px);
+      z-index: 0;
+      border-radius: 50% 50% 30% 70% / 60% 40% 60% 40%;
+      animation: morphShape 9s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .quote-morph-blob {
+      position: absolute;
+      bottom: -30px;
+      left: -20px;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(250, 163, 7, 0.22) 0%, rgba(255, 105, 180, 0.14) 50%, transparent 75%);
+      filter: blur(35px);
+      z-index: 0;
+      animation: morphShape 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
        1. TOP HEADER & NAVIGATION
        ========================================================================== */
     header {
@@ -140,10 +336,20 @@
     }
     .brand-logo-text {
       font-family: var(--font-editorial);
-      font-size: 1.45rem;
+      font-size: 1.55rem;
       font-weight: 700;
+      font-style: italic;
       color: var(--brand-green);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.015em;
+      text-transform: lowercase;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: baseline;
+    }
+    .brand-logo-dot {
+      color: var(--sunset-accent);
+      font-style: normal;
+      margin-left: 1px;
     }
 
     .nav-links {
@@ -1502,10 +1708,12 @@
     }
     .footer-arched-logo {
       font-family: var(--font-editorial);
-      font-size: 1.95rem;
-      font-weight: 800;
+      font-size: 2.1rem;
+      font-weight: 700;
+      font-style: italic;
       color: var(--brand-green);
-      letter-spacing: -0.02em;
+      letter-spacing: -0.015em;
+      text-transform: lowercase;
       margin-bottom: 12px;
       display: inline-block;
     }
@@ -1948,7 +2156,7 @@
 
     @media (max-width: 640px) {
       /* Navigation Bar on Mobile */
-      .brand-logo-text { font-size: 1.25rem; }
+      .brand-logo-text { font-size: 1.3rem; }
       .brand-logo-img { width: 38px; height: 38px; }
       .quiz-pill-btn { display: none; }
       .sound-toggle-btn #soundLabel { display: none; }
@@ -2165,6 +2373,32 @@
 </head>
 <body>
 
+  <!-- ========================================================================
+       PRELOADER: AWWWARDS-GRADE CINEMATIC MORPHING INTRO LOADER
+       ======================================================================== -->
+  <div class="site-preloader" id="sitePreloader">
+    <div class="preloader-content">
+      <!-- Morphing Liquid Glow Orb with Pulsing Heart -->
+      <div class="preloader-morph-orb">
+        <div class="preloader-morph-inner">
+          <svg class="preloader-heart-icon" viewBox="0 0 24 24" width="28" height="28" fill="#FFFFFF">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Small Brand Wordmark in Best Font -->
+      <div class="preloader-brand-title">teen time glow<span class="preloader-dot">.</span></div>
+      <div class="preloader-tagline">feel the glow • curated teen aesthetic</div>
+
+      <!-- Animated Progress Bar & Percentage -->
+      <div class="preloader-progress-wrap">
+        <div class="preloader-progress-bar" id="preloaderProgressBar"></div>
+      </div>
+      <div class="preloader-percent" id="preloaderPercent">0%</div>
+    </div>
+  </div>
+
   <!-- Top Scroll Reading Progress Bar (GSAP ScrollTrigger) -->
   <div class="scroll-progress-bar" id="scrollProgressBar"></div>
 
@@ -2201,7 +2435,7 @@
       <div class="nav-wrap">
         <a href="/" class="brand-logo-wrap">
           <img src="assets/logo.jpg" alt="Teen Time Glow Logo" class="brand-logo-img" />
-          <span class="brand-logo-text">TeenTimeGlow</span>
+          <span class="brand-logo-text">teen time glow<span class="brand-logo-dot">.</span></span>
         </a>
 
         <ul class="nav-links">
@@ -2286,6 +2520,10 @@
     <div class="hero-banner-wrap" id="heroBanner">
       <!-- Stardust Canvas Particles -->
       <canvas class="hero-particles-canvas" id="heroParticles"></canvas>
+
+      <!-- Organic Ambient Morphing Liquid Blobs -->
+      <div class="morph-liquid-blob hero-morph-blob-1"></div>
+      <div class="morph-liquid-blob hero-morph-blob-2"></div>
 
       <div class="hero-inner-grid">
         <!-- Left Text Column -->
@@ -2529,6 +2767,8 @@
        ======================================================================== -->
   <section class="container" id="quotes">
     <div class="quote-section-wrap tilt-card" id="quoteCard">
+      <!-- Ambient Morphing Liquid Blob -->
+      <div class="morph-liquid-blob quote-morph-blob"></div>
       <div class="quote-layout">
         <div class="quote-content-col">
           <div class="quote-badge-row">
@@ -2653,6 +2893,8 @@
        ======================================================================== -->
   <section class="container" id="quiz">
     <div class="quiz-section-wrap">
+      <!-- Ambient Morphing Liquid Blob -->
+      <div class="morph-liquid-blob quiz-morph-blob"></div>
       <div class="quiz-inner-grid">
         <div class="quiz-intro-col">
           <span class="quiz-pill-header">✨ Interactive Experience</span>
@@ -2807,7 +3049,7 @@
       <div class="footer-layout">
         <!-- Left: Newsletter & Socials -->
         <div class="footer-left">
-          <div class="footer-arched-logo">Teen Time Glow</div>
+          <div class="footer-arched-logo">teen time glow<span class="brand-logo-dot">.</span></div>
           <h3 class="footer-offer-title">Join The Glow Club</h3>
           <p class="footer-offer-desc">Weekly curated lookbook drops, secret 4K wallpapers, and teen mindset letters by Rini directly in your inbox.</p>
           
@@ -3321,8 +3563,63 @@
       });
     }
 
+    // --- 0. Cinematic Morphing Loading Screen (0% -> 100% Counter & Curtain Wipe) ---
+    function initPreloader() {
+      const preloader = document.getElementById('sitePreloader');
+      const bar = document.getElementById('preloaderProgressBar');
+      const counter = document.getElementById('preloaderPercent');
+      if (!preloader || !bar || !counter) return;
+
+      let progress = 0;
+      const startTime = performance.now();
+      const duration = 1000; // 1 second fluid count up
+
+      function tick(now) {
+        const elapsed = now - startTime;
+        const current = Math.min(100, Math.floor((elapsed / duration) * 100));
+        if (current > progress) {
+          progress = current;
+          bar.style.width = progress + '%';
+          counter.textContent = progress + '%';
+        }
+
+        if (progress < 100) {
+          requestAnimationFrame(tick);
+        } else {
+          // Preloader exit animation
+          setTimeout(() => {
+            if (typeof gsap !== 'undefined') {
+              gsap.timeline()
+                .to('.preloader-content', {
+                  scale: 0.9,
+                  opacity: 0,
+                  duration: 0.35,
+                  ease: 'power2.in'
+                })
+                .to(preloader, {
+                  yPercent: -100,
+                  duration: 0.85,
+                  ease: 'power4.inOut',
+                  onComplete: () => {
+                    preloader.style.display = 'none';
+                    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+                  }
+                }, '-=0.1');
+            } else {
+              preloader.style.transition = 'transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.5s ease';
+              preloader.style.transform = 'translateY(-100%)';
+              preloader.style.opacity = '0';
+              setTimeout(() => { preloader.style.display = 'none'; }, 850);
+            }
+          }, 120);
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
     // --- 7. Awwwards-Grade GSAP Cinematic Intro Animation & Parallax ---
     window.addEventListener('DOMContentLoaded', () => {
+      initPreloader();
       initHeroParticles();
       initCursorHearts();
       initMagneticButtons();
