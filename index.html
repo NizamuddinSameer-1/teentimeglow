@@ -9,7 +9,7 @@
   <!-- OpenGraph / Social Meta -->
   <meta property="og:title" content="TeenTimeGlow — Feel The Glow" />
   <meta property="og:description" content="Curated teen fashion lookbooks, glowing skincare routines, Prime Video rankings, daily mindset quotes, and free 4K wallpapers." />
-  <meta property="og:image" content="https://www.teentimeglow.me/assets/hero-model.jpg" />
+  <meta property="og:image" content="https://www.teentimeglow.me/assets/hero-glow-creator.jpg" />
   <meta property="og:url" content="https://www.teentimeglow.me" />
   <meta name="twitter:card" content="summary_large_image" />
 
@@ -335,16 +335,17 @@
        ========================================================================== */
     .hero-banner-wrap {
       position: relative;
-      border-radius: 0 0 var(--card-radius) var(--card-radius);
+      border-radius: var(--card-radius);
       overflow: hidden;
       background: var(--sunset-gradient);
-      min-height: 560px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
       box-shadow: 0 16px 40px rgba(232, 93, 4, 0.2);
       transform-origin: center top;
       will-change: transform, opacity;
+      padding: 56px 48px;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .hero-particles-canvas {
       position: absolute;
@@ -371,35 +372,20 @@
       100% { transform: rotate(360deg); }
     }
 
-    .hero-model-container {
+    .hero-inner-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: 48px;
+      align-items: center;
       position: relative;
+      z-index: 5;
       width: 100%;
-      max-width: 540px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      z-index: 4;
-      will-change: transform;
-    }
-    .hero-model-img {
-      width: 100%;
-      height: auto;
-      max-height: 620px;
-      object-fit: contain;
-      display: block;
-      filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.38));
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    .hero-model-container:hover .hero-model-img {
-      transform: scale(1.03) translateY(-4px);
     }
 
-    /* Left Text Overlay */
+    /* Left Text Column */
     .hero-left-overlay {
-      position: absolute;
-      bottom: 48px;
-      left: 48px;
-      max-width: 420px;
+      position: relative;
+      max-width: 540px;
       z-index: 10;
       color: #FFFFFF;
       will-change: transform, opacity;
@@ -410,30 +396,31 @@
       gap: 6px;
       background: rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: #FFDE59;
-      padding: 5px 14px;
+      padding: 6px 16px;
       border-radius: 999px;
       font-size: 0.75rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     .hero-left-heading {
       font-family: var(--font-body);
-      font-size: clamp(1.4rem, 2.6vw, 1.95rem);
+      font-size: clamp(1.85rem, 3.2vw, 2.75rem);
       font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 12px;
+      line-height: 1.18;
+      margin-bottom: 14px;
       text-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
     }
     .hero-left-subtext {
-      font-size: 0.95rem;
-      line-height: 1.55;
-      color: rgba(255, 255, 255, 0.94);
-      margin-bottom: 22px;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 24px;
       text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
     }
     .hero-btn-group {
@@ -453,19 +440,20 @@
       font-size: 0.92rem;
       font-weight: 700;
       text-decoration: none;
-      transition: background 0.2s ease, box-shadow 0.2s ease;
+      transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
       box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
       cursor: pointer;
     }
     .btn-black-pill:hover {
       background: #1F2937;
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+      transform: translateY(-2px);
     }
     .btn-glass-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.24);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       color: #FFFFFF;
@@ -475,43 +463,91 @@
       font-weight: 700;
       text-decoration: none;
       border: 1px solid rgba(255, 255, 255, 0.45);
-      transition: background 0.2s ease;
+      transition: background 0.2s ease, transform 0.2s ease;
       cursor: pointer;
     }
     .btn-glass-pill:hover {
       background: rgba(255, 255, 255, 0.38);
+      transform: translateY(-2px);
+    }
+    .hero-meta-badge-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+    .hero-meta-badge {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
+      background: rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
 
-    /* Floating Micro-Cards with Physics */
+    /* Right Visual Column */
+    .hero-visual-col {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 8;
+    }
+    .hero-model-container {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      border-radius: 24px;
+    }
+    .hero-model-img {
+      width: 100%;
+      height: 470px;
+      object-fit: cover;
+      object-position: center 20%;
+      border-radius: 24px;
+      display: block;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .hero-model-container:hover .hero-model-img {
+      transform: scale(1.02) translateY(-4px);
+    }
+
+    /* Floating Micro-Cards Anchored to Visual Column */
     .floating-card {
       position: absolute;
-      background: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.32);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.6);
       border-radius: 16px;
-      padding: 8px 12px;
+      padding: 8px 14px;
       display: flex;
       align-items: center;
       gap: 10px;
       box-shadow: 0 14px 34px rgba(0, 0, 0, 0.25);
-      z-index: 10;
+      z-index: 12;
       cursor: pointer;
-      transition: background 0.2s ease, box-shadow 0.2s ease;
+      transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
       text-decoration: none;
       animation: floatSlow 5s ease-in-out infinite alternate;
     }
     .floating-card:hover {
-      background: rgba(255, 255, 255, 0.45);
+      background: rgba(255, 255, 255, 0.48);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
     }
     .floating-card-1 {
-      top: 22%;
-      left: 26%;
+      top: 24px;
+      left: -24px;
     }
     .floating-card-2 {
-      bottom: 22%;
-      right: 26%;
+      bottom: 24px;
+      right: -24px;
       animation-delay: 2.5s;
     }
     .floating-card-img {
@@ -1351,7 +1387,7 @@
 
     /* ==========================================================================
        10. FEATURE 6: THE TEEN GALLERY (COMMUNITY CREATOR SHOWCASE)
-       ======================================================================== -->
+       ========================================================================== */
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -1627,28 +1663,29 @@
     }
 
     /* Floating Back To Top Pill */
+    /* Floating Back To Top Pill (Bottom-Right Thumb Zone) */
     .back-to-top-btn {
       position: fixed;
-      bottom: 28px;
-      left: 28px;
-      width: 44px;
-      height: 44px;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: #000000;
       color: #FFFFFF;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       font-weight: 700;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.28);
       cursor: pointer;
-      z-index: 900;
+      z-index: 850;
       opacity: 0;
       pointer-events: none;
       transform: translateY(20px);
-      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
-      border: none;
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease, box-shadow 0.2s ease;
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .back-to-top-btn.visible {
       opacity: 1;
@@ -1658,6 +1695,7 @@
     .back-to-top-btn:hover {
       background: var(--sunset-accent);
       transform: translateY(-4px) scale(1.08);
+      box-shadow: 0 14px 32px rgba(232, 93, 4, 0.4);
     }
 
     /* ==========================================================================
@@ -1671,7 +1709,7 @@
       bottom: 0;
       background: rgba(15, 17, 21, 0.7);
       backdrop-filter: blur(8px);
-      z-index: 1000;
+      z-index: 2000;
       display: none;
       align-items: center;
       justify-content: center;
@@ -1716,29 +1754,36 @@
       background: #E5E7EB;
     }
 
-    /* Toast Notification */
+    /* Toast Notification (Top Center Floating Capsule - Collision Free) */
     .toast-pill {
       position: fixed;
-      bottom: 28px;
-      right: 28px;
-      background: #000000;
+      top: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: rgba(15, 17, 21, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: #FFFFFF;
-      padding: 12px 22px;
+      padding: 12px 24px;
       border-radius: 999px;
       font-size: 0.88rem;
       font-weight: 700;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      z-index: 2000;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+      z-index: 2500;
       display: flex;
       align-items: center;
       gap: 10px;
-      transform: translateY(100px);
       opacity: 0;
-      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+      pointer-events: none;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+      white-space: nowrap;
+      max-width: calc(100vw - 32px);
     }
     .toast-pill.show {
-      transform: translateY(0);
+      transform: translateX(-50%) translateY(0);
       opacity: 1;
+      pointer-events: auto;
     }
 
     /* Mobile Drawer */
@@ -1746,27 +1791,33 @@
       position: fixed;
       top: 0;
       right: 0;
-      width: 280px;
+      width: 300px;
       height: 100%;
       background: #FFFFFF;
       box-shadow: -10px 0 30px rgba(0,0,0,0.15);
-      z-index: 1500;
+      z-index: 2200;
       transform: translateX(100%);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       padding: 32px 24px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 24px;
     }
     .mobile-drawer.open {
       transform: translateX(0);
     }
     .drawer-close-btn {
       align-self: flex-end;
-      background: none;
+      background: #F3F4F6;
       border: none;
-      font-size: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.4rem;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .drawer-links {
       list-style: none;
@@ -1776,38 +1827,339 @@
     }
     .drawer-links a {
       color: #111827;
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 700;
       text-decoration: none;
+      padding: 8px 0;
+      transition: color 0.2s ease;
+    }
+    .drawer-links a:hover {
+      color: var(--sunset-accent);
     }
 
     /* ==========================================================================
-       RESPONSIVE BREAKPOINTS
+       RESPONSIVE BREAKPOINTS (ALL DEVICES: DESKTOP, TABLET, MOBILE)
        ========================================================================== */
     @media (max-width: 1024px) {
+      .container { padding: 0 20px; }
       .nav-links { display: none; }
-      .mobile-menu-toggle { display: block; }
+      .mobile-menu-toggle { display: flex; }
+      .hero-banner-wrap {
+        padding: 40px 28px;
+        min-height: auto;
+      }
+      .hero-inner-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .hero-left-overlay {
+        max-width: 100%;
+      }
+      .hero-model-container {
+        max-width: 400px;
+        margin: 0 auto;
+      }
+      .hero-model-img {
+        height: 400px;
+      }
+      .floating-card-1 {
+        top: -12px;
+        left: 0;
+      }
+      .floating-card-2 {
+        bottom: -12px;
+        right: 0;
+      }
       .edits-grid { grid-template-columns: 1fr; }
-      .rankings-grid { grid-template-columns: repeat(2, 1fr); }
-      .wallpapers-grid { grid-template-columns: repeat(2, 1fr); }
-      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+      .rankings-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .wallpapers-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
       .footer-layout { grid-template-columns: 1fr; gap: 40px; }
       .footer-center { order: -1; }
-      .quiz-inner-grid { grid-template-columns: 1fr; }
-      .quote-layout { grid-template-columns: 1fr; }
+      .quiz-inner-grid { grid-template-columns: 1fr; gap: 32px; }
+      .quote-layout { grid-template-columns: 1fr; gap: 28px; }
     }
 
     @media (max-width: 768px) {
-      .hero-banner-wrap { min-height: 480px; }
-      .hero-left-overlay { left: 20px; bottom: 20px; max-width: 320px; }
-      .hero-btn-group { flex-direction: column; align-items: flex-start; }
-      .floating-card-1 { left: 6%; top: 14%; }
-      .floating-card-2 { right: 6%; bottom: 14%; }
-      .rankings-grid { grid-template-columns: 1fr; }
+      .container { padding: 0 16px; }
+      .section-block { padding: 52px 0 24px; }
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+      .filter-tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding: 4px 2px 8px;
+        width: 100%;
+        gap: 8px;
+      }
+      .filter-tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .filter-btn {
+        flex-shrink: 0;
+        white-space: nowrap;
+        font-size: 0.82rem;
+        padding: 8px 14px;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .quote-section-wrap {
+        padding: 28px 20px;
+        margin: 24px 0;
+        border-radius: 20px;
+      }
+      .quote-mark { font-size: 2.8rem; }
+      .quote-actions-col {
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 10px;
+      }
+      .btn-quote-action {
+        flex: 1 1 calc(50% - 10px);
+        min-height: 44px;
+      }
+      .quiz-section-wrap {
+        padding: 28px 20px;
+        margin: 24px 0;
+        border-radius: 20px;
+      }
+      .quiz-intro-col { max-width: 100%; }
+      .quiz-card-container {
+        padding: 22px 18px;
+        border-radius: 18px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 640px) {
+      /* Navigation Bar on Mobile */
+      .brand-logo-text { font-size: 1.25rem; }
+      .brand-logo-img { width: 38px; height: 38px; }
+      .quiz-pill-btn { display: none; }
+      .sound-toggle-btn #soundLabel { display: none; }
+      .sound-toggle-btn {
+        padding: 8px 10px;
+        border-radius: 50%;
+        min-width: 40px;
+        min-height: 40px;
+        justify-content: center;
+      }
+      .saved-pill {
+        padding: 8px 12px;
+        min-height: 40px;
+      }
+      .mobile-menu-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #F3F4F6;
+        border: 1px solid rgba(0,0,0,0.06);
+        font-size: 1.15rem;
+        cursor: pointer;
+      }
+
+      /* Giant Headline on Mobile */
+      .giant-title-wrap { padding: 20px 0 8px; }
+      .giant-hero-title {
+        font-size: clamp(2.8rem, 14vw, 4.5rem);
+        gap: 10px;
+      }
+
+      /* Hero Section on Mobile */
+      .hero-banner-wrap {
+        padding: 24px 16px;
+        border-radius: 18px;
+      }
+      .hero-inner-grid {
+        gap: 24px;
+      }
+      .hero-issue-badge {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+      }
+      .hero-left-heading {
+        font-size: clamp(1.6rem, 7vw, 2.1rem);
+        line-height: 1.2;
+      }
+      .hero-left-subtext {
+        font-size: 0.88rem;
+        line-height: 1.5;
+        margin-bottom: 18px;
+      }
+      .hero-btn-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+      }
+      .btn-black-pill, .btn-glass-pill {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 20px;
+        min-height: 46px;
+        font-size: 0.92rem;
+      }
+      .hero-meta-badge-row {
+        flex-direction: column;
+        gap: 6px;
+        margin-top: 16px;
+      }
+      .hero-model-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 100%;
+      }
+      .hero-model-img {
+        height: 300px;
+        border-radius: 18px;
+      }
+      .floating-card {
+        position: static;
+        width: 100%;
+        animation: none !important;
+        transform: none !important;
+        padding: 10px 14px;
+      }
+      .floating-card-1, .floating-card-2 {
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+      }
+      .slider-dots { display: none; }
+
+      /* Lookbook Magazine Cards on Mobile */
+      .edit-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px;
+        gap: 12px;
+      }
+      .edit-img-wrap {
+        width: 100%;
+        height: 180px;
+        border-radius: 12px;
+      }
+      .edit-info { width: 100%; }
+      .edit-title { font-size: 1.05rem; }
+      .btn-read-edit {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 10px;
+        border-top: 1px solid #F3F4F6;
+        font-size: 0.9rem;
+      }
+
+      /* Rankings Cards on Mobile */
+      .rankings-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .ranking-card {
+        max-width: 440px;
+        margin: 0 auto;
+        width: 100%;
+      }
+      .ranking-poster-frame {
+        aspect-ratio: 16 / 11;
+      }
+      .ranking-action-link {
+        min-height: 44px;
+      }
+
+      /* Wallpapers on Mobile */
+      .wallpapers-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .wallpaper-info {
+        padding: 12px 10px;
+        gap: 8px;
+      }
+      .wallpaper-title { font-size: 0.85rem; }
+      .btn-download-wallpaper {
+        padding: 10px 12px;
+        font-size: 0.78rem;
+        min-height: 44px;
+      }
+
+      /* Gallery on Mobile */
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .gallery-info { padding: 10px 10px; }
+      .gallery-title { font-size: 0.8rem; }
+
+      /* Floating Controls on Mobile */
+      .back-to-top-btn {
+        bottom: 20px;
+        right: 16px;
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+        z-index: 850;
+      }
+      .audio-preview-bar {
+        bottom: 18px;
+        width: calc(100% - 32px);
+        max-width: 380px;
+        padding: 10px 16px;
+        gap: 10px;
+      }
+      .toast-pill {
+        top: 20px;
+        bottom: auto;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%) translateY(-100px);
+        width: calc(100% - 40px);
+        max-width: 360px;
+        justify-content: center;
+        font-size: 0.82rem;
+        padding: 10px 18px;
+      }
+      .toast-pill.show {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* Footer on Mobile */
+      footer {
+        padding: 56px 0 32px;
+        margin-top: 48px;
+      }
+      .footer-right {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+      .footer-left { max-width: 100%; }
+      .footer-offer-title { font-size: 1.7rem; }
+      .footer-jar-img { max-width: 160px; }
+    }
+
+    @media (max-width: 380px) {
       .wallpapers-grid { grid-template-columns: 1fr; }
-      .quote-section-wrap { padding: 28px 20px; }
-      .quiz-section-wrap { padding: 28px 20px; }
-      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .btn-quote-action { flex: 1 1 100%; }
     }
   </style>
 </head>
@@ -1935,37 +2287,48 @@
       <!-- Stardust Canvas Particles -->
       <canvas class="hero-particles-canvas" id="heroParticles"></canvas>
 
-      <!-- Floating Glass Card 1 (Top-Left) -->
-      <a href="#edits" class="floating-card floating-card-1" id="floatCard1">
-        <img src="assets/feature-skincare.jpg" alt="Skincare Glow Routine" class="floating-card-img" />
-        <div class="floating-text-wrap">
-          <span class="floating-tag">✨ Skincare Edit</span>
-          <span class="floating-title">Glass Skin Morning</span>
+      <div class="hero-inner-grid">
+        <!-- Left Text Column -->
+        <div class="hero-left-overlay" id="heroOverlay">
+          <div class="hero-issue-badge">
+            <span>✨</span>
+            <span>ISSUE #28 • GOLDEN HOUR EDITION</span>
+          </div>
+          <h2 class="hero-left-heading">Feel The Glow.<br />Daily Curated Inspo.</h2>
+          <p class="hero-left-subtext">Rini curates the freshest teen aesthetic lookbooks, dewy glass skincare routines, bingeable Prime Video rankings, and cozy study spaces.</p>
+          <div class="hero-btn-group">
+            <a href="#edits" class="btn-black-pill magnetic-btn">Explore The Glow &rarr;</a>
+            <a href="#quiz" class="btn-glass-pill magnetic-btn">Discover Your Vibe ✨</a>
+          </div>
+          <div class="hero-meta-badge-row">
+            <span class="hero-meta-badge">✦ Free 4K Wallpaper Vault</span>
+            <span class="hero-meta-badge">✦ Updated Every Saturday</span>
+          </div>
         </div>
-      </a>
 
-      <!-- Central Hero Fashion Model -->
-      <div class="hero-model-container" id="heroModelWrap">
-        <img src="assets/hero-model.jpg" alt="TeenTimeGlow Fashion Model" class="hero-model-img" id="heroModelImg" />
-      </div>
+        <!-- Right Visual Column -->
+        <div class="hero-visual-col">
+          <div class="hero-model-container" id="heroModelWrap">
+            <img src="assets/hero-glow-creator.jpg" alt="Rini — TeenTimeGlow Creator & Curator" class="hero-model-img" id="heroModelImg" />
 
-      <!-- Floating Glass Card 2 (Bottom-Right) -->
-      <a href="#wallpapers" class="floating-card floating-card-2" id="floatCard2">
-        <img src="assets/wallpaper-sunset.jpg" alt="Free 4K Wallpapers" class="floating-card-img" />
-        <div class="floating-text-wrap">
-          <span class="floating-tag">📱 Free 4K Vault</span>
-          <span class="floating-title">Sunset Horizon Drop</span>
-        </div>
-      </a>
+            <!-- Floating Glass Card 1 (Skincare Edit) -->
+            <a href="#edits" class="floating-card floating-card-1" id="floatCard1">
+              <img src="assets/feature-skincare.jpg" alt="Skincare Glow Routine" class="floating-card-img" />
+              <div class="floating-text-wrap">
+                <span class="floating-tag">✨ Skincare Edit</span>
+                <span class="floating-title">Glass Skin Morning</span>
+              </div>
+            </a>
 
-      <!-- Left Text Overlay -->
-      <div class="hero-left-overlay" id="heroOverlay">
-        <span class="hero-issue-badge">Issue #28 • Golden Hour Edition</span>
-        <h2 class="hero-left-heading">Get ready for the new season with TeenTimeGlow</h2>
-        <p class="hero-left-subtext">Rini curates the freshest teen fashion lookbooks, glowing skincare routines, bingeable Prime Video rankings, and cozy space inspiration.</p>
-        <div class="hero-btn-group">
-          <a href="#edits" class="btn-black-pill magnetic-btn">Explore The Glow &rarr;</a>
-          <a href="#quiz" class="btn-glass-pill magnetic-btn">Discover Your Vibe ✨</a>
+            <!-- Floating Glass Card 2 (Free 4K Wallpapers) -->
+            <a href="#wallpapers" class="floating-card floating-card-2" id="floatCard2">
+              <img src="assets/wallpaper-sunset.jpg" alt="Free 4K Wallpapers" class="floating-card-img" />
+              <div class="floating-text-wrap">
+                <span class="floating-tag">📱 Free 4K Vault</span>
+                <span class="floating-title">Sunset Horizon Drop</span>
+              </div>
+            </a>
+          </div>
         </div>
       </div>
 
@@ -2043,7 +2406,7 @@
         <!-- Story 2: Autumn Capsule Wardrobe -->
         <div class="edit-card tilt-card" data-cat="fashion" onclick="openStoryModal('fashion')">
           <div class="edit-img-wrap">
-            <img src="assets/arrival-1.jpg" alt="Autumn Warm Layering Guide" class="edit-img parallax-img" />
+            <img src="assets/feature-fashion.jpg" alt="Autumn Warm Layering & Knitwear Guide" class="edit-img parallax-img" />
           </div>
           <div class="edit-info">
             <span class="edit-category-badge">Fashion Lookbook</span>
@@ -2059,7 +2422,7 @@
         <!-- Story 3: Cozy Room Corner Inspo -->
         <div class="edit-card tilt-card" data-cat="decor" onclick="openStoryModal('decor')">
           <div class="edit-img-wrap">
-            <img src="assets/arrival-3.jpg" alt="Cozy Bedroom Setup" class="edit-img parallax-img" />
+            <img src="assets/feature-decor.jpg" alt="Aesthetic Study Desk & Fairy Lights Setup" class="edit-img parallax-img" />
           </div>
           <div class="edit-info">
             <span class="edit-category-badge">Cozy Decor</span>
@@ -2093,7 +2456,7 @@
         <!-- Rank #1: The Summer I Turned Pretty -->
         <div class="ranking-card tilt-card">
           <div class="ranking-poster-frame">
-            <img src="assets/bestseller-1.jpg" alt="The Summer I Turned Pretty" class="ranking-poster-img parallax-img" />
+            <img src="assets/ranking-summer.jpg" alt="The Summer I Turned Pretty — Prime Video" class="ranking-poster-img parallax-img" />
             <span class="ranking-badge-top">#1 TOP SERIES</span>
             <span class="ranking-type-tag">Prime Video • Drama</span>
           </div>
@@ -2110,7 +2473,7 @@
         <!-- Rank #2: The Seven Husbands of Evelyn Hugo -->
         <div class="ranking-card tilt-card">
           <div class="ranking-poster-frame">
-            <img src="assets/bestseller-2.jpg" alt="The Seven Husbands of Evelyn Hugo" class="ranking-poster-img parallax-img" />
+            <img src="assets/ranking-evelyn.jpg" alt="The Seven Husbands of Evelyn Hugo — Audiobook" class="ranking-poster-img parallax-img" />
             <span class="ranking-badge-top">#1 AUDIOBOOK</span>
             <span class="ranking-type-tag">Audible • Fiction</span>
           </div>
@@ -2127,7 +2490,7 @@
         <!-- Rank #3: Daisy Jones & The Six -->
         <div class="ranking-card tilt-card">
           <div class="ranking-poster-frame">
-            <img src="assets/bestseller-3.jpg" alt="Daisy Jones & The Six" class="ranking-poster-img parallax-img" />
+            <img src="assets/ranking-daisy.jpg" alt="Daisy Jones & The Six — Vintage Rock Series" class="ranking-poster-img parallax-img" />
             <span class="ranking-badge-top">#2 TOP SERIES</span>
             <span class="ranking-type-tag">Prime Video • Music</span>
           </div>
@@ -2144,7 +2507,7 @@
         <!-- Rank #4: Atomic Habits for Teens -->
         <div class="ranking-card tilt-card">
           <div class="ranking-poster-frame">
-            <img src="assets/bestseller-4.jpg" alt="Atomic Habits for Teens" class="ranking-poster-img parallax-img" />
+            <img src="assets/ranking-habits.jpg" alt="Atomic Habits for Teens — Mindset Edit" class="ranking-poster-img parallax-img" />
             <span class="ranking-badge-top">#2 AUDIOBOOK</span>
             <span class="ranking-type-tag">Audible • Mindset</span>
           </div>
@@ -2388,7 +2751,7 @@
         <!-- Community Card 1 -->
         <div class="gallery-card tilt-card" onclick="likeGalleryItem(1, event)">
           <div class="gallery-thumb">
-            <img src="assets/arrival-2.jpg" alt="Chrome Glazed Nails" class="gallery-img parallax-img" />
+            <img src="assets/gallery-nails.jpg" alt="Chrome Glazed French Tips & Matcha" class="gallery-img parallax-img" />
             <span class="gallery-creator-pill">by @clara.glaze</span>
           </div>
           <div class="gallery-info">
@@ -2400,11 +2763,11 @@
         <!-- Community Card 2 -->
         <div class="gallery-card tilt-card" onclick="likeGalleryItem(2, event)">
           <div class="gallery-thumb">
-            <img src="assets/bestseller-3.jpg" alt="Thrifted Autumn Layering" class="gallery-img parallax-img" />
+            <img src="assets/gallery-aesthetic-ootd.jpg" alt="Golden Hour Street Style & Canvas Tote" class="gallery-img parallax-img" />
             <span class="gallery-creator-pill">by @maya.fits</span>
           </div>
           <div class="gallery-info">
-            <h4 class="gallery-title">Thrifted Fall Layering Fit</h4>
+            <h4 class="gallery-title">Golden Hour Canvas Tote OOTD</h4>
             <span class="gallery-likes" id="like-2">♡ 614</span>
           </div>
         </div>
@@ -2412,7 +2775,7 @@
         <!-- Community Card 3 -->
         <div class="gallery-card tilt-card" onclick="likeGalleryItem(3, event)">
           <div class="gallery-thumb">
-            <img src="assets/arrival-3.jpg" alt="Desk Fairy Light Corner" class="gallery-img parallax-img" />
+            <img src="assets/feature-decor.jpg" alt="Cozy Bedroom Fairy Light Desk Corner" class="gallery-img parallax-img" />
             <span class="gallery-creator-pill">by @sophia_study</span>
           </div>
           <div class="gallery-info">
@@ -2424,11 +2787,11 @@
         <!-- Community Card 4 -->
         <div class="gallery-card tilt-card" onclick="likeGalleryItem(4, event)">
           <div class="gallery-thumb">
-            <img src="assets/wallpaper-matcha.jpg" alt="Ceramic Matcha Morning" class="gallery-img parallax-img" />
-            <span class="gallery-creator-pill">by @rini.vibes</span>
+            <img src="assets/gallery-journal.jpg" alt="Digital iPad Bullet Journal & Habit Planner" class="gallery-img parallax-img" />
+            <span class="gallery-creator-pill">by @rini.journal</span>
           </div>
           <div class="gallery-info">
-            <h4 class="gallery-title">Ceramic Matcha Foam Art</h4>
+            <h4 class="gallery-title">Digital iPad Habit Planner</h4>
             <span class="gallery-likes" id="like-4">♡ 892</span>
           </div>
         </div>
@@ -3483,12 +3846,12 @@
       fashion: {
         tag: 'Fashion Lookbook',
         title: 'Autumn Warm Layering: Trench & Oversized Knits',
-        image: 'assets/arrival-1.jpg',
+        image: 'assets/feature-fashion.jpg',
         readTime: '5 min read • ★ 5.0 by 512 teens',
         content: `
           <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Autumn is the ultimate season for style experimentation. The secret to looking effortlessly chic lies in playing with contrasting textures and balanced silhouettes.</p>
           <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">The Rule of Proportions</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Pair an oversized outer layer (like a long thrifted trench or vintage puffer) with sleek inner garments: ribbed turtlenecks or straight-leg dark denim.</p>
+          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Pair an oversized outer layer (like a long thrifted trench or vintage knitwear) with sleek inner garments: ribbed turtlenecks or straight-leg dark denim.</p>
           <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Warm Earth Tone Palette</h4>
           <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Stick to creamy oatmeals, burnt terracotta, forest matcha greens, and espresso browns for that timeless Pinterest autumn board look.</p>
           <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Accessorizing Like A Pro</h4>
@@ -3498,7 +3861,7 @@
       decor: {
         tag: 'Cozy Decor',
         title: 'How To Romanticize Your Study Corner',
-        image: 'assets/arrival-3.jpg',
+        image: 'assets/feature-decor.jpg',
         readTime: '3 min read • ★ 4.8 by 290 teens',
         content: `
           <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Your bedroom desk doesn't have to feel like a high-stress exam prison. With just 3 intentional tweaks, you can turn study hours into your most peaceful ritual.</p>
@@ -3513,7 +3876,7 @@
       about: {
         tag: 'Creator Story',
         title: 'About Rini & TeenTimeGlow',
-        image: 'assets/hero-model.jpg',
+        image: 'assets/hero-glow-creator.jpg',
         readTime: '2 min read',
         content: `
           <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Hey loves! Welcome to <strong>TeenTimeGlow</strong> — a dedicated sanctuary for teenage self-expression, glowing beauty, aesthetic spaces, and daily positive mindset.</p>
