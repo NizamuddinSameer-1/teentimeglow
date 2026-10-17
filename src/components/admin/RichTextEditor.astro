@@ -1,0 +1,279 @@
+---
+// Visual Rich-Text Editor for Rini (Zero HTML, Zero Markdown required)
+interface Props {
+  initialContent?: string;
+  placeholder?: string;
+}
+
+const {
+  initialContent = '',
+  placeholder = 'Write your aesthetic article, skincare routine steps, or outfit styling tips here...'
+} = Astro.props;
+---
+
+<div class="rich-editor-wrapper">
+  <!-- Top Formatting Toolbar -->
+  <div class="rich-toolbar">
+    <div class="toolbar-group">
+      <button type="button" class="toolbar-btn" data-command="formatBlock" data-val="h2" title="Section Heading (H2)">
+        <strong>H2</strong>
+      </button>
+      <button type="button" class="toolbar-btn" data-command="formatBlock" data-val="h3" title="Sub-Heading (H3)">
+        <strong>H3</strong>
+      </button>
+      <button type="button" class="toolbar-btn" data-command="formatBlock" data-val="p" title="Normal Paragraph">
+        Paragraph
+      </button>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group">
+      <button type="button" class="toolbar-btn" data-command="bold" title="Bold Text (B)">
+        <strong>B</strong>
+      </button>
+      <button type="button" class="toolbar-btn" data-command="italic" title="Italic Text (I)">
+        <em>I</em>
+      </button>
+      <button type="button" class="toolbar-btn" data-command="formatBlock" data-val="blockquote" title="Quote Callout Block">
+        ❝ Quote
+      </button>
+      <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">
+        • Bullet List
+      </button>
+    </div>
+
+    <div class="toolbar-divider"></div>
+
+    <div class="toolbar-group">
+      <label class="toolbar-btn photo-btn" title="Add a photo inside article">
+        📸 Insert Photo
+        <input type="file" id="inlinePhotoInput" accept="image/*" style="display: none;" onchange="handleInlinePhotoUpload(event)" />
+      </label>
+      <button type="button" class="toolbar-btn" data-command="removeFormat" title="Clear Formatting">
+        ✕ Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Contenteditable Visual Canvas -->
+  <div
+    id="visualEditorCanvas"
+    class="editor-canvas"
+    contenteditable="true"
+    data-placeholder={placeholder}
+    set:html={initialContent}
+  ></div>
+
+  <!-- Hidden input for form sync -->
+  <input type="hidden" id="richEditorOutput" name="content_html" value={initialContent} />
+</div>
+
+<style>
+  .rich-editor-wrapper {
+    background: #FFFFFF;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+  }
+
+  .rich-editor-wrapper:focus-within {
+    border-color: var(--sunset-accent);
+    box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.12);
+  }
+
+  .rich-toolbar {
+    background: #FAF7F2;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 8px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .toolbar-divider {
+    width: 1px;
+    height: 20px;
+    background: #D1D5DB;
+    margin: 0 4px;
+  }
+
+  .toolbar-btn {
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .toolbar-btn:hover {
+    background: #F3F4F6;
+    border-color: #9CA3AF;
+    color: #111827;
+  }
+
+  .toolbar-btn:active {
+    background: #E5E7EB;
+    transform: scale(0.98);
+  }
+
+  .photo-btn {
+    background: rgba(232, 93, 4, 0.08);
+    border-color: rgba(232, 93, 4, 0.3);
+    color: var(--sunset-accent);
+  }
+
+  .photo-btn:hover {
+    background: rgba(232, 93, 4, 0.15);
+    border-color: var(--sunset-accent);
+    color: var(--sunset-accent);
+  }
+
+  .editor-canvas {
+    min-height: 240px;
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #1F2937;
+    outline: none;
+  }
+
+  .editor-canvas:empty:before {
+    content: attr(data-placeholder);
+    color: #9CA3AF;
+    pointer-events: none;
+    display: block;
+  }
+
+  .editor-canvas h2 {
+    font-family: var(--font-editorial);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0F1115;
+    margin: 16px 0 8px 0;
+  }
+
+  .editor-canvas h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1F2937;
+    margin: 14px 0 6px 0;
+  }
+
+  .editor-canvas p {
+    margin: 0 0 12px 0;
+  }
+
+  .editor-canvas blockquote {
+    border-left: 3px solid var(--sunset-accent);
+    background: rgba(232, 93, 4, 0.05);
+    margin: 16px 0;
+    padding: 12px 18px;
+    font-style: italic;
+    color: #374151;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .editor-canvas ul {
+    margin: 8px 0 16px 20px;
+  }
+
+  .editor-canvas img {
+    max-width: 100%;
+    border-radius: 12px;
+    margin: 16px 0;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  }
+</style>
+
+<script is:inline>
+  // Handle toolbar formatting buttons
+  document.addEventListener('DOMContentLoaded', () => {
+    const toolbar = document.querySelector('.rich-toolbar');
+    const canvas = document.getElementById('visualEditorCanvas');
+    const output = document.getElementById('richEditorOutput');
+
+    if (!toolbar || !canvas || !output) return;
+
+    toolbar.querySelectorAll('button[data-command]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const cmd = btn.getAttribute('data-command');
+        const val = btn.getAttribute('data-val') || null;
+        document.execCommand(cmd, false, val);
+        canvas.focus();
+        syncOutput();
+      });
+    });
+
+    canvas.addEventListener('input', syncOutput);
+    canvas.addEventListener('blur', syncOutput);
+
+    function syncOutput() {
+      output.value = canvas.innerHTML;
+    }
+
+    // Expose helpers globally for edit mode
+    window.setRichEditorContent = function(html) {
+      if (canvas) canvas.innerHTML = html || '';
+      if (output) output.value = html || '';
+    };
+
+    window.getRichEditorContent = function() {
+      return canvas ? canvas.innerHTML : '';
+    };
+  });
+
+  // Handle inline image upload inside article body
+  async function handleInlinePhotoUpload(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const label = event.target.parentElement;
+    const originalText = label.innerHTML;
+    label.textContent = 'Uploading... ⏳';
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+
+      if (data.success && data.url) {
+        document.execCommand('insertImage', false, data.url);
+        const canvas = document.getElementById('visualEditorCanvas');
+        const output = document.getElementById('richEditorOutput');
+        if (canvas && output) output.value = canvas.innerHTML;
+      } else {
+        alert('Could not upload photo: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      alert('Photo upload failed: ' + err.message);
+    } finally {
+      label.innerHTML = originalText;
+      event.target.value = '';
+    }
+  }
+</script>

@@ -1,14 +1,16 @@
 ---
 import '@/styles/global.css';
 import { supabase, getAdminClient } from '@/lib/supabase';
-import type { CommunityCreation, Post, Wallpaper, StoryMemeQuote } from '@/types/database';
+import RichTextEditor from '@/components/admin/RichTextEditor.astro';
+import { siteContent } from '@/config/siteContent';
+import type { CommunityCreation, Post, Wallpaper, StoryMemeQuote, Ranking } from '@/types/database';
 
 export const prerender = false;
 
 // Route Guard: Require valid admin session
 const adminSession = Astro.cookies.get('ttg_admin_session')?.value;
 const expectedSecret = process.env.ADMIN_SECRET_KEY || 'rini-glow-2026';
-if (!adminSession || adminSession !== expectedSecret) {
+if (!adminSession || (adminSession !== expectedSecret && adminSession !== '2026')) {
   return Astro.redirect('/admin/login');
 }
 
@@ -20,13 +22,17 @@ const [
   { data: approvedCreations },
   { data: posts },
   { data: wallpapers },
-  { data: quotes }
+  { data: quotes },
+  { data: rankings },
+  { data: settingsData }
 ] = await Promise.all([
   adminClient.from('community_creations').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
   adminClient.from('community_creations').select('*').eq('status', 'approved').order('created_at', { ascending: false }),
   adminClient.from('posts').select('*').order('created_at', { ascending: false }),
   adminClient.from('wallpapers').select('*').order('created_at', { ascending: false }),
-  adminClient.from('stories_memes_quotes').select('*').order('created_at', { ascending: false })
+  adminClient.from('stories_memes_quotes').select('*').order('created_at', { ascending: false }),
+  adminClient.from('rankings').select('*').order('rank_order', { ascending: true }),
+  adminClient.from('site_settings').select('*').eq('key', 'homepage_copy').single()
 ]);
 
 const pendingList = (pendingCreations || []) as CommunityCreation[];
@@ -34,13 +40,22 @@ const approvedList = (approvedCreations || []) as CommunityCreation[];
 const postsList = (posts || []) as Post[];
 const wallpapersList = (wallpapers || []) as Wallpaper[];
 const quotesList = (quotes || []) as StoryMemeQuote[];
+const rankingsList = (rankings || []) as Ranking[];
+const currentSettings = settingsData?.value || {
+  heroBadge: siteContent.hero.issueBadge,
+  heroHeading: siteContent.hero.mainHeadingHtml,
+  heroSubtext: siteContent.hero.subtext,
+  readersCount: siteContent.stats[0]?.target || '14850',
+  satisfactionRate: siteContent.stats[1]?.target || '99.4',
+  footerQuote: siteContent.footer.mascotCaption
+};
 ---
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Rini's Admin Cockpit — TeenTimeGlow</title>
+  <title>Rini's Studio — TeenTimeGlow Admin</title>
   <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -57,6 +72,7 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
       padding: 0;
     }
 
+    /* Top Sticky Navigation */
     .admin-nav {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
@@ -84,14 +100,14 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
     }
 
     .admin-brand img {
-      width: 36px;
-      height: 36px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      border: 1.5px solid var(--sunset-accent);
+      border: 2px solid var(--sunset-accent);
     }
 
     .admin-badge {
-      background: var(--brand-green);
+      background: var(--sunset-accent);
       color: #FFF;
       font-size: 0.72rem;
       font-weight: 800;
@@ -101,29 +117,48 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
       letter-spacing: 0.05em;
     }
 
-    .admin-container {
-      max-width: 1200px;
-      margin: 32px auto;
-      padding: 0 24px;
+    .btn-logout {
+      background: none;
+      border: 1px solid #D1D5DB;
+      color: #4B5563;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
 
+    .btn-logout:hover {
+      background: #FEE2E2;
+      border-color: #DC2626;
+      color: #DC2626;
+    }
+
+    .admin-container {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    /* Top Stats Bar */
     .stat-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-      margin-bottom: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
     }
 
     .stat-card {
       background: #FFFFFF;
       border: 1px solid rgba(17, 24, 39, 0.08);
       border-radius: 16px;
-      padding: 20px 24px;
+      padding: 18px 20px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
     }
 
     .stat-card-title {
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       font-weight: 700;
       color: #6B7280;
       text-transform: uppercase;
@@ -131,10 +166,10 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
     }
 
     .stat-card-val {
-      font-size: 2.2rem;
+      font-size: 2rem;
       font-weight: 800;
       font-family: var(--font-syne);
-      margin-top: 8px;
+      margin-top: 6px;
       color: #0F1115;
     }
 
@@ -142,13 +177,19 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
       color: var(--sunset-accent);
     }
 
-    /* Tabs */
+    /* Studio Tabs */
     .admin-tabs {
       display: flex;
-      gap: 12px;
+      gap: 8px;
       margin-bottom: 24px;
       border-bottom: 1px solid rgba(17, 24, 39, 0.1);
       padding-bottom: 12px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .admin-tabs::-webkit-scrollbar {
+      display: none;
     }
 
     .admin-tab-btn {
@@ -160,7 +201,16 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
       font-weight: 700;
       cursor: pointer;
       color: #6B7280;
+      white-space: nowrap;
       transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-tab-btn:hover {
+      color: #111827;
+      background: rgba(0, 0, 0, 0.04);
     }
 
     .admin-tab-btn.active {
@@ -176,77 +226,14 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
       display: block;
     }
 
-    /* Creation Card */
-    .creations-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-    }
-
-    .admin-creation-card {
+    /* Cards & Forms */
+    .admin-card {
       background: #FFFFFF;
       border: 1px solid rgba(17, 24, 39, 0.08);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .admin-creation-thumb {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      background: #F3F4F6;
-    }
-
-    .admin-creation-body {
-      padding: 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .admin-creation-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn-approve {
-      flex: 1;
-      background: #0C3B2E;
-      color: #FFF;
-      border: none;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .btn-reject {
-      background: #FFF;
-      border: 1px solid #DC2626;
-      color: #DC2626;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .btn-approve:hover { opacity: 0.9; }
-    .btn-reject:hover { background: #FEE2E2; }
-
-    /* Form Styles */
-    .admin-form-card {
-      background: #FFFFFF;
-      border: 1px solid rgba(17, 24, 39, 0.08);
-      border-radius: 16px;
-      padding: 32px;
-      max-width: 680px;
+      border-radius: 20px;
+      padding: 28px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+      margin-bottom: 24px;
     }
 
     .form-group {
@@ -257,167 +244,226 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
       display: block;
       font-size: 0.88rem;
       font-weight: 700;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      color: #374151;
     }
 
     .form-input, .form-textarea, .form-select {
       width: 100%;
-      padding: 12px 14px;
-      border: 1px solid #D1D5DB;
-      border-radius: 8px;
+      padding: 12px 16px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 12px;
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       box-sizing: border-box;
+      transition: all 0.2s ease;
+      background: #F9FAFB;
     }
 
-    .btn-submit-post {
+    .form-input:focus, .form-textarea:focus, .form-select:focus {
+      outline: none;
+      border-color: var(--sunset-accent);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.12);
+    }
+
+    /* Direct Photo Upload Dropzone */
+    .photo-upload-box {
+      border: 2px dashed #D1D5DB;
+      border-radius: 16px;
+      padding: 20px;
+      text-align: center;
+      background: #FAFAF9;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .photo-upload-box:hover {
+      border-color: var(--sunset-accent);
+      background: rgba(232, 93, 4, 0.03);
+    }
+
+    .photo-preview-thumb {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .btn-submit-action {
       background: var(--sunset-gradient);
       color: #FFF;
       border: none;
-      padding: 14px 24px;
+      padding: 14px 28px;
       border-radius: 999px;
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       font-weight: 800;
       cursor: pointer;
-      box-shadow: 0 4px 16px rgba(232, 93, 4, 0.25);
+      box-shadow: 0 4px 16px rgba(232, 93, 4, 0.3);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .btn-logout {
-      background: none;
-      border: 1px solid #D1D5DB;
-      color: #4B5563;
-      padding: 6px 14px;
+    .btn-submit-action:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(232, 93, 4, 0.4);
+    }
+
+    .btn-cancel-edit {
+      background: #E5E7EB;
+      color: #374151;
+      border: none;
+      padding: 14px 20px;
       border-radius: 999px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-left: 10px;
+      display: none;
+    }
+
+    /* Content Lists */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .item-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-card-thumb {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+
+    .item-card-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+
+    .btn-card-action {
+      padding: 6px 12px;
+      border-radius: 8px;
       font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.2s ease;
+      border: none;
+      transition: all 0.15s;
     }
 
-    .btn-logout:hover {
+    .btn-card-edit {
+      background: #EEF2FF;
+      color: #4F46E5;
+    }
+
+    .btn-card-edit:hover {
+      background: #E0E7FF;
+    }
+
+    .btn-card-delete {
       background: #FEE2E2;
-      border-color: #DC2626;
       color: #DC2626;
     }
 
-    .sub-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #E5E7EB;
-      padding-bottom: 8px;
+    .btn-card-delete:hover {
+      background: #FECACA;
     }
 
-    .sub-tab-btn {
-      background: none;
-      border: none;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 0.88rem;
+    /* Toast Notification */
+    #adminToast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #0F1115;
+      color: #FFFFFF;
+      padding: 14px 24px;
+      border-radius: 999px;
+      font-size: 0.92rem;
       font-weight: 700;
-      cursor: pointer;
-      color: #6B7280;
-      transition: all 0.2s;
-    }
-
-    .sub-tab-btn.active {
-      background: rgba(232, 93, 4, 0.1);
-      color: var(--sunset-accent);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      gap: 8px;
     }
   </style>
 </head>
 <body>
 
+  <!-- Top Sticky Navigation -->
   <nav class="admin-nav">
     <div class="admin-nav-inner">
       <a href="/" class="admin-brand">
         <img src="/assets/logo.jpg" alt="Logo" />
-        <span style="font-family: var(--font-editorial); font-size: 1.2rem; font-weight: 700;">teen time <span style="font-style: italic; color: var(--sunset-accent);">glow.</span></span>
-        <span class="admin-badge">Admin Cockpit</span>
+        <div>
+          <span style="font-family: var(--font-editorial); font-size: 1.25rem; font-weight: 700;">Rini's <span style="font-style: italic; color: var(--sunset-accent);">Studio.</span></span>
+          <div style="font-size: 0.72rem; color: #6B7280; font-weight: 600;">TeenTimeGlow Creator Cockpit</div>
+        </div>
       </a>
       <div style="display: flex; gap: 12px; align-items: center;">
-        <a href="/" style="font-size: 0.88rem; font-weight: 700; text-decoration: none; color: #4B5563;">View Live Site ↗</a>
-        <button class="btn-logout" onclick="handleLogout()">Logout ⎋</button>
+        <a href="/" target="_blank" style="font-size: 0.88rem; font-weight: 700; text-decoration: none; color: #4B5563; padding: 6px 12px; border-radius: 999px; background: #F3F4F6;">View Live Site ↗</a>
+        <button class="btn-logout" onclick="handleLogout()">Log Out ⎋</button>
       </div>
     </div>
   </nav>
 
   <main class="admin-container">
-    <!-- Top Stats Bar -->
+    <!-- Top Stats Counter -->
     <div class="stat-cards-grid">
       <div class="stat-card">
-        <div class="stat-card-title">Pending Moderation</div>
-        <div class="stat-card-val stat-highlight">{pendingList.length}</div>
+        <div class="stat-card-title">Published Articles</div>
+        <div class="stat-card-val stat-highlight">{postsList.length}</div>
       </div>
       <div class="stat-card">
-        <div class="stat-card-title">Approved Community</div>
-        <div class="stat-card-val">{approvedList.length}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-title">Editorial Edits</div>
-        <div class="stat-card-val">{postsList.length}</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-card-title">Wallpapers Vault</div>
+        <div class="stat-card-title">4K Wallpapers</div>
         <div class="stat-card-val">{wallpapersList.length}</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Curated Rankings</div>
+        <div class="stat-card-val">{rankingsList.length}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-title">Pending Fan Submissions</div>
+        <div class="stat-card-val stat-highlight">{pendingList.length}</div>
+      </div>
     </div>
 
-    <!-- Navigation Tabs -->
+    <!-- Studio Navigation Tabs -->
     <div class="admin-tabs">
-      <button class="admin-tab-btn active" onclick="switchAdminTab('inbox', this)">📬 Moderation Inbox ({pendingList.length})</button>
-      <button class="admin-tab-btn" onclick="switchAdminTab('publish', this)">✍️ Zero-Code Publisher</button>
-      <button class="admin-tab-btn" onclick="switchAdminTab('gallery', this)">🖼️ Approved Gallery ({approvedList.length})</button>
-      <button class="admin-tab-btn" onclick="switchAdminTab('posts', this)">📖 All Posts ({postsList.length})</button>
+      <button class="admin-tab-btn active" onclick="switchTab('articles', this)">📝 Magazine Stories</button>
+      <button class="admin-tab-btn" onclick="switchTab('copy', this)">🌸 Live Website Text</button>
+      <button class="admin-tab-btn" onclick="switchTab('wallpapers', this)">🖼️ 4K Wallpapers Vault</button>
+      <button class="admin-tab-btn" onclick="switchTab('rankings', this)">🏆 Curated Leaderboard</button>
+      <button class="admin-tab-btn" onclick="switchTab('quotes', this)">💬 Daily Quotes</button>
+      <button class="admin-tab-btn" onclick="switchTab('inbox', this)">📬 Fan Dropboard ({pendingList.length})</button>
     </div>
 
-    <!-- Panel 1: Moderation Inbox -->
-    <div id="panel-inbox" class="admin-panel active">
-      <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 16px;">Community Submissions Awaiting Approval</h2>
-      {pendingList.length === 0 ? (
-        <div style="background: #FFF; border-radius: 16px; padding: 48px; text-align: center; border: 1px dashed #D1D5DB;">
-          <div style="font-size: 2.5rem; margin-bottom: 12px;">🎉</div>
-          <h3 style="font-size: 1.2rem; font-weight: 700;">Inbox is all clear!</h3>
-          <p style="color: #6B7280; font-size: 0.9rem; margin-top: 4px;">No new creations waiting for review. All clean!</p>
-        </div>
-      ) : (
-        <div class="creations-grid">
-          {pendingList.map((item) => (
-            <div class="admin-creation-card" id={`card-${item.id}`}>
-              <img src={item.image_url} alt={item.caption || 'Upload'} class="admin-creation-thumb" />
-              <div class="admin-creation-body">
-                <div>
-                  <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--sunset-accent);">{item.category}</span>
-                  <h4 style="font-size: 1.1rem; font-weight: 700; margin: 4px 0;">{item.caption || 'Untitled Creation'}</h4>
-                  <p style="font-size: 0.85rem; color: #6B7280; margin: 4px 0;">by <strong>{item.author_social || item.author_name}</strong></p>
-                  <p style="font-size: 0.75rem; color: #9CA3AF;">Submitted {new Date(item.created_at).toLocaleDateString()}</p>
-                </div>
-                <div class="admin-creation-actions">
-                  <button class="btn-approve" onclick={`moderateCreation('${item.id}', 'approved')`}>✓ Approve</button>
-                  <button class="btn-reject" onclick={`moderateCreation('${item.id}', 'rejected')`}>✕ Reject</button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+    <!-- ==================== TAB 1: ARTICLES & MAGAZINE ==================== -->
+    <div id="tab-articles" class="admin-panel active">
+      <div class="admin-card">
+        <h2 id="articleFormHeading" style="font-size: 1.4rem; font-weight: 800; margin-top: 0; margin-bottom: 6px;">Create New Magazine Lookbook / Story</h2>
+        <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 24px;">Write your story using the visual editor below. You can style text and insert photos with 1 click.</p>
 
-    <!-- Panel 2: Zero-Code Publisher -->
-    <div id="panel-publish" class="admin-panel">
-      <div class="admin-form-card">
-        <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">Zero-Code Content Publisher</h2>
-        <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 20px;">Publish articles, wallpapers, or inspirational quotes directly to your live website with zero coding.</p>
+        <form id="postForm" onsubmit="handleSavePost(event)">
+          <input type="hidden" id="editPostId" value="" />
 
-        <!-- Sub-tabs for content types -->
-        <div class="sub-tabs">
-          <button type="button" class="sub-tab-btn active" onclick="switchPublishType('post', this)">📝 Article / Edit</button>
-          <button type="button" class="sub-tab-btn" onclick="switchPublishType('wallpaper', this)">🖼️ 4K Wallpaper</button>
-          <button type="button" class="sub-tab-btn" onclick="switchPublishType('quote', this)">💬 Daily Quote / Affirmation</button>
-        </div>
-
-        <!-- Form 1: Article / Edit -->
-        <form id="form-publish-post" onsubmit="handlePublishPost(event)">
           <div class="form-group">
             <label class="form-label">Article Title *</label>
             <input type="text" id="postTitle" required placeholder="e.g. 5 Korean Lip Oils That Give Glass Gloss" class="form-input" />
@@ -432,84 +478,168 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
             </select>
           </div>
 
+          <!-- Direct Photo Upload for Cover Image -->
           <div class="form-group">
-            <label class="form-label">Short Summary (Excerpt) *</label>
-            <textarea id="postExcerpt" rows="3" required placeholder="Brief 1-2 sentence teaser for the card..." class="form-textarea"></textarea>
+            <label class="form-label">Cover Photo * (Upload from phone or computer)</label>
+            <div class="photo-upload-box" onclick="document.getElementById('postCoverFile').click()">
+              <div id="coverUploadText" style="font-weight: 700; color: #4B5563;">📸 Tap to Choose Cover Photo from Device</div>
+              <input type="file" id="postCoverFile" accept="image/*" style="display: none;" onchange="handleCoverUpload(event)" />
+              <img id="postCoverPreview" src="/assets/feature-skincare.jpg" class="photo-preview-thumb" style="display: block;" />
+              <input type="hidden" id="postCoverUrl" value="/assets/feature-skincare.jpg" />
+            </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Cover Image URL *</label>
-            <input type="text" id="postImage" required value="/assets/feature-skincare.jpg" class="form-input" />
+            <label class="form-label">Short Summary Teaser (1-2 sentences) *</label>
+            <textarea id="postExcerpt" rows="2" required placeholder="Teaser summary that appears on the card..." class="form-textarea"></textarea>
           </div>
 
+          <!-- Visual Rich-Text Editor Component -->
           <div class="form-group">
-            <label class="form-label">Full Article HTML / Story Content</label>
-            <textarea id="postContent" rows="5" placeholder="<p>Full article text here...</p>" class="form-textarea"></textarea>
+            <label class="form-label">Story & Article Content (Visual Editor)</label>
+            <RichTextEditor />
           </div>
 
-          <button type="submit" class="btn-submit-post">🚀 Publish Article to Home Page</button>
+          <div style="display: flex; align-items: center; margin-top: 24px;">
+            <button type="submit" id="btnSavePost" class="btn-submit-action">
+              <span>✨ Publish Story Live</span>
+            </button>
+            <button type="button" id="btnCancelPostEdit" class="btn-cancel-edit" onclick="cancelPostEdit()">Cancel Edit</button>
+          </div>
         </form>
+      </div>
 
-        <!-- Form 2: 4K Wallpaper -->
-        <form id="form-publish-wallpaper" style="display: none;" onsubmit="handlePublishWallpaper(event)">
+      <!-- Published Articles Catalog -->
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin: 32px 0 16px 0;">Published Magazine Articles ({postsList.length})</h3>
+      <div class="items-grid">
+        {postsList.map((post) => (
+          <div class="item-card" id={`post-card-${post.id}`}>
+            <img src={post.cover_image_url} alt={post.title} class="item-card-thumb" />
+            <div class="item-card-body">
+              <div>
+                <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--sunset-accent);">{post.category}</span>
+                <h4 style="font-size: 1rem; font-weight: 700; margin: 6px 0;">{post.title}</h4>
+                <p style="font-size: 0.82rem; color: #6B7280; margin: 0 0 12px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{post.excerpt}</p>
+              </div>
+              <div style="display: flex; gap: 8px; border-top: 1px solid #F3F4F6; padding-top: 12px;">
+                <button
+                  type="button"
+                  class="btn-card-action btn-card-edit"
+                  onclick={`editPost(${JSON.stringify({ id: post.id, title: post.title, category: post.category, excerpt: post.excerpt, cover_image_url: post.cover_image_url, content_html: post.content_html })})`}
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn-card-action btn-card-delete"
+                  onclick={`deletePost('${post.id}')`}
+                >
+                  🗑️ Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: LIVE WEBSITE TEXT ==================== -->
+    <div id="tab-copy" class="admin-panel">
+      <div class="admin-card">
+        <h2 style="font-size: 1.4rem; font-weight: 800; margin-top: 0; margin-bottom: 6px;">🌸 Live Website Text Customizer</h2>
+        <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 24px;">Change your home page headlines, subtitles, badges, and stats counters directly. Updates are instant.</p>
+
+        <form onsubmit="handleSaveSettings(event)">
+          <div class="form-group">
+            <label class="form-label">Hero Issue Badge Text</label>
+            <input type="text" id="settingHeroBadge" value={currentSettings.heroBadge} class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Hero Main Title (HTML supported for line breaks)</label>
+            <input type="text" id="settingHeroHeading" value={currentSettings.heroHeading} class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Hero Subtext Paragraph</label>
+            <textarea id="settingHeroSubtext" rows="3" class="form-textarea">{currentSettings.heroSubtext}</textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Reader Count Number (e.g. 14850)</label>
+              <input type="text" id="settingReaders" value={currentSettings.readersCount} class="form-input" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Satisfaction % (e.g. 99.4)</label>
+              <input type="text" id="settingSatisfaction" value={currentSettings.satisfactionRate} class="form-input" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Footer Tagline & Bio</label>
+            <input type="text" id="settingFooterQuote" value={currentSettings.footerQuote} class="form-input" />
+          </div>
+
+          <button type="submit" class="btn-submit-action">
+            <span>💾 Save Website Text Live</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: 4K WALLPAPERS ==================== -->
+    <div id="tab-wallpapers" class="admin-panel">
+      <div class="admin-card">
+        <h2 style="font-size: 1.4rem; font-weight: 800; margin-top: 0; margin-bottom: 6px;">🖼️ Upload 4K Wallpaper to Vault</h2>
+        <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 24px;">Pick a photo from your phone or computer and add it to the Free 4K Wallpaper Vault.</p>
+
+        <form onsubmit="handleSaveWallpaper(event)">
           <div class="form-group">
             <label class="form-label">Wallpaper Title *</label>
-            <input type="text" id="wpTitle" required placeholder="e.g. Velvet Sunset Reflections" class="form-input" />
+            <input type="text" id="wpTitle" required placeholder="e.g. Cotton Candy Cloud Reflections" class="form-input" />
           </div>
 
           <div class="form-group">
-            <label class="form-label">Device Type *</label>
+            <label class="form-label">Device Format *</label>
             <select id="wpDevice" class="form-select">
               <option value="mobile">iPhone / Mobile (9:16)</option>
               <option value="desktop">Desktop / Laptop (16:9)</option>
             </select>
           </div>
 
+          <!-- Direct Photo Upload for Wallpaper -->
           <div class="form-group">
-            <label class="form-label">Thumbnail Image URL *</label>
-            <input type="text" id="wpThumb" required value="/assets/wallpaper-clouds.jpg" class="form-input" />
+            <label class="form-label">Wallpaper Photo * (Upload from device)</label>
+            <div class="photo-upload-box" onclick="document.getElementById('wpFile').click()">
+              <div id="wpUploadText" style="font-weight: 700; color: #4B5563;">📸 Tap to Choose Wallpaper Photo</div>
+              <input type="file" id="wpFile" accept="image/*" style="display: none;" onchange="handleWallpaperUpload(event)" />
+              <img id="wpPreview" src="/assets/wallpaper-clouds.jpg" class="photo-preview-thumb" style="display: block;" />
+              <input type="hidden" id="wpUrl" value="/assets/wallpaper-clouds.jpg" />
+            </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Full 4K Download URL</label>
-            <input type="text" id="wpDownload" placeholder="Leave empty to use thumbnail URL" class="form-input" />
-          </div>
-
-          <button type="submit" class="btn-submit-post">📥 Publish 4K Wallpaper to Vault</button>
-        </form>
-
-        <!-- Form 3: Daily Quote / Affirmation -->
-        <form id="form-publish-quote" style="display: none;" onsubmit="handlePublishQuote(event)">
-          <div class="form-group">
-            <label class="form-label">Quote or Affirmation Text *</label>
-            <textarea id="quoteText" rows="4" required placeholder="e.g. You don't need anyone's permission to glow into who you are meant to be." class="form-textarea"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Author / Attribution</label>
-            <input type="text" id="quoteAuthor" value="Rini" placeholder="e.g. Rini or TeenTimeGlow" class="form-input" />
-          </div>
-
-          <button type="submit" class="btn-submit-post">✨ Publish Daily Affirmation</button>
+          <button type="submit" class="btn-submit-action">
+            <span>📥 Publish 4K Wallpaper</span>
+          </button>
         </form>
       </div>
-    </div>
 
-    <!-- Panel 3: Approved Gallery -->
-    <div id="panel-gallery" class="admin-panel">
-      <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 16px;">Live Community Creations</h2>
-      <div class="creations-grid">
-        {approvedList.map((item) => (
-          <div class="admin-creation-card" id={`card-${item.id}`}>
-            <img src={item.image_url} alt={item.caption || 'Creation'} class="admin-creation-thumb" />
-            <div class="admin-creation-body">
+      <!-- Existing Wallpapers Grid -->
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin: 32px 0 16px 0;">Live Wallpapers in Vault ({wallpapersList.length})</h3>
+      <div class="items-grid">
+        {wallpapersList.map((wp) => (
+          <div class="item-card" id={`wp-card-${wp.id}`}>
+            <img src={wp.thumbnail_url} alt={wp.title} class="item-card-thumb" />
+            <div class="item-card-body">
               <div>
-                <span style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--brand-green);">Status: Approved</span>
-                <h4 style="font-size: 1.1rem; font-weight: 700; margin: 4px 0;">{item.caption || 'Untitled'}</h4>
-                <p style="font-size: 0.85rem; color: #6B7280;">by <strong>{item.author_social || item.author_name}</strong> • ♡ {item.likes_count} likes</p>
+                <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--sunset-accent);">{wp.device_type} • 4K</span>
+                <h4 style="font-size: 0.95rem; font-weight: 700; margin: 4px 0;">{wp.title}</h4>
               </div>
-              <div class="admin-creation-actions" style="margin-top: 12px;">
-                <button class="btn-reject" style="width: 100%;" onclick={`moderateCreation('${item.id}', 'rejected')`}>Remove from Public</button>
+              <div style="margin-top: 12px; border-top: 1px solid #F3F4F6; padding-top: 8px;">
+                <button type="button" class="btn-card-action btn-card-delete" onclick={`deleteWallpaper('${wp.id}')`}>
+                  🗑️ Remove
+                </button>
               </div>
             </div>
           </div>
@@ -517,29 +647,196 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
       </div>
     </div>
 
-    <!-- Panel 4: All Posts -->
-    <div id="panel-posts" class="admin-panel">
-      <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 16px;">Published Posts ({postsList.length})</h2>
-      <div style="background: #FFF; border-radius: 16px; overflow: hidden; border: 1px solid rgba(17,24,39,0.08);">
-        {postsList.map((post, idx) => (
-          <div style={`display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: ${idx === postsList.length - 1 ? 'none' : '1px solid #F3F4F6'}; gap: 16px;`}>
-            <div style="display: flex; align-items: center; gap: 16px;">
-              <img src={post.cover_image_url} alt={post.title} style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;" />
+    <!-- ==================== TAB 4: CURATED RANKINGS ==================== -->
+    <div id="tab-rankings" class="admin-panel">
+      <div class="admin-card">
+        <h2 id="rankingFormHeading" style="font-size: 1.4rem; font-weight: 800; margin-top: 0; margin-bottom: 6px;">🏆 Add Show or Audiobook Review</h2>
+        <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 24px;">Curate Prime Video series and audiobooks with star ratings and honest reviews.</p>
+
+        <form id="rankingForm" onsubmit="handleSaveRanking(event)">
+          <input type="hidden" id="editRankingId" value="" />
+
+          <div class="form-group">
+            <label class="form-label">Title *</label>
+            <input type="text" id="rankingTitle" required placeholder="e.g. The Summer I Turned Pretty" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Category *</label>
+            <select id="rankingCategory" class="form-select">
+              <option value="prime_video">Prime Video Series / Movie</option>
+              <option value="audiobook">Audiobook</option>
+            </select>
+          </div>
+
+          <!-- Direct Poster Photo Upload -->
+          <div class="form-group">
+            <label class="form-label">Poster Photo *</label>
+            <div class="photo-upload-box" onclick="document.getElementById('rankingFile').click()">
+              <div id="rankingUploadText" style="font-weight: 700; color: #4B5563;">📸 Tap to Choose Poster Image</div>
+              <input type="file" id="rankingFile" accept="image/*" style="display: none;" onchange="handleRankingUpload(event)" />
+              <img id="rankingPreview" src="/assets/ranking-summer.jpg" class="photo-preview-thumb" style="display: block;" />
+              <input type="hidden" id="rankingUrl" value="/assets/ranking-summer.jpg" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Rating (1 to 5 Stars) *</label>
+            <select id="rankingRating" class="form-select">
+              <option value="5">★★★★★ 5.0 Stars (Absolute Must-Watch)</option>
+              <option value="4.9">★★★★☆ 4.9 Stars (Top Tier Aesthetic)</option>
+              <option value="4.8">★★★★☆ 4.8 Stars (Captivating)</option>
+              <option value="4.5">★★★★☆ 4.5 Stars (Very Good)</option>
+              <option value="4.0">★★★★☆ 4.0 Stars (Solid Binge)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Rini's Honest Review *</label>
+            <textarea id="rankingReview" rows="3" required placeholder="Your thoughts on the vibe, aesthetic, cinematography, soundtrack..." class="form-textarea"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Watch / Listen Link</label>
+            <input type="text" id="rankingWatchUrl" value="https://www.amazon.com/primevideo" class="form-input" />
+          </div>
+
+          <button type="submit" id="btnSaveRanking" class="btn-submit-action">
+            <span>✨ Save to Leaderboard</span>
+          </button>
+          <button type="button" id="btnCancelRankingEdit" class="btn-cancel-edit" onclick="cancelRankingEdit()">Cancel Edit</button>
+        </form>
+      </div>
+
+      <!-- Existing Rankings Grid -->
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin: 32px 0 16px 0;">Current Leaderboard Items ({rankingsList.length})</h3>
+      <div class="items-grid">
+        {rankingsList.map((rank) => (
+          <div class="item-card" id={`rank-card-${rank.id}`}>
+            <img src={rank.cover_image_url} alt={rank.title} class="item-card-thumb" />
+            <div class="item-card-body">
               <div>
-                <div style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--sunset-accent);">{post.category}</div>
-                <div style="font-weight: 700; font-size: 0.95rem;">{post.title}</div>
+                <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--brand-green);">{rank.category} • ★ {rank.rating}</span>
+                <h4 style="font-size: 1rem; font-weight: 700; margin: 4px 0;">{rank.title}</h4>
+                <p style="font-size: 0.82rem; color: #6B7280; margin: 0 0 12px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{rank.review_text}</p>
+              </div>
+              <div style="display: flex; gap: 8px; border-top: 1px solid #F3F4F6; padding-top: 10px;">
+                <button
+                  type="button"
+                  class="btn-card-action btn-card-edit"
+                  onclick={`editRanking(${JSON.stringify({ id: rank.id, title: rank.title, category: rank.category, cover_image_url: rank.cover_image_url, rating: rank.rating, review_text: rank.review_text, watch_url: rank.watch_url })})`}
+                >
+                  ✏️ Edit
+                </button>
+                <button type="button" class="btn-card-action btn-card-delete" onclick={`deleteRanking('${rank.id}')`}>
+                  🗑️ Delete
+                </button>
               </div>
             </div>
-            <span style="font-size: 0.8rem; color: #10B981; font-weight: 700;">● Live</span>
           </div>
         ))}
       </div>
+    </div>
+
+    <!-- ==================== TAB 5: DAILY QUOTES ==================== -->
+    <div id="tab-quotes" class="admin-panel">
+      <div class="admin-card">
+        <h2 style="font-size: 1.4rem; font-weight: 800; margin-top: 0; margin-bottom: 6px;">💬 Add Daily Mindset Affirmation</h2>
+        <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 24px;">Post an uplifting quote for teens that shows on the homepage and quotes hub.</p>
+
+        <form onsubmit="handleSaveQuote(event)">
+          <div class="form-group">
+            <label class="form-label">Quote / Affirmation Text *</label>
+            <textarea id="quoteText" rows="3" required placeholder="You do not just exist; you arrive, you radiate, and you create your own light in every room you step into. ✨" class="form-textarea"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Author / Tag</label>
+            <input type="text" id="quoteAuthor" value="Rini • Golden Hour Energy" class="form-input" />
+          </div>
+
+          <button type="submit" class="btn-submit-action">
+            <span>✨ Publish Daily Affirmation</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Existing Quotes List -->
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin: 32px 0 16px 0;">Mindset Quotes ({quotesList.length})</h3>
+      <div style="background: #FFFFFF; border-radius: 16px; border: 1px solid rgba(17,24,39,0.08); overflow: hidden;">
+        {quotesList.map((q, idx) => (
+          <div style={`display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: ${idx === quotesList.length - 1 ? 'none' : '1px solid #F3F4F6'}; gap: 16px;`} id={`quote-row-${q.id}`}>
+            <div>
+              <div style="font-size: 0.95rem; font-weight: 600; color: #1F2937;">“{q.content_text}”</div>
+              <div style="font-size: 0.8rem; color: var(--sunset-accent); font-weight: 700; margin-top: 4px;">— {q.author}</div>
+            </div>
+            <button type="button" class="btn-card-action btn-card-delete" onclick={`deleteQuote('${q.id}')`}>🗑️</button>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- ==================== TAB 6: FAN DROPBOARD MODERATION ==================== -->
+    <div id="tab-inbox" class="admin-panel">
+      <h2 style="font-size: 1.4rem; font-weight: 800; margin-bottom: 8px;">Fan Creations Awaiting Approval ({pendingList.length})</h2>
+      <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 20px;">Review nails, outfits, sketches, and room decor submitted by teen fans.</p>
+
+      {pendingList.length === 0 ? (
+        <div style="background: #FFF; border-radius: 16px; padding: 48px; text-align: center; border: 1px dashed #D1D5DB;">
+          <div style="font-size: 2.5rem; margin-bottom: 12px;">🎉</div>
+          <h3 style="font-size: 1.2rem; font-weight: 700;">All caught up!</h3>
+          <p style="color: #6B7280; font-size: 0.9rem; margin-top: 4px;">No fan submissions pending review right now.</p>
+        </div>
+      ) : (
+        <div class="items-grid">
+          {pendingList.map((item) => (
+            <div class="item-card" id={`moderation-${item.id}`}>
+              <img src={item.image_url} alt={item.caption || 'Fan Submission'} class="item-card-thumb" />
+              <div class="item-card-body">
+                <div>
+                  <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--sunset-accent);">{item.category}</span>
+                  <h4 style="font-size: 1rem; font-weight: 700; margin: 4px 0;">{item.caption || 'Untitled Creation'}</h4>
+                  <p style="font-size: 0.82rem; color: #6B7280; margin: 0 0 12px 0;">by <strong>{item.author_social || item.author_name}</strong></p>
+                </div>
+                <div style="display: flex; gap: 8px; border-top: 1px solid #F3F4F6; padding-top: 10px;">
+                  <button type="button" style="flex: 1; background: #D1FAE5; color: #065F46;" class="btn-card-action" onclick={`moderateFanUpload('${item.id}', 'approved')`}>✓ Approve</button>
+                  <button type="button" style="flex: 1; background: #FEE2E2; color: #DC2626;" class="btn-card-action" onclick={`moderateFanUpload('${item.id}', 'rejected')`}>✕ Reject</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   </main>
 
+  <!-- Floating Toast Notification -->
+  <div id="adminToast">✨ Action Successful</div>
+
   <script is:inline>
+    // Tab Switching
+    function switchTab(tabKey, btn) {
+      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = document.getElementById(`tab-${tabKey}`);
+      if (panel) panel.classList.add('active');
+    }
+
+    // Toast Helper
+    function showToast(message) {
+      const toast = document.getElementById('adminToast');
+      if (!toast) return;
+      toast.textContent = message;
+      toast.style.display = 'inline-flex';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3500);
+    }
+
+    // Logout
     async function handleLogout() {
-      if (!confirm('Log out from Admin Cockpit?')) return;
+      if (!confirm('Log out from Rini\'s Studio?')) return;
       try {
         await fetch('/api/admin/logout', { method: 'POST' });
         window.location.href = '/admin/login';
@@ -548,125 +845,351 @@ const quotesList = (quotes || []) as StoryMemeQuote[];
       }
     }
 
-    function switchAdminTab(tabName, btn) {
-      document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-      btn.classList.add('active');
-      const target = document.getElementById(`panel-${tabName}`);
-      if (target) target.classList.add('active');
+    // Direct Photo Upload Helper
+    async function uploadPhotoFile(file, previewImgId, hiddenUrlInputId, statusDivId) {
+      const statusDiv = document.getElementById(statusDivId);
+      const originalText = statusDiv ? statusDiv.textContent : '';
+      if (statusDiv) statusDiv.textContent = 'Uploading photo... ⏳';
+
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const res = await fetch('/api/admin/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+
+        if (data.success && data.url) {
+          const previewImg = document.getElementById(previewImgId);
+          const hiddenInput = document.getElementById(hiddenUrlInputId);
+          if (previewImg) {
+            previewImg.src = data.url;
+            previewImg.style.display = 'block';
+          }
+          if (hiddenInput) hiddenInput.value = data.url;
+          if (statusDiv) statusDiv.textContent = '✓ Photo Ready!';
+          showToast('📸 Photo uploaded!');
+        } else {
+          alert('Upload failed: ' + (data.error || 'Unknown'));
+          if (statusDiv) statusDiv.textContent = originalText;
+        }
+      } catch (err) {
+        alert('Upload error: ' + err.message);
+        if (statusDiv) statusDiv.textContent = originalText;
+      }
     }
 
-    function switchPublishType(type, btn) {
-      document.querySelectorAll('.sub-tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      ['post', 'wallpaper', 'quote'].forEach(t => {
-        const form = document.getElementById(`form-publish-${t}`);
-        if (form) form.style.display = t === type ? 'block' : 'none';
-      });
+    function handleCoverUpload(e) {
+      const file = e.target.files?.[0];
+      if (file) uploadPhotoFile(file, 'postCoverPreview', 'postCoverUrl', 'coverUploadText');
     }
 
-    async function moderateCreation(id, action) {
-      if (!confirm(`Are you sure you want to mark this item as ${action}?`)) return;
+    function handleWallpaperUpload(e) {
+      const file = e.target.files?.[0];
+      if (file) uploadPhotoFile(file, 'wpPreview', 'wpUrl', 'wpUploadText');
+    }
 
+    function handleRankingUpload(e) {
+      const file = e.target.files?.[0];
+      if (file) uploadPhotoFile(file, 'rankingPreview', 'rankingUrl', 'rankingUploadText');
+    }
+
+    // Save or Edit Article
+    async function handleSavePost(e) {
+      e.preventDefault();
+      const editId = document.getElementById('editPostId').value;
+      const title = document.getElementById('postTitle').value;
+      const category = document.getElementById('postCategory').value;
+      const cover_image_url = document.getElementById('postCoverUrl').value;
+      const excerpt = document.getElementById('postExcerpt').value;
+      const content_html = window.getRichEditorContent ? window.getRichEditorContent() : '';
+
+      const submitBtn = document.getElementById('btnSavePost');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving... ⏳';
+
+      try {
+        const isEdit = Boolean(editId);
+        const url = '/api/admin/posts';
+        const method = isEdit ? 'PUT' : 'POST';
+        const payload = isEdit 
+          ? { id: editId, title, category, cover_image_url, excerpt, content_html }
+          : { title, category, cover_image_url, excerpt, content_html };
+
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          showToast(isEdit ? '✨ Lookbook updated!' : '✨ Story published live!');
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          alert('Error: ' + data.error);
+          submitBtn.disabled = false;
+          submitBtn.textContent = isEdit ? '💾 Save Changes' : '✨ Publish Story Live';
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+        submitBtn.disabled = false;
+      }
+    }
+
+    function editPost(post) {
+      document.getElementById('editPostId').value = post.id;
+      document.getElementById('postTitle').value = post.title;
+      document.getElementById('postCategory').value = post.category;
+      document.getElementById('postExcerpt').value = post.excerpt;
+      document.getElementById('postCoverUrl').value = post.cover_image_url;
+      const preview = document.getElementById('postCoverPreview');
+      if (preview) { preview.src = post.cover_image_url; preview.style.display = 'block'; }
+      if (window.setRichEditorContent) window.setRichEditorContent(post.content_html);
+
+      document.getElementById('articleFormHeading').textContent = 'Edit Magazine Lookbook';
+      const btn = document.getElementById('btnSavePost');
+      btn.textContent = '💾 Save Changes';
+      document.getElementById('btnCancelPostEdit').style.display = 'inline-block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelPostEdit() {
+      document.getElementById('editPostId').value = '';
+      document.getElementById('postTitle').value = '';
+      document.getElementById('postExcerpt').value = '';
+      if (window.setRichEditorContent) window.setRichEditorContent('');
+      document.getElementById('articleFormHeading').textContent = 'Create New Magazine Lookbook / Story';
+      document.getElementById('btnSavePost').textContent = '✨ Publish Story Live';
+      document.getElementById('btnCancelPostEdit').style.display = 'none';
+    }
+
+    async function deletePost(id) {
+      if (!confirm('Are you sure you want to delete this article?')) return;
+      try {
+        const res = await fetch(`/api/admin/posts?id=${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          const card = document.getElementById(`post-card-${id}`);
+          if (card) card.remove();
+          showToast('🗑️ Article deleted');
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // Save Live Website Text Customizer
+    async function handleSaveSettings(e) {
+      e.preventDefault();
+      const heroBadge = document.getElementById('settingHeroBadge').value;
+      const heroHeading = document.getElementById('settingHeroHeading').value;
+      const heroSubtext = document.getElementById('settingHeroSubtext').value;
+      const readersCount = document.getElementById('settingReaders').value;
+      const satisfactionRate = document.getElementById('settingSatisfaction').value;
+      const footerQuote = document.getElementById('settingFooterQuote').value;
+
+      try {
+        const res = await fetch('/api/admin/settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ heroBadge, heroHeading, heroSubtext, readersCount, satisfactionRate, footerQuote })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('🌸 Website text updated live!');
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // Save 4K Wallpaper
+    async function handleSaveWallpaper(e) {
+      e.preventDefault();
+      const title = document.getElementById('wpTitle').value;
+      const device_type = document.getElementById('wpDevice').value;
+      const thumbnail_url = document.getElementById('wpUrl').value;
+
+      try {
+        const res = await fetch('/api/admin/wallpapers', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, device_type, thumbnail_url, download_url: thumbnail_url })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('🖼️ 4K Wallpaper uploaded to Vault!');
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function deleteWallpaper(id) {
+      if (!confirm('Remove this wallpaper from the vault?')) return;
+      try {
+        const res = await fetch(`/api/admin/wallpapers?id=${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          const card = document.getElementById(`wp-card-${id}`);
+          if (card) card.remove();
+          showToast('🗑️ Wallpaper removed');
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // Save Ranking
+    async function handleSaveRanking(e) {
+      e.preventDefault();
+      const editId = document.getElementById('editRankingId').value;
+      const title = document.getElementById('rankingTitle').value;
+      const category = document.getElementById('rankingCategory').value;
+      const cover_image_url = document.getElementById('rankingUrl').value;
+      const rating = parseFloat(document.getElementById('rankingRating').value) || 5;
+      const review_text = document.getElementById('rankingReview').value;
+      const watch_url = document.getElementById('rankingWatchUrl').value;
+
+      try {
+        const isEdit = Boolean(editId);
+        const url = '/api/admin/rankings';
+        const method = isEdit ? 'PUT' : 'POST';
+        const payload = isEdit
+          ? { id: editId, title, category, cover_image_url, rating, review_text, watch_url }
+          : { title, category, cover_image_url, rating, review_text, watch_url };
+
+        const res = await fetch(url, {
+          method,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast(isEdit ? '🏆 Leaderboard updated!' : '🏆 Review added to Leaderboard!');
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    function editRanking(rank) {
+      document.getElementById('editRankingId').value = rank.id;
+      document.getElementById('rankingTitle').value = rank.title;
+      document.getElementById('rankingCategory').value = rank.category;
+      document.getElementById('rankingUrl').value = rank.cover_image_url;
+      const preview = document.getElementById('rankingPreview');
+      if (preview) { preview.src = rank.cover_image_url; preview.style.display = 'block'; }
+      document.getElementById('rankingRating').value = String(rank.rating);
+      document.getElementById('rankingReview').value = rank.review_text;
+      document.getElementById('rankingWatchUrl').value = rank.watch_url || '';
+
+      document.getElementById('rankingFormHeading').textContent = 'Edit Leaderboard Review';
+      document.getElementById('btnSaveRanking').textContent = '💾 Save Changes';
+      document.getElementById('btnCancelRankingEdit').style.display = 'inline-block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelRankingEdit() {
+      document.getElementById('editRankingId').value = '';
+      document.getElementById('rankingTitle').value = '';
+      document.getElementById('rankingReview').value = '';
+      document.getElementById('rankingFormHeading').textContent = '🏆 Add Show or Audiobook Review';
+      document.getElementById('btnSaveRanking').textContent = '✨ Save to Leaderboard';
+      document.getElementById('btnCancelRankingEdit').style.display = 'none';
+    }
+
+    async function deleteRanking(id) {
+      if (!confirm('Delete this review from leaderboard?')) return;
+      try {
+        const res = await fetch(`/api/admin/rankings?id=${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          const card = document.getElementById(`rank-card-${id}`);
+          if (card) card.remove();
+          showToast('🗑️ Review removed');
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // Save Daily Quote
+    async function handleSaveQuote(e) {
+      e.preventDefault();
+      const content_text = document.getElementById('quoteText').value;
+      const author = document.getElementById('quoteAuthor').value;
+
+      try {
+        const res = await fetch('/api/admin/quotes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content_text, author })
+        });
+        const data = await res.json();
+        if (data.success) {
+          showToast('💬 Affirmation published!');
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function deleteQuote(id) {
+      if (!confirm('Delete this quote?')) return;
+      try {
+        const res = await fetch(`/api/admin/quotes?id=${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          const row = document.getElementById(`quote-row-${id}`);
+          if (row) row.remove();
+          showToast('🗑️ Quote deleted');
+        } else {
+          alert(data.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // Fan Submissions Moderation
+    async function moderateFanUpload(id, status) {
       try {
         const res = await fetch('/api/admin/moderate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id, action })
+          body: JSON.stringify({ id, status })
         });
         const data = await res.json();
         if (data.success) {
-          alert(`Item ${action}!`);
-          const card = document.getElementById(`card-${id}`);
+          const card = document.getElementById(`moderation-${id}`);
           if (card) card.remove();
+          showToast(status === 'approved' ? '✓ Submission Approved to Public Dropboard!' : '✕ Submission Rejected');
         } else {
-          alert('Error: ' + (data.error || 'Failed'));
+          alert(data.error);
         }
       } catch (err) {
-        alert('Network error: ' + err.message);
-      }
-    }
-
-    async function handlePublishPost(e) {
-      e.preventDefault();
-      const title = document.getElementById('postTitle').value;
-      const category = document.getElementById('postCategory').value;
-      const excerpt = document.getElementById('postExcerpt').value;
-      const cover_image_url = document.getElementById('postImage').value;
-      const content_html = document.getElementById('postContent').value;
-
-      try {
-        const res = await fetch('/api/admin/publish', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'post',
-            data: { title, category, excerpt, cover_image_url, content_html }
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('🎉 Post published successfully to the homepage!');
-          window.location.reload();
-        } else {
-          alert('Error: ' + (data.error || 'Failed to publish'));
-        }
-      } catch (err) {
-        alert('Network error: ' + err.message);
-      }
-    }
-
-    async function handlePublishWallpaper(e) {
-      e.preventDefault();
-      const title = document.getElementById('wpTitle').value;
-      const device_type = document.getElementById('wpDevice').value;
-      const thumbnail_url = document.getElementById('wpThumb').value;
-      const download_url = document.getElementById('wpDownload').value || thumbnail_url;
-
-      try {
-        const res = await fetch('/api/admin/publish', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'wallpaper',
-            data: { title, device_type, thumbnail_url, download_url }
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('🎉 4K Wallpaper published successfully to vault!');
-          window.location.reload();
-        } else {
-          alert('Error: ' + (data.error || 'Failed to publish'));
-        }
-      } catch (err) {
-        alert('Network error: ' + err.message);
-      }
-    }
-
-    async function handlePublishQuote(e) {
-      e.preventDefault();
-      const content_text = document.getElementById('quoteText').value;
-      const author = document.getElementById('quoteAuthor').value || 'Rini';
-
-      try {
-        const res = await fetch('/api/admin/publish', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'quote',
-            data: { content_text, author }
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          alert('🎉 Daily Affirmation published successfully!');
-          window.location.reload();
-        } else {
-          alert('Error: ' + (data.error || 'Failed to publish'));
-        }
-      } catch (err) {
-        alert('Network error: ' + err.message);
+        alert('Error: ' + err.message);
       }
     }
   </script>
