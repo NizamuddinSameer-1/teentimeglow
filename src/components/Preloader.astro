@@ -1,0 +1,117 @@
+---
+// Cinematic Preloader with Real Counter
+---
+<div class="site-preloader" id="sitePreloader">
+  <div class="preloader-content">
+    <!-- Morphing Liquid Glow Orb with Pulsing Heart -->
+    <div class="preloader-morph-orb">
+      <div class="preloader-morph-inner">
+        <svg class="preloader-heart-icon" viewBox="0 0 24 24" width="28" height="28" fill="#FFFFFF">
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Small Brand Wordmark in Best Font -->
+    <div class="preloader-brand-title">teen time glow<span class="preloader-dot">.</span></div>
+    <div class="preloader-tagline">feel the glow • curated teen aesthetic</div>
+
+    <!-- Animated Progress Bar & Percentage -->
+    <div class="preloader-progress-wrap">
+      <div class="preloader-progress-bar" id="preloaderProgressBar"></div>
+    </div>
+    <div class="preloader-percent" id="preloaderPercent">0%</div>
+  </div>
+</div>
+
+<script is:inline>
+  (function() {
+    const preloader = document.getElementById('sitePreloader');
+    const bar = document.getElementById('preloaderProgressBar');
+    const counter = document.getElementById('preloaderPercent');
+    if (!preloader) return;
+
+    let progress = 0;
+    const duration = 750; // Fluid count up in 750ms
+    const startTime = performance.now();
+    let dismissed = false;
+
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      if (!preloader) return;
+
+      if (window.gsap) {
+        window.gsap.timeline()
+          .to('.preloader-content', { scale: 0.9, opacity: 0, duration: 0.3, ease: 'power2.in' })
+          .to(preloader, {
+            yPercent: -100,
+            duration: 0.7,
+            ease: 'power4.inOut',
+            onComplete: () => {
+              preloader.style.display = 'none';
+              if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+            }
+          }, '-=0.1');
+      } else {
+        preloader.style.transition = 'transform 0.65s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.4s ease';
+        preloader.style.transform = 'translateY(-100%)';
+        preloader.style.opacity = '0';
+        setTimeout(() => { preloader.style.display = 'none'; }, 700);
+      }
+    }
+
+    function tick(now) {
+      if (dismissed) return;
+      const elapsed = now - startTime;
+      const current = Math.min(100, Math.floor((elapsed / duration) * 100));
+      if (current > progress) {
+        progress = current;
+        if (bar) bar.style.width = progress + '%';
+        if (counter) counter.textContent = progress + '%';
+      }
+
+      if (progress < 100) {
+        requestAnimationFrame(tick);
+      } else {
+        setTimeout(dismiss, 100);
+      }
+    }
+
+    requestAnimationFrame(tick);
+
+    // Guaranteed failsafe: Never stay stuck for more than 1.4s under ANY circumstance
+    setTimeout(dismiss, 1400);
+
+    // Expose dismiss function globally in case external scripts want to trigger it
+    window.dismissPreloader = dismiss;
+  })();
+</script>
+
+<!-- Top Scroll Reading Progress Bar (GSAP ScrollTrigger) -->
+<div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+<!-- Ambient Sunset Cursor Follower -->
+<div class="ambient-glow" id="ambientGlow"></div>
+
+<!-- Floating Back to Top Button -->
+<button class="back-to-top-btn" id="backToTopBtn" onclick="scrollToTop()" aria-label="Back to top">↑</button>
+
+<!-- Interactive Audiobook Audio Player Bar -->
+<div class="audio-preview-bar" id="audioPreviewBar">
+  <div class="audio-bars-anim">
+    <span class="audio-bar"></span>
+    <span class="audio-bar"></span>
+    <span class="audio-bar"></span>
+    <span class="audio-bar"></span>
+    <span class="audio-bar"></span>
+    <span class="audio-bar"></span>
+    <span class="audio-bar"></span>
+    <span class="audio-bar"></span>
+  </div>
+  <div style="display: flex; flex-direction: column;">
+    <span style="font-size: 0.72rem; color: #FAA307; font-weight: 800; text-transform: uppercase;">Now Previewing</span>
+    <span id="audioTrackTitle" style="font-size: 0.88rem; font-weight: 700;">The Seven Husbands of Evelyn Hugo</span>
+  </div>
+  <button onclick="toggleAudioPreview(false)" style="background: none; border: none; color: #9CA3AF; cursor: pointer; font-size: 1.1rem; padding: 4px;">✕</button>
+</div>

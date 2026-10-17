@@ -1,0 +1,28 @@
+{
+  "name": "teentimeglow",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/vercel": "^8.0.7",
+    "@supabase/supabase-js": "^2.49.1",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "astro": "^5.4.2",
+    "dompurify": "^3.2.4",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/dompurify": "^3.0.5",
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  }
+}
