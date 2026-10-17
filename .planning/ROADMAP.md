@@ -144,13 +144,28 @@
 
 ## Milestone 3: Google SEO, Analytics & Search Console Indexing
 
-### Phase 13: Google Analytics 4, Search Console, Sitemap & Search Engine Optimization
+### Phase 13: Google Analytics 4, Search Console, Sitemap & Search Engine Optimization [x] (Completed: 2026-10-18)
 * **Goal**: Equip TeenTimeGlow with production SEO, Google Analytics 4 tracking, Google Search Console verification, dynamic XML sitemaps, robots.txt, and rich JSON-LD schemas so pages index and rank on Google.
 * **Tasks**:
-  1. Add non-blocking `Analytics.astro` component supporting `PUBLIC_GA_MEASUREMENT_ID`.
-  2. Implement `public/robots.txt` and `public/sitemap.xml` referencing `https://teentimeglow.me`.
-  3. Implement JSON-LD structured data schemas (`WebSite`, `Organization`, `BlogPosting`, `ItemList`) in `BaseLayout.astro` and article reader `/edits/[slug]`.
-  4. Add canonical URLs (`<link rel="canonical" ...>`) and Google Search Console verification meta tag in `BaseLayout.astro`.
-  5. Document actionable step-by-step instructions for submitting the site to Google Search Console and obtaining the GA4 ID.
+  1. [x] Add non-blocking `Analytics.astro` component supporting `PUBLIC_GA_MEASUREMENT_ID` (`G-3L1L8THSDR`).
+  2. [x] Implement `public/robots.txt` and `public/sitemap.xml` referencing `https://teentimeglow.me`.
+  3. [x] Implement JSON-LD structured data schemas (`WebSite`, `Organization`, `BlogPosting`, `ItemList`) in `BaseLayout.astro` and article reader `/edits/[slug]`.
+  4. [x] Add canonical URLs (`<link rel="canonical" ...>`) and Google Search Console verification meta tag in `BaseLayout.astro`.
+  5. [x] Verify in Google Search Console: Sitemap read, 13 pages discovered and processed successfully.
+
+---
+
+## Milestone 4: Rini's Zero-Tech Visual Admin Studio
+
+### Phase 14: Rini's Zero-Tech Visual Admin Studio (/admin)
+* **Goal**: Build a beginner-friendly, visual content management studio at `/admin` designed specifically for Rini (0 coding experience) to customize website text, create and edit articles with visual rich text, upload images directly from phone/laptop, manage rankings & wallpapers, and moderate submissions.
+* **Tasks**:
+  1. Build a welcoming, friendly login screen with simple 4-digit PIN / password and persistent "Remember Me" session.
+  2. Implement direct drag-and-drop / phone camera photo upload endpoint (`/api/admin/upload-image`) to Supabase Storage with instant preview.
+  3. Build a visual rich-text editor (Notion/Instagram style with Bold, Heading, Quote, Bullet list) for writing and editing articles.
+  4. Implement complete Article Management: Create new lookbooks, edit existing articles, and delete with confirmation.
+  5. Implement Live Website Copy Customizer: Change hero headline, subtitle, issue badge, stats numbers, and footer without code.
+  6. Implement Wallpapers, Rankings & Quotes management tabs: Add, edit, or delete items with automatic public updates.
+  7. Implement Moderation Inbox for community creations with 1-click Approve/Reject.
 
 
