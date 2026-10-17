@@ -133,3 +133,25 @@ export async function getActiveQuiz(): Promise<{
     return { quiz: null, questions: [], outcomes: [] };
   }
 }
+
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('slug', slug)
+      .eq('is_published', true)
+      .single();
+
+    if (error || !data) {
+      const fallback = fallbackPosts.find(p => p.slug === slug);
+      return fallback || null;
+    }
+    return data as Post;
+  } catch (err) {
+    console.warn(`Supabase fetch post by slug [${slug}] error, using fallback:`, err);
+    const fallback = fallbackPosts.find(p => p.slug === slug);
+    return fallback || null;
+  }
+}
+

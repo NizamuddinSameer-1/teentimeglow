@@ -8,7 +8,27 @@ export const fallbackPosts: Post[] = [
     category: 'beauty',
     cover_image_url: '/assets/feature-skincare.jpg',
     excerpt: 'Discover the exact layering ritual for that hydrated, glazed-donut morning glow without breaking the bank.',
-    content_html: '<p>The secret to glass skin is gentle hydration layering: double cleansing, milky toner, hyaluronic acid, ceramide barrier cream, and SPF 50.</p>',
+    content_html: `
+      <h2>The Philosophy of Glass Skin</h2>
+      <p>Glass skin isn’t about wearing layers of illuminating foundation or synthetic glitter. In Korean skincare traditions (known as <em>yuri pibu</em>), it represents a skin barrier so deeply hydrated, plump, and smooth that it reflects light naturally like clean glass.</p>
+      
+      <blockquote>"Hydration is not a single product; it is a layering conversation between moisture and your skin barrier." — Rini</blockquote>
+
+      <h2>Step 1: Gentle Double Cleansing</h2>
+      <p>Never strip your moisture mantle with foaming sulfates. Begin with a calming cleansing oil or balm containing jojoba or green tea seed oil. Massage for 60 seconds to melt away SPF and impurities, then emulsify with warm water. Follow up with a pH 5.5 hydrating water gel cleanser.</p>
+
+      <h2>Step 2: The Milky Hydrating Toner</h2>
+      <p>Instead of harsh astringents, pour a nickel-sized puddle of rice water or ceramide toner into your palms. Pat gently into damp skin using the 3-Skin Method (patting three thin layers consecutively). Your skin will instantly drink it up and feel bouncy.</p>
+
+      <h2>Step 3: Hyaluronic Acid & Beta-Glucan Serum</h2>
+      <p>Apply your serum while the skin is still dewy from toner. Beta-glucan actually holds 20% more moisture than hyaluronic acid, providing deep cushioning that smooths texture and calms redness.</p>
+
+      <h2>Step 4: Ceramide Barrier Cushion Cream</h2>
+      <p>Lock that hydration in! Look for a non-comedogenic gel cream packed with Centella Asiatica (Cica), panthenol, and triple ceramides. This creates a soft-focus protective seal that lasts throughout school or work.</p>
+
+      <h2>Step 5: Dewy SPF 50+ Sunscreen</h2>
+      <p>The non-negotiable final step. Modern chemical filters like chemical UV essences melt into the skin like water lotion with zero white cast and leave behind that iconic golden-hour glaze.</p>
+    `,
     read_time_minutes: 4,
     is_published: true,
     created_at: new Date().toISOString(),
@@ -21,7 +41,21 @@ export const fallbackPosts: Post[] = [
     category: 'fashion',
     cover_image_url: '/assets/feature-fashion.jpg',
     excerpt: 'Aesthetic styling formulas combining cozy vintage textures with modern streetwear accents.',
-    content_html: '<p>Balance oversized knit sweaters with structured pleated mini skirts and chunky loafers with ankle socks.</p>',
+    content_html: `
+      <h2>The Proportions of Autumn Elegance</h2>
+      <p>Fall fashion is all about tactile contrast: heavy cable-knit wools paired with crisp woven pleats, soft cashmere against sleek leather loafers. Here is how we balance volume to keep silhouettes effortless rather than bulky.</p>
+
+      <blockquote>"When the weather turns crisp, your outfit should feel like a warm embrace with high-fashion intent." — Rini</blockquote>
+
+      <h2>Formula 1: The Chunky Fisherman Knit + Tennis Pleat</h2>
+      <p>Choose an oversized oatmeal or cream crewneck that drops slightly past the hips. Pair with a deep charcoal or forest green pleated mini skirt. Allow just 2-3 inches of the pleats to peek below the hem for that chic Ivy League contrast.</p>
+
+      <h2>Formula 2: Footwear Foundations</h2>
+      <p>Ground the feminine pleats with structured leather penny loafers or Mary Janes. Add ribbed ecru crew socks pulled slightly slouchy around the ankles to bring warmth and athletic playfulness.</p>
+
+      <h2>Formula 3: Vintage Accessories</h2>
+      <p>Elevate the look with a slim tortoiseshell headband, wire-rimmed reading glasses, and an emerald green leather shoulder tote.</p>
+    `,
     read_time_minutes: 3,
     is_published: true,
     created_at: new Date().toISOString(),
@@ -34,8 +68,82 @@ export const fallbackPosts: Post[] = [
     category: 'decor',
     cover_image_url: '/assets/feature-decor.jpg',
     excerpt: 'How to transform your bedroom into a Pinterest-worthy sanctuary using warm sunset lamps, linen, and ceramic jars.',
-    content_html: '<p>Lighting makes 80% of bedroom ambiance. Opt for 2700K warm incandescent or LED tones with linen drapes.</p>',
+    content_html: `
+      <h2>The Bedroom as an Emotional Sanctuary</h2>
+      <p>Your room is where you decompress after long study sessions and recharge your creative battery. You do not need thousands of dollars to create an ethereal, peaceful sanctuary — just intentional lighting and tactile warmth.</p>
+
+      <blockquote>"Lighting makes 80% of bedroom atmosphere. Banish overhead ceiling fluorescents forever." — Rini</blockquote>
+
+      <h2>Step 1: Ambient Sunset Lamps & Warm Bulbs</h2>
+      <p>Replace cool 5000K white LED bulbs with warm 2200K–2700K incandescent warmth. Add a 10W sunset projection lamp angled at an ivory corner to create an eternal golden hour glow even on gloomy days.</p>
+
+      <h2>Step 2: Woven Bedding & Cloud Textures</h2>
+      <p>Swap synthetic comforters for pre-washed cotton or linen duvet covers in sand, oat, or matcha green. Layer a waffle-weave throw blanket across the foot of the bed for lived-in comfort.</p>
+
+      <h2>Step 3: Botanical Ceramic Accents</h2>
+      <p>Pick up thrifted stone mugs or ceramic bud vases for dried baby’s breath, eucalyptus, and lavender. The subtle herbal scent naturally signals your mind to unwind.</p>
+    `,
     read_time_minutes: 5,
+    is_published: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '4',
+    title: 'Parisian Chic & Effortless Autumn Layering',
+    slug: 'parisian-chic-layering',
+    category: 'fashion',
+    cover_image_url: '/assets/arrival-1.jpg',
+    excerpt: 'Mastering timeless capsule wardrobes: trenches, tailored trousers, and soft neutral palettes.',
+    content_html: `
+      <h2>The Art of Nonchalant Parisian Dressing</h2>
+      <p>The essence of Parisian style is looking impeccably put-together without appearing as though you spent more than three minutes planning in the mirror. It relies on high-quality basics styled with crisp attitude.</p>
+
+      <h2>The Heritage Trench Coat</h2>
+      <p>An oversized beige or taupe double-breasted trench is the ultimate transitional layer. Tie the belt loosely at the back rather than buckling it in the front to maintain fluid motion as you walk.</p>
+
+      <h2>Relaxed Tailored Wool Trousers</h2>
+      <p>Ditch tight skinny jeans for high-waisted, wide-leg pleated trousers in camel or espresso brown. They pool gracefully over minimal white leather trainers or ankle boots.</p>
+    `,
+    read_time_minutes: 4,
+    is_published: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '5',
+    title: 'Ceramide Magic: Restoring Your Moisture Barrier Overnight',
+    slug: 'ceramide-barrier-repair',
+    category: 'beauty',
+    cover_image_url: '/assets/arrival-3.jpg',
+    excerpt: 'Waking up with calm, radiant, un-irritated skin after accidental over-exfoliation or dry winter winds.',
+    content_html: `
+      <h2>Recognizing a Damaged Moisture Mantle</h2>
+      <p>If your skin stings when applying basic moisturizer, looks shiny yet feels tight, or experiences random flaky patches, your acid mantle has been compromised by harsh actives or weather extremes.</p>
+
+      <h2>The 72-Hour Reset Routine</h2>
+      <p>Pause all retinoids, AHA/BHA exfoliants, and vitamin C. Wash only with lukewarm water or an ultra-mild milk cleanser. Slather a cream rich in 3:1:1 physiological ratio of ceramides, cholesterol, and fatty acids before sleep.</p>
+    `,
+    read_time_minutes: 3,
+    is_published: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: '6',
+    title: 'Curating The Ultimate Study Sanctuary: Warm Lighting & Scented Rituals',
+    slug: 'study-aesthetic-sanctuary',
+    category: 'decor',
+    cover_image_url: '/assets/gallery-aesthetic-ootd.jpg',
+    excerpt: 'Design an inspiring study desk nook that boosts focus, dopamine, and academic productivity.',
+    content_html: `
+      <h2>The Psychology of an Inspiring Desk Space</h2>
+      <p>When your workspace looks beautiful and smells like cedarwood or vanilla bean, sitting down to study ceases to feel like a chore. It becomes a peaceful ritual you look forward to every evening.</p>
+
+      <h2>Cable Management & Visual Calm</h2>
+      <p>Tuck away dangling wires using under-desk adhesive trays. A clean wood desk mat creates a dedicated zone for your laptop, notebook, and ceramic pen cup.</p>
+    `,
+    read_time_minutes: 4,
     is_published: true,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()

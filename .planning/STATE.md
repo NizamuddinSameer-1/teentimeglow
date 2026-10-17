@@ -3,8 +3,8 @@
 **Last Updated:** 2026-10-17  
 **Branch:** `gsd-super/separate-pages`  
 **Current Milestone:** Milestone 2 (Dedicated Standalone Pages)  
-**Current Phase Completed:** Phase 9: Curated Leaderboard (`/rankings`)  
-**Next Phase:** Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`)  
+**Current Phase Completed:** Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`)  
+**Next Phase:** Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`)  
 **Mode:** Mode B — Milestone Pauses  
 
 ## Phase Tracking
@@ -17,12 +17,13 @@
 * [x] **Phase 7: Dedicated 4K Wallpaper Vault (`/wallpapers`)** (COMPLETED & VERIFIED)
 * [x] **Phase 8: Daily Mindset & Quotes Hub (`/quotes`)** (COMPLETED & VERIFIED)
 * [x] **Phase 9: Curated Leaderboard (`/rankings`)** (COMPLETED & VERIFIED)
-* [ ] **Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`)** (READY FOR EXECUTION)
-* [ ] **Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`)** (PENDING)
+* [x] **Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`)** (COMPLETED & VERIFIED)
+* [ ] **Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`)** (READY FOR EXECUTION)
 * [ ] **Phase 12: Unified Navigation, Global Links & Production Verification** (PENDING)
 
 ## Last Activity
-Phase 9 completed:
-- Built `src/pages/rankings/index.astro` with category switcher tabs, live keyword search, star ratings, and external watch/listen links.
-- Expanded fallback rankings in `src/lib/seeds.ts` with 8 diverse Prime Video and Audiobook titles.
-- Verified production build compiles cleanly in 11.01s with 0 errors.
+Phase 10 completed:
+- Built `src/pages/edits/index.astro` catalog with featured cover story, category filters, live keyword search, and 3-column lookbook grid.
+- Built dynamic SSR reader route `src/pages/edits/[slug].astro` with reading progress bar, table of contents sidebar, author byline, and related stories.
+- Added `getPostBySlug(slug)` helper in `src/lib/api.ts` and expanded fallback articles in `src/lib/seeds.ts`.
+- Verified production build compiles cleanly in 15.36s with 0 errors.

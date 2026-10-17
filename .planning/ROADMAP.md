@@ -117,13 +117,13 @@
   4. [x] Add external streaming/listen links with security rel="noopener noreferrer".
   5. [x] Connect to `getRankings()` with seed fallbacks.
 
-### Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`)
+### Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`) [x] (Completed: 2026-10-17)
 * **Goal**: Build a dedicated magazine lookbook catalog (`/edits`) and dynamic individual article reader (`/edits/[slug]`).
 * **Tasks**:
-  1. Create `src/pages/edits/index.astro` with featured cover story hero and category filters (Skincare, Fashion, Decor).
-  2. Create dynamic route `src/pages/edits/[slug].astro` for full-text articles with table of contents, author profile (Rini), estimated read time, and high-res imagery.
-  3. Add `getPostBySlug(slug)` helper in `src/lib/api.ts` with resilient seed matching.
-  4. Include "Related Edits" carousel and social share actions.
+  1. [x] Create `src/pages/edits/index.astro` with featured cover story hero and category filters (Skincare, Fashion, Decor).
+  2. [x] Create dynamic route `src/pages/edits/[slug].astro` for full-text articles with table of contents, author profile (Rini), estimated read time, and high-res imagery.
+  3. [x] Add `getPostBySlug(slug)` helper in `src/lib/api.ts` with resilient seed matching.
+  4. [x] Include "Related Edits" carousel and social share actions.
 
 ### Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`)
 * **Goal**: Build dedicated standalone pages for the interactive Quiz (`/quiz`) and Community Showcase (`/gallery`).
