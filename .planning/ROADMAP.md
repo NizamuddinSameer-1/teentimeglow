@@ -108,14 +108,14 @@
   4. [x] Implement "Copy Quote" and "Share Card" functionality with visual toast confirmation.
   5. [x] Connect to `getQuotes()` with seed fallbacks.
 
-### Phase 9: Curated Leaderboard (`/rankings`)
+### Phase 9: Curated Leaderboard (`/rankings`) [x] (Completed: 2026-10-17)
 * **Goal**: Build a dedicated reviews and ranking board for Prime Video shows and Audiobooks.
 * **Tasks**:
-  1. Create `src/pages/rankings/index.astro`.
-  2. Add category switchers: "Prime Video Binge" vs "Addictive Audiobooks".
-  3. Display rank medals (#1 Golden Hour Pick, #2, etc.), star ratings, genre tags, and deep-dive editorial reviews.
-  4. Add external streaming/listen links with security rel="noopener noreferrer".
-  5. Connect to `getRankings()` with seed fallbacks.
+  1. [x] Create `src/pages/rankings/index.astro`.
+  2. [x] Add category switchers: "Prime Video Binge" vs "Addictive Audiobooks".
+  3. [x] Display rank medals (#1 Golden Hour Pick, #2, etc.), star ratings, genre tags, and deep-dive editorial reviews.
+  4. [x] Add external streaming/listen links with security rel="noopener noreferrer".
+  5. [x] Connect to `getRankings()` with seed fallbacks.
 
 ### Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`)
 * **Goal**: Build a dedicated magazine lookbook catalog (`/edits`) and dynamic individual article reader (`/edits/[slug]`).

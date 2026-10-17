@@ -1,0 +1,728 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getRankings } from '@/lib/api';
+import type { Ranking } from '@/types/database';
+
+export const prerender = false;
+
+// Hydrate live rankings with seed fallback
+const rankings: Ranking[] = await getRankings();
+
+const primeSeries = rankings.filter(r => r.category === 'prime_video');
+const audiobooks = rankings.filter(r => r.category === 'audiobook');
+---
+
+<BaseLayout
+  title="Curated Leaderboard: Prime Video & Audiobooks — TeenTimeGlow by Rini"
+  description="Explore Rini's top curated rankings for Prime Video series and captivating audiobooks. Honest 5-star reviews, dark academia aesthetics, summer romances, and mindset audio."
+>
+  <main class="rankings-page-container">
+    <!-- Breadcrumb & Back Bar -->
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Curated Leaderboard</span>
+      </nav>
+      <a href="/" class="btn-back-home magnetic-btn">
+        <span>← Back to Main Magazine</span>
+      </a>
+    </div>
+
+    <!-- Hero Header -->
+    <section class="rankings-hero">
+      <div class="container text-center">
+        <div class="hero-badge-wrap">
+          <span class="section-pill-tag">✦ RINI'S TOP LEADERBOARD</span>
+          <span class="hero-live-badge">UPDATED MONTHLY</span>
+        </div>
+        <h1 class="rankings-hero-title">The Binge & Audio Leaderboard.<br /><span class="glow-gradient-text">Curated For Aesthetic Minds.</span></h1>
+        <p class="rankings-hero-subtitle">
+          Honest 5-star reviews of Prime Video cinematic releases and captivating audiobook narrations. Handpicked for mood, worldbuilding, and emotional resonance.
+        </p>
+
+        <!-- Stats Bar -->
+        <div class="rankings-stats-bar">
+          <div class="stat-pill-item">
+            <span class="stat-pill-val">{rankings.length}</span>
+            <span class="stat-pill-lbl">Curated Picks</span>
+          </div>
+          <div class="stat-pill-divider"></div>
+          <div class="stat-pill-item">
+            <span class="stat-pill-val">4.9★</span>
+            <span class="stat-pill-lbl">Avg. Rating</span>
+          </div>
+          <div class="stat-pill-divider"></div>
+          <div class="stat-pill-item">
+            <span class="stat-pill-val">100%</span>
+            <span class="stat-pill-lbl">Unfiltered Reviews</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Toolbar & Filter Tabs -->
+    <section class="rankings-toolbar-section">
+      <div class="container">
+        <div class="toolbar-box">
+          <!-- Live Search Input -->
+          <div class="search-input-wrap">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              id="rankingSearchInput"
+              class="search-input-field"
+              placeholder="Search by title, genre, or tag (e.g. Summer, Habits, Oxford)..."
+              oninput="handleRankingSearch(this.value)"
+            />
+          </div>
+
+          <!-- Category Switcher Tabs -->
+          <div class="filter-tabs-wrap">
+            <button class="rank-filter-tab active" data-category="all" onclick="filterRankingsByCategory('all', this)">
+              All Picks ({rankings.length})
+            </button>
+            <button class="rank-filter-tab" data-category="prime_video" onclick="filterRankingsByCategory('prime_video', this)">
+              📺 Prime Video ({primeSeries.length})
+            </button>
+            <button class="rank-filter-tab" data-category="audiobook" onclick="filterRankingsByCategory('audiobook', this)">
+              🎧 Audiobooks ({audiobooks.length})
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rankings Grid -->
+    <section class="rankings-grid-section">
+      <div class="container">
+        <div class="rankings-custom-grid" id="rankingsGrid">
+          {rankings.map((item) => {
+            const isAudiobook = item.category === 'audiobook';
+            const rankLabel = item.rank_order === 1 ? '👑 #1 GOLDEN HOUR PICK' : `#${item.rank_order} TOP RANKED`;
+            const platformTag = isAudiobook ? 'Audible Audiobook' : 'Prime Video Exclusive';
+            const tagsList = item.tags || [];
+            const safeTitle = item.title.replace(/'/g, "\\'");
+
+            return (
+              <div
+                class="ranking-full-card tilt-card"
+                data-category={item.category}
+                data-title={item.title.toLowerCase()}
+                data-tags={tagsList.join(' ').toLowerCase()}
+              >
+                <!-- Poster Image Frame -->
+                <div class="ranking-poster-frame">
+                  <img
+                    src={item.cover_image_url}
+                    alt={item.title}
+                    class="ranking-poster-img parallax-img"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class={`ranking-badge-top ${item.rank_order === 1 ? 'gold-badge' : ''}`}>{rankLabel}</span>
+                  <span class="ranking-type-tag">{platformTag}</span>
+                </div>
+
+                <!-- Content & Details -->
+                <div class="ranking-card-content">
+                  <div class="genre-tags-row">
+                    {tagsList.map(tag => (
+                      <span class="genre-pill-mini">#{tag}</span>
+                    ))}
+                  </div>
+
+                  <h3 class="ranking-item-title">{item.title}</h3>
+                  <p class="ranking-item-review">{item.review_text}</p>
+
+                  <div class="ranking-card-footer">
+                    <div class="rating-stars-badge">
+                      <span class="star-icon">★</span>
+                      <span class="rating-num">{item.rating.toFixed(1)} / 5.0</span>
+                    </div>
+
+                    {isAudiobook ? (
+                      <button
+                        class="btn-rank-action magnetic-btn"
+                        onclick={`playAudioSampleDirect('${safeTitle}', event)`}
+                      >
+                        <span>Listen Sample</span>
+                        <span>♫</span>
+                      </button>
+                    ) : (
+                      <a
+                        href={item.watch_url || 'https://www.amazon.com/primevideo'}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-rank-action magnetic-btn"
+                      >
+                        <span>Watch on Prime</span>
+                        <span>↗</span>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <!-- No Results Fallback -->
+        <div id="noRankingsFound" class="no-results-state" style="display: none;">
+          <div class="no-results-icon">🎬</div>
+          <h3>No titles match your search</h3>
+          <p>Try searching for a different keyword or genre, or reset your filters.</p>
+          <button class="btn-reset-filters" onclick="resetRankingFilters()">Show All Titles</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Editorial Rating Guide -->
+    <section class="rankings-guide-section">
+      <div class="container">
+        <div class="guide-box">
+          <div class="guide-header">
+            <span class="section-pill-tag">✦ THE RINI STANDARD</span>
+            <h2 class="guide-title">How We Score Every Series & Narration</h2>
+            <p class="guide-subtitle">Our 3-point benchmark for selecting stories worthy of your downtime.</p>
+          </div>
+          <div class="guide-grid">
+            <div class="guide-card">
+              <span class="guide-num">01</span>
+              <h4>Aesthetic Worldbuilding</h4>
+              <p>From Cousins Beach nostalgia to Oxford stone halls, we look for cinematography and costume design that transports you into another reality.</p>
+            </div>
+            <div class="guide-card">
+              <span class="guide-num">02</span>
+              <h4>Emotional Pacing</h4>
+              <p>Zero filler episodes. We evaluate whether characters undergo meaningful growth and whether audio narrators breathe life into every dialogue.</p>
+            </div>
+            <div class="guide-card">
+              <span class="guide-num">03</span>
+              <h4>Rewatch & Relisten Value</h4>
+              <p>A true 5-star pick is comfort media you revisit on cozy Sunday afternoons with a warm beverage and scented candle.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  function filterRankingsByCategory(category, btn) {
+    document.querySelectorAll('.rank-filter-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const cards = document.querySelectorAll('#rankingsGrid .ranking-full-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cardCategory = card.getAttribute('data-category');
+      const matches = category === 'all' || cardCategory === category;
+      if (matches) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const empty = document.getElementById('noRankingsFound');
+    if (empty) empty.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  function handleRankingSearch(term) {
+    const q = term.toLowerCase().trim();
+    const cards = document.querySelectorAll('#rankingsGrid .ranking-full-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const title = card.getAttribute('data-title') || '';
+      const tags = card.getAttribute('data-tags') || '';
+      const matches = !q || title.includes(q) || tags.includes(q);
+      if (matches) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const empty = document.getElementById('noRankingsFound');
+    if (empty) empty.style.display = visibleCount === 0 ? 'block' : 'none';
+  }
+
+  function resetRankingFilters() {
+    const input = document.getElementById('rankingSearchInput');
+    if (input) input.value = '';
+    const allBtn = document.querySelector('.rank-filter-tab[data-category="all"]');
+    filterRankingsByCategory('all', allBtn);
+  }
+
+  function playAudioSampleDirect(title, event) {
+    event.preventDefault();
+    if (typeof window.playTone === 'function') {
+      window.playTone(480, 'sine', 0.2);
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Playing sample narration for "${title}" ♫`);
+    }
+  }
+</script>
+
+<style>
+  /* ==========================================================================
+     Dedicated Rankings Page Styling
+     ========================================================================== */
+  .rankings-page-container {
+    padding-top: 100px;
+    padding-bottom: 80px;
+    background: #FAF7F2;
+    min-height: 100vh;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .breadcrumb-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .breadcrumb-link:hover {
+    color: var(--sunset-accent);
+  }
+  .breadcrumb-sep {
+    color: #CBD5E1;
+  }
+  .breadcrumb-current {
+    color: #111827;
+  }
+  .btn-back-home {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #111827;
+    text-decoration: none;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+  }
+  .btn-back-home:hover {
+    border-color: var(--sunset-accent);
+    color: var(--sunset-accent);
+    transform: translateX(-2px);
+  }
+
+  /* Hero Section */
+  .rankings-hero {
+    padding: 40px 0 30px;
+  }
+  .hero-badge-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .hero-live-badge {
+    background: #E85D04;
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  .rankings-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    line-height: 1.05;
+    color: #0F1115;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .glow-gradient-text {
+    background: linear-gradient(135deg, #E85D04 0%, #FAA307 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .rankings-hero-subtitle {
+    font-size: 1.08rem;
+    color: var(--text-muted);
+    max-width: 640px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+
+  /* Stats Bar */
+  .rankings-stats-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 28px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 12px 34px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+  }
+  .stat-pill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .stat-pill-val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-family: var(--font-syne);
+    color: #111827;
+  }
+  .stat-pill-lbl {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .stat-pill-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border-subtle);
+  }
+
+  /* Toolbar Section */
+  .rankings-toolbar-section {
+    padding: 24px 0;
+  }
+  .toolbar-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 14px 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  }
+  .search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FAF9F6;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 10px 18px;
+    flex: 1;
+    min-width: 280px;
+    max-width: 440px;
+  }
+  .search-input-wrap:focus-within {
+    border-color: var(--sunset-accent);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.12);
+  }
+  .search-icon {
+    color: var(--text-muted);
+  }
+  .search-input-field {
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    color: #111827;
+    outline: none;
+    width: 100%;
+  }
+  .filter-tabs-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .rank-filter-tab {
+    background: #FAF9F6;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .rank-filter-tab:hover {
+    color: #111827;
+    background: #F3F4F6;
+  }
+  .rank-filter-tab.active {
+    background: #0C3B2E;
+    color: #FFFFFF;
+    border-color: #0C3B2E;
+  }
+
+  /* Rankings Custom Grid */
+  .rankings-grid-section {
+    padding: 20px 0 60px;
+  }
+  .rankings-custom-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+  .ranking-full-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.03);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .ranking-full-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(232, 93, 4, 0.12);
+  }
+  .ranking-poster-frame {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #111827;
+  }
+  .ranking-poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .ranking-full-card:hover .ranking-poster-img {
+    transform: scale(1.08);
+  }
+  .ranking-badge-top {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    color: #FFFFFF;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.05em;
+  }
+  .gold-badge {
+    background: linear-gradient(135deg, #FFBA00 0%, #E85D04 100%);
+    color: #000000;
+    font-weight: 900;
+  }
+  .ranking-type-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    color: #111827;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .ranking-card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 12px;
+  }
+  .genre-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .genre-pill-mini {
+    background: #FAF9F6;
+    color: var(--sunset-accent);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .ranking-item-title {
+    font-family: var(--font-syne);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.25;
+  }
+  .ranking-item-review {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    flex: 1;
+  }
+  .ranking-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+    gap: 10px;
+  }
+  .rating-stars-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #E85D04;
+  }
+  .star-icon {
+    color: #FFBA00;
+    font-size: 1rem;
+  }
+  .rating-num {
+    color: #111827;
+  }
+  .btn-rank-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #000000;
+    color: #FFFFFF;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .btn-rank-action:hover {
+    background: var(--sunset-accent);
+    transform: translateY(-2px);
+  }
+
+  /* No Results */
+  .no-results-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px dashed var(--border-subtle);
+  }
+  .no-results-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+  }
+  .btn-reset-filters {
+    margin-top: 16px;
+    background: var(--sunset-accent);
+    color: #FFFFFF;
+    border: none;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  /* Guide Box */
+  .rankings-guide-section {
+    padding: 40px 0 20px;
+  }
+  .guide-box {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 36px 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  }
+  .guide-header {
+    margin-bottom: 28px;
+  }
+  .guide-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    color: #0F1115;
+    margin-top: 8px;
+  }
+  .guide-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .guide-card {
+    background: #FAF9F6;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-subtle);
+  }
+  .guide-num {
+    font-family: var(--font-syne);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .guide-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 6px;
+  }
+  .guide-card p {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 1100px) {
+    .rankings-custom-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 768px) {
+    .guide-grid {
+      grid-template-columns: 1fr;
+    }
+    .toolbar-box {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .search-input-wrap {
+      max-width: 100%;
+    }
+  }
+  @media (max-width: 580px) {
+    .rankings-custom-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
