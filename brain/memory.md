@@ -1,9 +1,9 @@
-# Project Memory & Decision Log — Rini TheTeen
+# Project Memory & Decision Log — TeenTimeGlow
 
 **Last Updated:** 2026-10-17  
-**Target Custom Domain:** `teentimeglow.me` (Claimed via GitHub Student Pack on Namecheap)  
-**Fallback / Staging Domain:** `rinitheteen.vercel.app`  
-**Current Phase:** Pre-implementation / Spec & Architecture Alignment  
+**Production Custom Domain:** [`https://teentimeglow.me`](https://teentimeglow.me) | [`https://www.teentimeglow.me`](https://www.teentimeglow.me)  
+**Deployment Platform:** Vercel Global Edge Network  
+**Current Phase:** Production Live & Polished  
 
 ---
 
@@ -38,6 +38,18 @@
 * **Decision:** Public submissions must save to `status = 'pending'` and never display publicly until Rini taps "Approve" in her Admin Inbox.
 * **Status:** Accepted.
 
+### ADR-006: Navigation Bar Redesign & Two-Tone Brand Identity
+* **Context:** The user provided an exact reference design showing a two-tone brand mark (`teen time glow.`), active capsule pill for `Home`, 6 core nav links, hairline divider, capsule search input, audio toggle, like counter, and deep forest green `Take Quiz ✨` CTA button.
+* **Decision:** Re-architected `<header id="siteHeader">` to match the exact reference layout while strictly preserving the user's circular logo avatar (`assets/logo.jpg`).
+* **Rationale:** Keeps brand recognition while elevating visual craftsmanship to elite editorial standards. Search bar includes instant smart jump navigation to page sections (`#edits`, `#rankings`, `#quotes`, `#wallpapers`, `#quiz`, `#gallery`).
+* **Status:** Accepted & Deployed.
+
+### ADR-007: Romantic Aesthetics & Pink Little Hearts Interactive Trail
+* **Context:** The user requested replacing generic cursor particle dust with romantic pink little hearts, adding morphing animation effects, and a cinematic preloader.
+* **Decision:** Implemented inline SVG mini pink hearts with rotation, upward drift, and decay physics on mouse movement, radial click explosions, CSS keyframe `@keyframes organicMorph` background blobs, and a real percentage preloader (`0%` → `100%`).
+* **Rationale:** Deepens the "Teen Glow" brand immersion and delight factor without degrading performance (lightweight DOM recycling, 60fps).
+* **Status:** Accepted & Deployed.
+
 ---
 
 ## 2. Environment Variables & Secrets Inventory (Template)
@@ -65,19 +77,22 @@ ADMIN_EMAIL="rini@example.com"
 
 ---
 
-## 3. Implementation Roadmap
+## 3. Implementation Roadmap & Current Status
 
-| Phase | Milestone | Deliverables |
-| :--- | :--- | :--- |
-| **Phase 1** | **Foundation & Specs** | PRD, Architecture, System Map, Rules, Memory (Current). Awaiting Stitch design screens to populate `designs.md`. |
-| **Phase 2** | **Project Scaffold & Database** | Initialize Astro project with Vercel adapter, setup Supabase schema and RLS policies, configure R2 storage bucket. |
-| **Phase 3** | **Public Experience** | Build Homepage, Beauty/Fashion/Decor Blog, Prime Video & Audiobook Rankings, Wallpaper Vault, Daily Quote card. |
-| **Phase 4** | **Interactive & Community Engine** | Interactive Quiz player + result generator, Community submission modal ("The Teen Gallery"). |
-| **Phase 5** | **Zero-Code Admin Dashboard** | `/admin` panel with Article editor, Quiz builder, Ranking manager, Community moderation inbox, and Wallpaper uploader. |
-| **Phase 6** | **Telemetry, SEO & Ship** | GA4 integration, Open Graph cards, sitemap.xml, Lighthouse 95+ verification, deployment to `rinitheteen.vercel.app`. |
+| Phase | Milestone | Deliverables | Status |
+| :--- | :--- | :--- | :--- |
+| **Phase 1** | **Foundation & Specs** | PRD, Architecture, System Map, Rules, Memory, Brand Identity | ✅ **Complete** |
+| **Phase 2** | **Frontend Core & Visual Identity** | Editorial Hero, Theme Color Tokens, Typography, WebP Assets | ✅ **Complete** |
+| **Phase 3** | **Interactive Experience Engine** | Beauty/Fashion/Decor Edits, Prime Rankings, Wallpaper Vault, Glow Quiz, Quotes | ✅ **Complete** |
+| **Phase 4** | **Micro-Interactions & Nav Overhaul** | Pink heart cursor trail, preloader, organic morph blobs, reference navbar | ✅ **Complete** |
+| **Phase 5** | **Zero-Code Admin & Supabase Sync** | Full backend sync, R2 zero-egress bucket connection, `/admin` moderation queue | 🟡 **Ready / Planned** |
+| **Phase 6** | **Telemetry, Analytics & Growth** | GA4 tracking, SEO Rich Snippets, WebP automation, social share cards | ✅ **Live on Production** |
 
 ---
 
-## 4. Pending Items
-* [ ] User provides **Stitch pages/screens** for UI inspiration and visual mapping.
-* [ ] Review Stitch designs and populate [designs.md](file:///c:/Users/lenovo/OneDrive/Desktop/rini%20website/docs/designs.md) with exact tokens, layouts, and component specs.
+## 4. Completed & Live Milestones
+* [x] Custom domain active: [`https://teentimeglow.me`](https://teentimeglow.me) and [`https://www.teentimeglow.me`](https://www.teentimeglow.me).
+* [x] Brand identity verified: Two-tone `teen time ` and `glow.` wordmark in Playfair Display italic + circular brand avatar (`assets/logo.jpg`).
+* [x] Reference navigation bar implemented: Active Home pill, 6 curated category links, vertical divider, expandable capsule search bar, sound toggle (`🔊`), saved moodboard counter (`♡ 4`), and `Take Quiz ✨` button.
+* [x] Ambient FX integrated: Floating pink little hearts cursor trail, click burst ripples, cinematic counter preloader, and organic morphing blobs.
+* [x] Design specifications document fully updated in [`brain/designs.md`](file:///c:/Users/lenovo/OneDrive/Desktop/rini%20website/brain/designs.md).
