@@ -157,15 +157,15 @@
 
 ## Milestone 4: Rini's Zero-Tech Visual Admin Studio
 
-### Phase 14: Rini's Zero-Tech Visual Admin Studio (/admin)
+### Phase 14: Rini's Zero-Tech Visual Admin Studio (/admin) [x] (Completed: 2026-10-18)
 * **Goal**: Build a beginner-friendly, visual content management studio at `/admin` designed specifically for Rini (0 coding experience) to customize website text, create and edit articles with visual rich text, upload images directly from phone/laptop, manage rankings & wallpapers, and moderate submissions.
 * **Tasks**:
-  1. Build a welcoming, friendly login screen with simple 4-digit PIN / password and persistent "Remember Me" session.
-  2. Implement direct drag-and-drop / phone camera photo upload endpoint (`/api/admin/upload-image`) to Supabase Storage with instant preview.
-  3. Build a visual rich-text editor (Notion/Instagram style with Bold, Heading, Quote, Bullet list) for writing and editing articles.
-  4. Implement complete Article Management: Create new lookbooks, edit existing articles, and delete with confirmation.
-  5. Implement Live Website Copy Customizer: Change hero headline, subtitle, issue badge, stats numbers, and footer without code.
-  6. Implement Wallpapers, Rankings & Quotes management tabs: Add, edit, or delete items with automatic public updates.
-  7. Implement Moderation Inbox for community creations with 1-click Approve/Reject.
+  1. [x] Build a welcoming, friendly login screen with simple 4-digit PIN / password and persistent "Remember Me" session.
+  2. [x] Implement direct drag-and-drop / phone camera photo upload endpoint (`/api/admin/upload-image`) to Supabase Storage with instant preview.
+  3. [x] Build a visual rich-text editor (Notion/Instagram style with Bold, Heading, Quote, Bullet list) for writing and editing articles.
+  4. [x] Implement complete Article Management: Create new lookbooks, edit existing articles, and delete with confirmation.
+  5. [x] Implement Live Website Copy Customizer: Change hero headline, subtitle, issue badge, stats numbers, and footer without code.
+  6. [x] Implement Wallpapers, Rankings & Quotes management tabs: Add, edit, or delete items with automatic public updates.
+  7. [x] Implement Moderation Inbox for community creations with 1-click Approve/Reject.
 
 

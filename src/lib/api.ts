@@ -155,3 +155,20 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   }
 }
 
+export async function getSiteSettings(): Promise<any | null> {
+  try {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .eq('key', 'homepage_copy')
+      .single();
+
+    if (!error && data?.value) {
+      return data.value;
+    }
+  } catch (err) {
+    // Return null to use default siteContent
+  }
+  return null;
+}
+

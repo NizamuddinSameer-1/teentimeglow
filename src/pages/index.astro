@@ -14,21 +14,34 @@ import {
   getRankings,
   getQuotes,
   getWallpapers,
-  getCommunityCreations
+  getCommunityCreations,
+  getSiteSettings
 } from '@/lib/api';
 
 // Hydrate dynamically from Supabase (with instant seed fallback)
-const [posts, rankings, quotes, wallpapers, creations] = await Promise.all([
+const [posts, rankings, quotes, wallpapers, creations, settings] = await Promise.all([
   getPosts(),
   getRankings(),
   getQuotes(),
   getWallpapers(),
-  getCommunityCreations()
+  getCommunityCreations(),
+  getSiteSettings()
 ]);
+
+const customStats = settings ? [
+  { target: settings.readersCount || '14850', suffix: '+', label: '✨ Radiant Readers' },
+  { target: settings.satisfactionRate || '99.4', suffix: '%', decimals: '1', label: '★ Glow Satisfaction' },
+  { target: '100', suffix: '%', label: '📱 Free 4K Wallpaper Vault' },
+  { target: '365', suffix: ' Days', label: '☕ Curated Teen Inspo' }
+] : undefined;
 ---
 <BaseLayout>
-  <Hero />
-  <StatsStrip />
+  <Hero
+    issueBadge={settings?.heroBadge}
+    headline={settings?.heroHeading}
+    subtext={settings?.heroSubtext}
+  />
+  <StatsStrip stats={customStats} />
   <EditsSection posts={posts} />
   <RankingsSection rankings={rankings} />
   <QuotesSection quotes={quotes} />
