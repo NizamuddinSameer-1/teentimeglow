@@ -1,0 +1,119 @@
+---
+import { siteContent } from '@/config/siteContent';
+
+interface Props {
+  issueBadge?: string;
+  headline?: string;
+  subtext?: string;
+  exploreBtnText?: string;
+  quizBtnText?: string;
+  badge1?: string;
+  badge2?: string;
+  tickerItems?: string[];
+  card1Tag?: string;
+  card1Title?: string;
+  card2Tag?: string;
+  card2Title?: string;
+}
+
+const {
+  issueBadge = siteContent.hero.issueBadge,
+  headline = siteContent.hero.mainHeadingHtml,
+  subtext = siteContent.hero.subtext,
+  exploreBtnText = siteContent.hero.exploreButtonText,
+  quizBtnText = siteContent.hero.quizButtonText,
+  badge1 = siteContent.hero.trustBadges[0],
+  badge2 = siteContent.hero.trustBadges[1],
+  tickerItems = siteContent.hero.tickerItems,
+  card1Tag = siteContent.hero.floatingCards.card1.tag,
+  card1Title = siteContent.hero.floatingCards.card1.title,
+  card2Tag = siteContent.hero.floatingCards.card2.tag,
+  card2Title = siteContent.hero.floatingCards.card2.title
+} = Astro.props;
+---
+<div class="container">
+  <div class="giant-title-wrap">
+    <h1 class="giant-hero-title" id="heroTitle">
+      <span class="word">
+        <span class="char">F</span><span class="char">E</span><span class="char">E</span><span class="char">L</span>
+      </span>
+      <span class="word">
+        <span class="char">T</span><span class="char">H</span><span class="char">E</span>
+      </span>
+      <span class="word glow-word">
+        <span class="char">G</span><span class="char">L</span><span class="char">O</span><span class="char">W</span>
+      </span>
+    </h1>
+  </div>
+</div>
+
+<div class="ticker-bar" id="tickerBar">
+  <div class="ticker-track">
+    {tickerItems.concat(tickerItems).map((item) => (
+      <span class="ticker-item">{item} <span class="ticker-star">✦</span></span>
+    ))}
+  </div>
+</div>
+
+<div class="container">
+  <div class="hero-banner-wrap" id="heroBanner">
+    <!-- Stardust Canvas Particles -->
+    <canvas class="hero-particles-canvas" id="heroParticles"></canvas>
+
+    <!-- Organic Ambient Morphing Liquid Blobs -->
+    <div class="morph-liquid-blob hero-morph-blob-1"></div>
+    <div class="morph-liquid-blob hero-morph-blob-2"></div>
+
+    <div class="hero-inner-grid">
+      <!-- Left Text Column -->
+      <div class="hero-left-overlay" id="heroOverlay">
+        <div class="hero-issue-badge">
+          <span>✨</span>
+          <span>{issueBadge}</span>
+        </div>
+        <h2 class="hero-left-heading" set:html={headline} />
+        <p class="hero-left-subtext">{subtext}</p>
+        <div class="hero-btn-group">
+          <a href="#edits" class="btn-black-pill magnetic-btn">{exploreBtnText}</a>
+          <a href="#quiz" class="btn-glass-pill magnetic-btn">{quizBtnText}</a>
+        </div>
+        <div class="hero-meta-badge-row">
+          <span class="hero-meta-badge">{badge1}</span>
+          <span class="hero-meta-badge">{badge2}</span>
+        </div>
+      </div>
+
+      <!-- Right Visual Column -->
+      <div class="hero-visual-col">
+        <div class="hero-model-container" id="heroModelWrap">
+          <img src="/assets/hero-glow-creator.jpg" alt="Rini — TeenTimeGlow Creator & Curator" class="hero-model-img" id="heroModelImg" fetchpriority="high" decoding="async" />
+
+          <!-- Floating Glass Card 1 (Skincare Edit) -->
+          <a href="#edits" class="floating-card floating-card-1" id="floatCard1">
+            <img src="/assets/feature-skincare.jpg" alt="Skincare Glow Routine" class="floating-card-img" loading="lazy" decoding="async" width="60" height="60" />
+            <div class="floating-text-wrap">
+              <span class="floating-tag">{card1Tag}</span>
+              <span class="floating-title">{card1Title}</span>
+            </div>
+          </a>
+
+          <!-- Floating Glass Card 2 (Free 4K Wallpapers) -->
+          <a href="#wallpapers" class="floating-card floating-card-2" id="floatCard2">
+            <img src="/assets/wallpaper-sunset.jpg" alt="Free 4K Wallpapers" class="floating-card-img" loading="lazy" decoding="async" width="60" height="60" />
+            <div class="floating-text-wrap">
+              <span class="floating-tag">{card2Tag}</span>
+              <span class="floating-title">{card2Title}</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Slider Dots -->
+    <div class="slider-dots">
+      <span class="slider-dot active" onclick="showToast('Viewing Feature 1 of 3: Golden Hour Series')"></span>
+      <span class="slider-dot" onclick="showToast('Viewing Feature 2 of 3: Glass Skin Rituals')"></span>
+      <span class="slider-dot" onclick="showToast('Viewing Feature 3 of 3: Cozy Room Aesthetic')"></span>
+    </div>
+  </div>
+</div>
