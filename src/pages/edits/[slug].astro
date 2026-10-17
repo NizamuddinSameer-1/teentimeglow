@@ -1,0 +1,640 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getPostBySlug, getPosts } from '@/lib/api';
+import type { Post } from '@/types/database';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+if (!slug) {
+  return Astro.redirect('/edits');
+}
+
+const post: Post | null = await getPostBySlug(slug);
+
+if (!post) {
+  return Astro.redirect('/edits');
+}
+
+const allPosts: Post[] = await getPosts();
+const relatedPosts = allPosts.filter(p => p.slug !== post.slug).slice(0, 3);
+
+const categoryLabels: Record<string, string> = {
+  beauty: 'Beauty & Skincare',
+  fashion: 'Fashion Lookbook',
+  decor: 'Cozy Decor'
+};
+---
+
+<BaseLayout
+  title={`${post.title} — TeenTimeGlow Magazine`}
+  description={post.excerpt}
+>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress-track">
+    <div class="reading-progress-fill" id="readingProgress"></div>
+  </div>
+
+  <main class="article-reader-container">
+    <!-- Breadcrumb & Back Bar -->
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/edits" class="breadcrumb-link">Magazine</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{post.title}</span>
+      </nav>
+      <a href="/edits" class="btn-back-home magnetic-btn">
+        <span>← Back to Magazine</span>
+      </a>
+    </div>
+
+    <!-- Article Header -->
+    <article class="article-main-wrap">
+      <header class="article-header container">
+        <div class="article-meta-top">
+          <span class="article-cat-badge">{categoryLabels[post.category] || post.category}</span>
+          <span class="article-read-time">📖 {post.read_time_minutes} min read</span>
+          <span class="article-date-pill">✦ ISSUE #28</span>
+        </div>
+
+        <h1 class="article-hero-title">{post.title}</h1>
+        <p class="article-lead-excerpt">{post.excerpt}</p>
+
+        <!-- Author Byline Bar -->
+        <div class="author-byline-bar">
+          <div class="author-info-left">
+            <img src="/assets/logo.jpg" alt="Rini" class="author-avatar-img" />
+            <div class="author-text-col">
+              <span class="author-name">Rini</span>
+              <span class="author-role">Founder & Lifestyle Curator • TeenTimeGlow</span>
+            </div>
+          </div>
+
+          <div class="social-share-row">
+            <button class="btn-share-icon" onclick="copyArticleLink(event)" title="Copy Article Link">
+              <span>🔗</span>
+            </button>
+            <button class="btn-share-icon" onclick="shareOnTwitter(event)" title="Share on Twitter">
+              <span>🐦</span>
+            </button>
+            <button class="btn-share-icon" onclick="shareOnPinterest(event)" title="Pin to Moodboard">
+              <span>📌</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Full-Bleed Cover Image -->
+      <div class="container cover-banner-container">
+        <div class="article-cover-frame">
+          <img
+            src={post.cover_image_url}
+            alt={post.title}
+            class="article-cover-img parallax-img"
+          />
+        </div>
+      </div>
+
+      <!-- Main Content Layout (Sidebar + Rich Body) -->
+      <div class="container article-body-layout">
+        <!-- Sticky Left Sidebar -->
+        <aside class="article-sidebar">
+          <div class="sidebar-sticky-box">
+            <span class="sidebar-heading">✦ IN THIS EDIT</span>
+            <ul class="sidebar-toc-list">
+              <li><span class="toc-bullet">01</span> Mindset & Preparation</li>
+              <li><span class="toc-bullet">02</span> The Core Ritual</li>
+              <li><span class="toc-bullet">03</span> Pro Tips by Rini</li>
+            </ul>
+
+            <div class="sidebar-divider"></div>
+
+            <div class="sidebar-moodboard-card">
+              <span class="moodboard-pill">♡ AESTHETIC VIBE</span>
+              <p class="moodboard-text">"Protect your peace, romanticize small moments, and let your natural glow speak for itself."</p>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Article Rich HTML Body -->
+        <div class="article-rich-body">
+          <div class="rich-html-content" set:html={post.content_html} />
+
+          <!-- Author Signature Card -->
+          <div class="author-signoff-card">
+            <img src="/assets/logo.jpg" alt="Rini" class="signoff-avatar" />
+            <div class="signoff-text">
+              <h4>Curated with love by Rini</h4>
+              <p>Every edit is crafted to bring effortless elegance, peace of mind, and radiant aesthetic inspiration to your daily rituals.</p>
+              <a href="/edits" class="btn-explore-more">Explore More Edits &rarr;</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Related Articles Carousel / Grid -->
+    {relatedPosts.length > 0 && (
+      <section class="related-edits-section">
+        <div class="container">
+          <div class="related-header">
+            <span class="section-pill-tag">✦ KEEP READING</span>
+            <h2 class="related-title">You Might Also Love</h2>
+          </div>
+
+          <div class="related-grid">
+            {relatedPosts.map((rel) => (
+              <a href={`/edits/${rel.slug}`} class="related-card tilt-card">
+                <div class="related-thumb-wrap">
+                  <img src={rel.cover_image_url} alt={rel.title} class="related-thumb-img" loading="lazy" />
+                  <span class="related-cat-badge">{categoryLabels[rel.category] || rel.category}</span>
+                </div>
+                <div class="related-info">
+                  <h3 class="related-card-title">{rel.title}</h3>
+                  <span class="related-read-more">Read Edit &rarr;</span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  // Reading Progress Bar
+  window.addEventListener('scroll', () => {
+    const docEl = document.documentElement;
+    const scrollTop = docEl.scrollTop || document.body.scrollTop;
+    const scrollHeight = docEl.scrollHeight - docEl.clientHeight;
+    const progress = (scrollTop / (scrollHeight || 1)) * 100;
+    const fillEl = document.getElementById('readingProgress');
+    if (fillEl) fillEl.style.width = `${Math.min(progress, 100)}%`;
+  });
+
+  function copyArticleLink(e) {
+    e.preventDefault();
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      if (typeof window.playTone === 'function') window.playTone(600, 'sine', 0.15);
+      if (typeof window.showToast === 'function') {
+        window.showToast('Article link copied to clipboard! 🔗');
+      }
+    });
+  }
+
+  function shareOnTwitter(e) {
+    e.preventDefault();
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent(document.title);
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
+  }
+
+  function shareOnPinterest(e) {
+    e.preventDefault();
+    const url = encodeURIComponent(window.location.href);
+    const desc = encodeURIComponent(document.title);
+    window.open(`https://pinterest.com/pin/create/button/?url=${url}&description=${desc}`, '_blank');
+  }
+</script>
+
+<style>
+  /* ==========================================================================
+     Dynamic Article Reader Styles
+     ========================================================================== */
+  .reading-progress-track {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: transparent;
+    z-index: 999999;
+  }
+  .reading-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #E85D04 0%, #FAA307 100%);
+    transition: width 0.1s ease-out;
+  }
+
+  .article-reader-container {
+    padding-top: 100px;
+    padding-bottom: 80px;
+    background: #FAF7F2;
+    min-height: 100vh;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .breadcrumb-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .breadcrumb-link:hover {
+    color: var(--sunset-accent);
+  }
+  .breadcrumb-sep {
+    color: #CBD5E1;
+  }
+  .breadcrumb-current {
+    color: #111827;
+    max-width: 320px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .btn-back-home {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #111827;
+    text-decoration: none;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+  }
+  .btn-back-home:hover {
+    border-color: var(--sunset-accent);
+    color: var(--sunset-accent);
+    transform: translateX(-2px);
+  }
+
+  /* Article Header */
+  .article-header {
+    max-width: 860px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 30px 20px 40px;
+  }
+  .article-meta-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .article-cat-badge {
+    background: rgba(232, 93, 4, 0.08);
+    color: var(--sunset-accent);
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 999px;
+    letter-spacing: 0.04em;
+  }
+  .article-read-time, .article-date-pill {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .article-hero-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    line-height: 1.15;
+    color: #0F1115;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .article-lead-excerpt {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  /* Author Byline Bar */
+  .author-byline-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  }
+  .author-info-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+  }
+  .author-avatar-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--sunset-accent);
+  }
+  .author-text-col {
+    display: flex;
+    flex-direction: column;
+  }
+  .author-name {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #111827;
+  }
+  .author-role {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+  }
+  .social-share-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-share-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FAF9F6;
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+  }
+  .btn-share-icon:hover {
+    background: var(--sunset-accent);
+    color: #FFFFFF;
+    border-color: var(--sunset-accent);
+  }
+
+  /* Full Bleed Cover */
+  .cover-banner-container {
+    max-width: 1040px;
+    margin: 20px auto 40px;
+  }
+  .article-cover-frame {
+    aspect-ratio: 16 / 9;
+    border-radius: 28px;
+    overflow: hidden;
+    background: #111827;
+    box-shadow: 0 20px 45px rgba(0,0,0,0.1);
+  }
+  .article-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Article Body Layout */
+  .article-body-layout {
+    max-width: 1040px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 50px;
+  }
+
+  /* Sidebar */
+  .sidebar-sticky-box {
+    position: sticky;
+    top: 120px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  }
+  .sidebar-heading {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+    letter-spacing: 0.06em;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .sidebar-toc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #111827;
+  }
+  .toc-bullet {
+    color: var(--sunset-accent);
+    font-family: var(--font-syne);
+    margin-right: 6px;
+  }
+  .sidebar-divider {
+    height: 1px;
+    background: var(--border-subtle);
+    margin: 20px 0;
+  }
+  .sidebar-moodboard-card {
+    background: #FAF9F6;
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--border-subtle);
+  }
+  .moodboard-pill {
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--brand-green);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .moodboard-text {
+    font-family: var(--font-editorial);
+    font-size: 0.86rem;
+    font-style: italic;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Rich Body Styling */
+  .article-rich-body {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 48px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  }
+  .rich-html-content {
+    font-family: var(--font-body);
+    font-size: 1.08rem;
+    line-height: 1.85;
+    color: #2D3748;
+  }
+  .rich-html-content :global(h2) {
+    font-family: var(--font-editorial);
+    font-size: 1.85rem;
+    color: #0F1115;
+    margin: 40px 0 16px;
+    line-height: 1.3;
+  }
+  .rich-html-content :global(p) {
+    margin-bottom: 20px;
+  }
+  .rich-html-content :global(blockquote) {
+    border-left: 3px solid var(--sunset-accent);
+    padding: 18px 24px;
+    background: #FAF9F6;
+    border-radius: 0 16px 16px 0;
+    font-family: var(--font-editorial);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: #111827;
+    margin: 32px 0;
+    line-height: 1.6;
+  }
+
+  /* Author Sign-off */
+  .author-signoff-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #FAF9F6;
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 28px;
+    margin-top: 50px;
+  }
+  .signoff-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--sunset-accent);
+  }
+  .signoff-text h4 {
+    font-family: var(--font-editorial);
+    font-size: 1.2rem;
+    color: #0F1115;
+    margin-bottom: 6px;
+  }
+  .signoff-text p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .btn-explore-more {
+    font-size: 0.86rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+    text-decoration: none;
+  }
+
+  /* Related Edits Section */
+  .related-edits-section {
+    padding: 70px 0 20px;
+  }
+  .related-header {
+    margin-bottom: 28px;
+  }
+  .related-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+    color: #0F1115;
+    margin-top: 8px;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .related-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    overflow: hidden;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+  }
+  .related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 36px rgba(232, 93, 4, 0.12);
+  }
+  .related-thumb-wrap {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #111827;
+  }
+  .related-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  .related-card:hover .related-thumb-img {
+    transform: scale(1.08);
+  }
+  .related-cat-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.72);
+    color: #FFFFFF;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .related-info {
+    padding: 18px;
+  }
+  .related-card-title {
+    font-family: var(--font-editorial);
+    font-size: 1.05rem;
+    color: #111827;
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .related-read-more {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+  }
+
+  @media (max-width: 900px) {
+    .article-body-layout {
+      grid-template-columns: 1fr;
+    }
+    .sidebar-sticky-box {
+      display: none;
+    }
+    .related-grid {
+      grid-template-columns: 1fr;
+    }
+    .article-rich-body {
+      padding: 28px 20px;
+    }
+    .author-byline-bar {
+      flex-direction: column;
+      gap: 16px;
+      border-radius: 20px;
+    }
+  }
+</style>

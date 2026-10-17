@@ -1246,26 +1246,40 @@
       if (!q) return;
 
       if (q.includes('edit') || q.includes('fashion') || q.includes('lookbook') || q.includes('skincare') || q.includes('decor')) {
-        document.getElementById('edits')?.scrollIntoView({ behavior: 'smooth' });
-        showToast(`✨ Jumped to Editorial Edits for "${query}"`);
+        const el = document.getElementById('edits');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        else window.location.href = '/edits';
+        showToast(`✨ Finding Editorial Edits for "${query}"`);
       } else if (q.includes('rank') || q.includes('book') || q.includes('series') || q.includes('prime') || q.includes('audio')) {
-        document.getElementById('rankings')?.scrollIntoView({ behavior: 'smooth' });
-        showToast(`✨ Jumped to Curated Rankings for "${query}"`);
+        const el = document.getElementById('rankings');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        else window.location.href = '/rankings';
+        showToast(`✨ Finding Curated Rankings for "${query}"`);
       } else if (q.includes('quote') || q.includes('mindset') || q.includes('reflect')) {
-        document.getElementById('quotes')?.scrollIntoView({ behavior: 'smooth' });
-        showToast(`✨ Jumped to Daily Mindset Quote for "${query}"`);
+        const el = document.getElementById('quotes');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        else window.location.href = '/quotes';
+        showToast(`✨ Finding Daily Mindset Quotes for "${query}"`);
       } else if (q.includes('wall') || q.includes('photo') || q.includes('4k') || q.includes('download')) {
-        document.getElementById('wallpapers')?.scrollIntoView({ behavior: 'smooth' });
-        showToast(`✨ Jumped to 4K Wallpapers for "${query}"`);
+        const el = document.getElementById('wallpapers');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        else window.location.href = '/wallpapers';
+        showToast(`✨ Finding 4K Wallpapers for "${query}"`);
       } else if (q.includes('quiz') || q.includes('vibe') || q.includes('aura')) {
-        document.getElementById('quiz')?.scrollIntoView({ behavior: 'smooth' });
-        showToast(`✨ Jumped to Glow Quiz for "${query}"`);
+        const el = document.getElementById('quiz');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        else window.location.href = '/quiz';
+        showToast(`✨ Finding Glow Quiz for "${query}"`);
       } else if (q.includes('gallery') || q.includes('nail') || q.includes('community') || q.includes('ootd')) {
-        document.getElementById('gallery')?.scrollIntoView({ behavior: 'smooth' });
-        showToast(`✨ Jumped to Community Gallery for "${query}"`);
+        const el = document.getElementById('gallery');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        else window.location.href = '/gallery';
+        showToast(`✨ Finding Community Drops for "${query}"`);
       } else {
+        const el = document.getElementById('edits');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+        else window.location.href = '/edits';
         showToast(`✨ Searching inspiration for "${query}"`);
-        document.getElementById('edits')?.scrollIntoView({ behavior: 'smooth' });
       }
     }
 

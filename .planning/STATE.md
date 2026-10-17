@@ -1,9 +1,11 @@
-# Current State: TeenTimeGlow Astro & Backend Migration
+# Current State: TeenTimeGlow Dedicated Standalone Pages
 
 **Last Updated:** 2026-10-17  
-**Branch:** `gsd-super/astro-backend-migration`  
-**Current Milestone Completed:** Phase 6 (Verification, Security Audit & Build Quality)  
-**Mode:** All 6 Phases Completed  
+**Branch:** `gsd-super/separate-pages`  
+**Current Milestone:** Milestone 2 (Dedicated Standalone Pages)  
+**Current Phase Completed:** Phase 12: Unified Navigation, Global Links & Production Verification  
+**Next Phase:** Milestone 2 Complete! Ready for PR merge or production deployment.  
+**Mode:** Mode B — Milestone Pauses  
 
 ## Phase Tracking
 * [x] **Phase 1: Astro Scaffolding & Build Pipeline** (Astro 5 + @astrojs/vercel + TypeScript configured and passing)
@@ -11,11 +13,20 @@
 * [x] **Phase 3: Supabase Database Layer & Fallback Seeds** (All 9 PostgreSQL tables migrated, seeded, and verified on live project `txuubvzxmawjqqduavcv`)
 * [x] **Phase 4: Serverless API Endpoints & Community Uploads** (`/api/community/submit`, `/api/community/like`, `/api/wallpapers/download` verified with live storage uploads and PostgreSQL increments)
 * [x] **Phase 5: Rini's Zero-Code Admin Dashboard (`/admin`)** (Live moderation inbox, 1-tap approve/reject, passkey authentication, and multi-content zero-code publisher)
-* [x] **Phase 6: Verification, Preview & Production Hand-off** (Security hardening, asset verification, 0-error build in 27s, and live SSR ready)
+* [x] **Phase 6: Verification, Security Audit & Build Quality** (Security hardening, asset verification, 0-error build in 27s, and live SSR ready)
+* [x] **Phase 7: Dedicated 4K Wallpaper Vault (`/wallpapers`)** (COMPLETED & VERIFIED)
+* [x] **Phase 8: Daily Mindset & Quotes Hub (`/quotes`)** (COMPLETED & VERIFIED)
+* [x] **Phase 9: Curated Leaderboard (`/rankings`)** (COMPLETED & VERIFIED)
+* [x] **Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`)** (COMPLETED & VERIFIED)
+* [x] **Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`)** (COMPLETED & VERIFIED)
+* [x] **Phase 12: Unified Navigation, Global Links & Production Verification** (COMPLETED & VERIFIED)
 
 ## Last Activity
-Phase 6 executed and verified:
-- Hardened `POST /api/admin/moderate` and `POST /api/admin/publish` to require authenticated admin sessions (unauthenticated requests return 401).
-- Mounted client script to `public/scripts/main.js` and confirmed all 24 image assets resolve properly in build.
-- Verified live SSR server response on homepage (`GET /`) and admin dashboard with dynamic Supabase database hydration.
-- Confirmed full production build passes in 27.36s with 0 errors.
+Phase 12 completed:
+- Updated `src/components/Navbar.astro` and `src/config/siteContent.ts` to route directly to all standalone pages (`/edits`, `/rankings`, `/quotes`, `/wallpapers`, `/quiz`, `/gallery`) with dynamic route highlighting (`.nav-pill-home active`).
+- Wired desktop and mobile drawer "Take Quiz ✨" buttons directly to `/quiz`.
+- Updated `src/components/Footer.astro` link lists to direct standalone hubs.
+- Updated discovery CTAs across `Hero`, `EditsSection`, `RankingsSection`, `QuotesSection`, `WallpapersSection`, `QuizSection`, and `GallerySection`.
+- Enhanced `executeNavSearch` in `public/scripts/main.js` and `src/scripts/main.js` with cross-page navigation capability.
+- Verified production build compiles cleanly in 23.03s with 0 errors across all routes.
+- **Milestone 2 (Dedicated Standalone Pages) 100% COMPLETE.**

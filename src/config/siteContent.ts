@@ -21,12 +21,12 @@ export const siteContent = {
   navbar: {
     homePillText: 'Home',
     links: [
-      { label: 'Editorial Edits', href: '#edits' },
-      { label: 'Curated Rankings', href: '#rankings' },
-      { label: 'Daily Quote', href: '#quotes' },
-      { label: '4K Wallpapers', href: '#wallpapers' },
-      { label: 'Glow Quiz', href: '#quiz' },
-      { label: 'Community Gallery', href: '#gallery' },
+      { label: 'Magazine', href: '/edits' },
+      { label: 'Rankings', href: '/rankings' },
+      { label: 'Quotes', href: '/quotes' },
+      { label: 'Wallpapers', href: '/wallpapers' },
+      { label: 'Glow Quiz', href: '/quiz' },
+      { label: 'Community', href: '/gallery' },
     ],
     searchPlaceholder: 'Search lookbooks, rankings, wallpapers...',
     savedCountDefault: 4,

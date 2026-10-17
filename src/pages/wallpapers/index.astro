@@ -1,0 +1,817 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getWallpapers } from '@/lib/api';
+import type { Wallpaper } from '@/types/database';
+
+export const prerender = false;
+
+// Hydrate live wallpapers with fallback seeds
+const wallpapers: Wallpaper[] = await getWallpapers();
+
+const mobileCount = wallpapers.filter(w => w.device_type === 'mobile').length;
+const desktopCount = wallpapers.filter(w => w.device_type === 'desktop').length;
+const totalDownloads = wallpapers.reduce((acc, w) => acc + (w.download_count || 0), 0);
+---
+
+<BaseLayout
+  title="Free 4K Aesthetic Wallpapers Vault — TeenTimeGlow by Rini"
+  description="Download free 4K ultra-HD aesthetic wallpapers curated by Rini. Ultra-crisp mobile (9:16) and desktop (16:9) backgrounds in sunset, golden hour, glassmorphism, and cozy vibes."
+>
+  <main class="wallpapers-page-container">
+    <!-- Breadcrumb & Top Bar -->
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Wallpapers Vault</span>
+      </nav>
+      <a href="/" class="btn-back-home magnetic-btn">
+        <span>← Back to Main Magazine</span>
+      </a>
+    </div>
+
+    <!-- Hero Header -->
+    <section class="wallpapers-hero">
+      <div class="container text-center">
+        <div class="hero-badge-wrap">
+          <span class="section-pill-tag">✦ FREE 4K ULTRA-HD VAULT</span>
+          <span class="hero-live-badge">UPDATED WEEKLY</span>
+        </div>
+        <h1 class="wallpapers-hero-title">Aesthetic Wallpapers<br /><span class="glow-gradient-text">For Every Screen.</span></h1>
+        <p class="wallpapers-hero-subtitle">
+          High-resolution visual drops curated by Rini. Crisp 4K mobile lockscreens and panoramic desktop wallpapers with zero watermarks.
+        </p>
+
+        <!-- Stats Counter Pill -->
+        <div class="wallpapers-stats-bar">
+          <div class="stat-pill-item">
+            <span class="stat-pill-val">{wallpapers.length}</span>
+            <span class="stat-pill-lbl">4K Drops</span>
+          </div>
+          <div class="stat-pill-divider"></div>
+          <div class="stat-pill-item">
+            <span class="stat-pill-val">{totalDownloads.toLocaleString()}+</span>
+            <span class="stat-pill-lbl">Downloads</span>
+          </div>
+          <div class="stat-pill-divider"></div>
+          <div class="stat-pill-item">
+            <span class="stat-pill-val">100%</span>
+            <span class="stat-pill-lbl">Free Forever</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter & Search Toolbar -->
+    <section class="wallpapers-toolbar-section">
+      <div class="container">
+        <div class="toolbar-box">
+          <!-- Search Input -->
+          <div class="search-input-wrap">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input
+              type="text"
+              id="wallpapersSearch"
+              class="search-input-field"
+              placeholder="Search by title (e.g., Sunset, Matcha, Studio)..."
+              oninput="handleWallpaperSearch(this.value)"
+            />
+          </div>
+
+          <!-- Device Filter Tabs -->
+          <div class="filter-tabs-wrap">
+            <button class="wp-filter-tab active" data-filter="all" onclick="filterWallpapersPage('all', this)">
+              All Drops ({wallpapers.length})
+            </button>
+            <button class="wp-filter-tab" data-filter="mobile" onclick="filterWallpapersPage('mobile', this)">
+              📱 iPhone & Mobile ({mobileCount})
+            </button>
+            <button class="wp-filter-tab" data-filter="desktop" onclick="filterWallpapersPage('desktop', this)">
+              💻 Desktop 4K ({desktopCount})
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wallpapers Catalog Grid -->
+    <section class="wallpapers-catalog-section">
+      <div class="container">
+        <div class="wallpapers-grid" id="wallpapersGrid">
+          {wallpapers.map((wp) => {
+            const isDesktop = wp.device_type === 'desktop';
+            const deviceBadge = isDesktop ? 'Desktop / 16:9' : 'iPhone / 9:16';
+            const safeTitle = wp.title.replace(/'/g, "\\'");
+            return (
+              <div
+                class="wallpaper-card tilt-card"
+                data-device={wp.device_type}
+                data-title={wp.title.toLowerCase()}
+              >
+                <div class={`wallpaper-thumb-frame ${isDesktop ? 'desktop-aspect' : 'mobile-aspect'}`}>
+                  <img
+                    src={wp.thumbnail_url}
+                    alt={wp.title}
+                    class="wallpaper-img parallax-img"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="wallpaper-res-badge">{wp.resolution_label || '4K ULTRA HD'}</span>
+                  <span class="wallpaper-device-badge">{deviceBadge}</span>
+                  
+                  <!-- Hover Quick Preview Overlay -->
+                  <div class="wallpaper-overlay-btn" onclick={`openWallpaperModal('${safeTitle}', '${wp.download_url}', '${deviceBadge}', '${wp.resolution_label || '4K ULTRA HD'}')`}>
+                    <span class="preview-pill">👁 Quick View</span>
+                  </div>
+                </div>
+
+                <div class="wallpaper-info">
+                  <h3 class="wallpaper-title" title={wp.title}>{wp.title}</h3>
+                  <div class="wallpaper-meta-row">
+                    <span class="wallpaper-count-tag">
+                      <span class="download-icon">↓</span> {wp.download_count?.toLocaleString() || '1,200+'} saved
+                    </span>
+                    <button
+                      class="btn-quick-preview"
+                      onclick={`openWallpaperModal('${safeTitle}', '${wp.download_url}', '${deviceBadge}', '${wp.resolution_label || '4K ULTRA HD'}')`}
+                      title="Preview in full screen"
+                    >
+                      Preview
+                    </button>
+                  </div>
+                  <a
+                    href={wp.download_url}
+                    download={`TeenTimeGlow-${wp.title.replace(/\s+/g, '-')}-4K.jpg`}
+                    class="btn-download-wallpaper magnetic-btn"
+                    onclick={`trackWallpaperDownload('${safeTitle}', event)`}
+                  >
+                    <span>Download 4K</span>
+                    <span>↓</span>
+                  </a>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <!-- Empty Search State -->
+        <div id="noWallpapersState" class="no-results-state" style="display: none;">
+          <div class="no-results-icon">🔍</div>
+          <h3>No wallpapers found</h3>
+          <p>Try searching for another aesthetic keyword or reset your filter.</p>
+          <button class="btn-reset-filters" onclick="resetWallpaperFilters()">Show All Wallpapers</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wallpapers FAQ / Tips Section -->
+    <section class="wallpapers-tips-section">
+      <div class="container">
+        <div class="tips-box">
+          <div class="tips-header">
+            <span class="section-pill-tag">✦ PRO TIP</span>
+            <h2 class="tips-title">How To Set 4K Wallpapers with Depth Effect on iOS 16 & 17</h2>
+          </div>
+          <div class="tips-grid">
+            <div class="tip-card">
+              <span class="tip-num">01</span>
+              <h4>Save to Photos</h4>
+              <p>Tap "Download 4K" on your favorite drop. When the image opens, tap the share icon and select "Save Image".</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-num">02</span>
+              <h4>Set as Wallpaper</h4>
+              <p>Open Settings → Wallpaper → Add New Wallpaper. Select the TeenTimeGlow photo from your library.</p>
+            </div>
+            <div class="tip-card">
+              <span class="tip-num">03</span>
+              <h4>Enable Depth & Widgets</h4>
+              <p>Pinch gently to scale the horizon. The subject automatically layers seamlessly in front of the lockscreen clock.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Full-Screen High-Res Preview Modal -->
+  <div id="wallpaperPreviewModal" class="wp-modal-backdrop" style="display: none;">
+    <div class="wp-modal-content">
+      <button class="wp-modal-close" onclick="closeWallpaperModal()">&times;</button>
+      <div class="wp-modal-body">
+        <div class="wp-modal-image-wrap">
+          <img id="wpModalImg" src="" alt="Wallpaper Preview" class="wp-modal-img" />
+        </div>
+        <div class="wp-modal-sidebar">
+          <span class="section-pill-tag">✦ 4K ULTRA HD</span>
+          <h2 id="wpModalTitle" class="wp-modal-title">Wallpaper Title</h2>
+          <div class="wp-modal-details">
+            <div class="detail-row">
+              <span class="detail-lbl">Format:</span>
+              <span class="detail-val">High-Definition JPEG (300 DPI)</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-lbl">Device Target:</span>
+              <span id="wpModalDevice" class="detail-val">iPhone / 9:16</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-lbl">Resolution:</span>
+              <span id="wpModalRes" class="detail-val">3840 × 2160 UHD</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-lbl">License:</span>
+              <span class="detail-val">Personal & Commercial Free</span>
+            </div>
+          </div>
+          <a id="wpModalDownloadBtn" href="#" download="" class="btn-download-wallpaper magnetic-btn wp-modal-cta">
+            <span>Download High-Res 4K</span>
+            <span>↓</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ==========================================================================
+     Dedicated Wallpapers Page Styling
+     ========================================================================== */
+  .wallpapers-page-container {
+    padding-top: 100px;
+    padding-bottom: 80px;
+    background: #FAF7F2;
+    min-height: 100vh;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .breadcrumb-link {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .breadcrumb-link:hover {
+    color: var(--sunset-accent);
+  }
+  .breadcrumb-sep {
+    color: #CBD5E1;
+  }
+  .breadcrumb-current {
+    color: #111827;
+  }
+  .btn-back-home {
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #111827;
+    text-decoration: none;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+  }
+  .btn-back-home:hover {
+    border-color: var(--sunset-accent);
+    color: var(--sunset-accent);
+    transform: translateX(-2px);
+  }
+
+  /* Hero Section */
+  .wallpapers-hero {
+    padding: 40px 0 30px;
+  }
+  .hero-badge-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .hero-live-badge {
+    background: #E85D04;
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+  .wallpapers-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 4.2rem);
+    line-height: 1.05;
+    color: #0F1115;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .glow-gradient-text {
+    background: linear-gradient(135deg, #E85D04 0%, #FAA307 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .wallpapers-hero-subtitle {
+    font-size: 1.08rem;
+    color: var(--text-muted);
+    max-width: 620px;
+    margin: 0 auto 28px;
+    line-height: 1.6;
+  }
+
+  /* Stats Bar */
+  .wallpapers-stats-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 12px 32px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+  }
+  .stat-pill-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .stat-pill-val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-family: var(--font-syne);
+    color: #111827;
+  }
+  .stat-pill-lbl {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .stat-pill-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--border-subtle);
+  }
+
+  /* Toolbar Section */
+  .wallpapers-toolbar-section {
+    padding: 24px 0;
+  }
+  .toolbar-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    padding: 14px 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+  }
+  .search-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #FAF9F6;
+    border: 1px solid var(--border-subtle);
+    border-radius: 999px;
+    padding: 10px 18px;
+    flex: 1;
+    min-width: 260px;
+    max-width: 420px;
+    transition: all 0.2s ease;
+  }
+  .search-input-wrap:focus-within {
+    border-color: var(--sunset-accent);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.12);
+  }
+  .search-icon {
+    color: var(--text-muted);
+  }
+  .search-input-field {
+    border: none;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    color: #111827;
+    outline: none;
+    width: 100%;
+  }
+  .filter-tabs-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .wp-filter-tab {
+    background: #FAF9F6;
+    border: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    font-weight: 700;
+    padding: 8px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .wp-filter-tab:hover {
+    color: #111827;
+    background: #F3F4F6;
+  }
+  .wp-filter-tab.active {
+    background: #0C3B2E;
+    color: #FFFFFF;
+    border-color: #0C3B2E;
+  }
+
+  /* Catalog Grid */
+  .wallpapers-catalog-section {
+    padding: 20px 0 60px;
+  }
+  .desktop-aspect {
+    aspect-ratio: 16 / 10 !important;
+  }
+  .mobile-aspect {
+    aspect-ratio: 9 / 14 !important;
+  }
+  .wallpaper-thumb-frame {
+    position: relative;
+    overflow: hidden;
+    background: #111827;
+    border-radius: 16px 16px 0 0;
+  }
+  .wallpaper-overlay-btn {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+  .wallpaper-card:hover .wallpaper-overlay-btn {
+    opacity: 1;
+  }
+  .preview-pill {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    color: #111827;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 999px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(6px);
+    transition: transform 0.2s ease;
+  }
+  .wallpaper-card:hover .preview-pill {
+    transform: translateY(0);
+  }
+  .wallpaper-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+  }
+  .download-icon {
+    font-weight: 800;
+    color: var(--sunset-accent);
+  }
+  .btn-quick-preview {
+    background: none;
+    border: none;
+    color: var(--sunset-accent);
+    font-weight: 700;
+    font-size: 0.78rem;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  /* No Results State */
+  .no-results-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    border: 1px dashed var(--border-subtle);
+  }
+  .no-results-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+  }
+  .btn-reset-filters {
+    margin-top: 16px;
+    background: var(--sunset-accent);
+    color: #FFFFFF;
+    border: none;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  /* Tips Section */
+  .wallpapers-tips-section {
+    padding: 40px 0 20px;
+  }
+  .tips-box {
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 36px 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  }
+  .tips-header {
+    margin-bottom: 28px;
+  }
+  .tips-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+    color: #0F1115;
+    margin-top: 8px;
+  }
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  .tip-card {
+    background: #FAF9F6;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid var(--border-subtle);
+  }
+  .tip-num {
+    font-family: var(--font-syne);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .tip-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 6px;
+  }
+  .tip-card p {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Full Screen Preview Modal */
+  .wp-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(12px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .wp-modal-content {
+    background: #FFFFFF;
+    border-radius: 24px;
+    max-width: 920px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+  .wp-modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: rgba(0,0,0,0.1);
+    border: none;
+    font-size: 1.8rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+  .wp-modal-close:hover {
+    background: rgba(0,0,0,0.2);
+  }
+  .wp-modal-body {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+  }
+  .wp-modal-image-wrap {
+    background: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 400px;
+  }
+  .wp-modal-img {
+    max-width: 100%;
+    max-height: 520px;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  }
+  .wp-modal-sidebar {
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .wp-modal-title {
+    font-family: var(--font-editorial);
+    font-size: 1.6rem;
+    color: #111827;
+    margin: 12px 0 20px;
+    line-height: 1.2;
+  }
+  .wp-modal-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.86rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .detail-lbl {
+    color: var(--text-muted);
+  }
+  .detail-val {
+    font-weight: 700;
+    color: #111827;
+  }
+  .wp-modal-cta {
+    width: 100%;
+    text-align: center;
+  }
+
+  @media (max-width: 860px) {
+    .tips-grid {
+      grid-template-columns: 1fr;
+    }
+    .wp-modal-body {
+      grid-template-columns: 1fr;
+    }
+    .wp-modal-image-wrap {
+      min-height: 280px;
+    }
+    .toolbar-box {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .search-input-wrap {
+      max-width: 100%;
+    }
+  }
+</style>
+
+<script is:inline>
+  // Wallpapers Page Client Script
+  function filterWallpapersPage(device, btn) {
+    // Update active tab button
+    document.querySelectorAll('.wp-filter-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const cards = document.querySelectorAll('#wallpapersGrid .wallpaper-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const cardDevice = card.getAttribute('data-device');
+      const matchesDevice = device === 'all' || cardDevice === device;
+      
+      if (matchesDevice) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const emptyState = document.getElementById('noWallpapersState');
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+
+  function handleWallpaperSearch(term) {
+    const query = term.toLowerCase().trim();
+    const cards = document.querySelectorAll('#wallpapersGrid .wallpaper-card');
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+      const title = card.getAttribute('data-title') || '';
+      if (!query || title.includes(query)) {
+        card.style.display = 'flex';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    const emptyState = document.getElementById('noWallpapersState');
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+
+  function resetWallpaperFilters() {
+    const searchInput = document.getElementById('wallpapersSearch');
+    if (searchInput) searchInput.value = '';
+    const allTab = document.querySelector('.wp-filter-tab[data-filter="all"]');
+    filterWallpapersPage('all', allTab);
+  }
+
+  function openWallpaperModal(title, url, device, res) {
+    const modal = document.getElementById('wallpaperPreviewModal');
+    const modalImg = document.getElementById('wpModalImg');
+    const modalTitle = document.getElementById('wpModalTitle');
+    const modalDevice = document.getElementById('wpModalDevice');
+    const modalRes = document.getElementById('wpModalRes');
+    const modalBtn = document.getElementById('wpModalDownloadBtn');
+
+    if (modal && modalImg) {
+      modalImg.src = url;
+      modalTitle.textContent = title;
+      modalDevice.textContent = device;
+      modalRes.textContent = res;
+      modalBtn.href = url;
+      modalBtn.setAttribute('download', `TeenTimeGlow-${title.replace(/\\s+/g, '-')}-4K.jpg`);
+      modalBtn.onclick = (e) => trackWallpaperDownload(title, e);
+      modal.style.display = 'flex';
+    }
+  }
+
+  function closeWallpaperModal() {
+    const modal = document.getElementById('wallpaperPreviewModal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  // Close modal when clicking outside content
+  document.addEventListener('click', (e) => {
+    const modal = document.getElementById('wallpaperPreviewModal');
+    if (modal && e.target === modal) {
+      closeWallpaperModal();
+    }
+  });
+
+  // Track download hit to serverless endpoint
+  function trackWallpaperDownload(title, event) {
+    try {
+      if (typeof window.playTone === 'function') {
+        window.playTone(600, 'sine', 0.15);
+      }
+      if (typeof window.confetti === 'function') {
+        window.confetti({ particleCount: 35, spread: 60, origin: { y: 0.8 } });
+      }
+      if (typeof window.showToast === 'function') {
+        window.showToast(`Starting 4K download for "${title}" ✨`);
+      }
+
+      fetch('/api/wallpapers/download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallpaper_title: title })
+      }).catch(err => console.warn('Wallpaper tracking ping error:', err));
+    } catch (e) {
+      console.warn('Track download error:', e);
+    }
+  }
+</script>

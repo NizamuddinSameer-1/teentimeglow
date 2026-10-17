@@ -1,0 +1,971 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getCommunityCreations } from '@/lib/api';
+import type { CommunityCreation } from '@/types/database';
+
+export const prerender = false;
+
+// Hydrate live creations from Supabase with resilient seed fallback
+const creations: CommunityCreation[] = await getCommunityCreations();
+
+const totalCreations = creations.length;
+const totalLikes = creations.reduce((acc, c) => acc + (c.likes_count || 0), 0);
+
+const categoryCounts = {
+  all: creations.length,
+  nails: creations.filter(c => c.category === 'nails').length,
+  fashion: creations.filter(c => c.category === 'fashion').length,
+  decor: creations.filter(c => c.category === 'decor').length,
+  sketch: creations.filter(c => c.category === 'sketch').length,
+  diy: creations.filter(c => c.category === 'diy').length
+};
+
+const categoryDisplayMap: Record<string, { label: string; icon: string }> = {
+  nails: { label: 'Nails & Beauty', icon: '💅' },
+  fashion: { label: 'Fashion & OOTD', icon: '🧥' },
+  decor: { label: 'Cozy Room Decor', icon: '🛋️' },
+  sketch: { label: 'Art & Sketch', icon: '🎨' },
+  diy: { label: 'DIY Crafts', icon: '🎀' }
+};
+---
+
+<BaseLayout
+  title="Community Creational Dropboard — Teen Nail Art, Outfits & Decor | TeenTimeGlow by Rini"
+  description="Explore authentic teen community creations curated by Rini: glazed chrome nail art, cozy bedroom decor, aesthetic digital sketches, and thrifted OOTDs. Submit your own creation!"
+>
+  <main class="gallery-page-container">
+    <!-- Breadcrumb & Back Bar -->
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Community Showcase</span>
+      </nav>
+      <a href="/" class="btn-back-home magnetic-btn">
+        <span>← Back to Main Magazine</span>
+      </a>
+    </div>
+
+    <!-- Hero Header -->
+    <section class="gallery-hero">
+      <div class="container text-center">
+        <div class="hero-badge-wrap">
+          <span class="section-pill-tag">✦ TEENTIMEGLOW CREATOR HUB</span>
+          <span class="hero-live-badge">✦ {totalCreations} APPROVED DROPS • {totalLikes.toLocaleString()} HEARTS</span>
+        </div>
+        <h1 class="gallery-hero-title">The Community Creational Dropboard.<br /><span class="glow-gradient-text">Showcase Your Glow.</span></h1>
+        <p class="gallery-hero-subtitle">
+          From glazed chrome manicures and cozy study corners to vintage streetwear thrift flips. Share your creative aesthetic and get featured on Rini’s main editorial magazine.
+        </p>
+
+        <div class="gallery-hero-cta-group">
+          <button type="button" class="btn-black-pill magnetic-btn btn-submit-hero" onclick="openSubmitModal()">
+            <span>✨ Submit Your Creation +</span>
+          </button>
+          <a href="/quiz" class="btn-quiz-link magnetic-btn">
+            <span>Discover Your Vibe Quiz 💫</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters & Search Toolbar -->
+    <section class="gallery-toolbar-section">
+      <div class="container">
+        <div class="toolbar-box">
+          <!-- Filter Tabs -->
+          <div class="filter-pills-row" id="galleryFilterTabs">
+            <button class="filter-pill active" data-category="all">
+              <span>All Drops ({categoryCounts.all})</span>
+            </button>
+            <button class="filter-pill" data-category="nails">
+              <span>💅 Nails ({categoryCounts.nails})</span>
+            </button>
+            <button class="filter-pill" data-category="fashion">
+              <span>🧥 Fashion ({categoryCounts.fashion})</span>
+            </button>
+            <button class="filter-pill" data-category="decor">
+              <span>🛋️ Room Decor ({categoryCounts.decor})</span>
+            </button>
+            <button class="filter-pill" data-category="sketch">
+              <span>🎨 Sketches ({categoryCounts.sketch})</span>
+            </button>
+            <button class="filter-pill" data-category="diy">
+              <span>🎀 DIY ({categoryCounts.diy})</span>
+            </button>
+          </div>
+
+          <!-- Live Search Bar -->
+          <div class="gallery-search-box">
+            <span class="search-icon">🔍</span>
+            <input
+              type="text"
+              id="gallerySearchInput"
+              placeholder="Search by creator, caption or style..."
+              aria-label="Search creations"
+            />
+            <button type="button" id="clearGallerySearchBtn" class="clear-search-btn" style="display: none;">&times;</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Creations Masonry Showcase Grid -->
+    <section class="gallery-grid-section">
+      <div class="container">
+        <div class="gallery-drops-grid" id="galleryDropsGrid">
+          {creations.map((item) => {
+            const catInfo = categoryDisplayMap[item.category] || { label: item.category, icon: '✨' };
+            return (
+              <article
+                class="gallery-drop-card tilt-card"
+                data-category={item.category}
+                data-title={(item.caption || '').toLowerCase()}
+                data-author={(item.author_name + ' ' + (item.author_social || '')).toLowerCase()}
+                id={`drop-card-${item.id}`}
+              >
+                <!-- Thumbnail Image with Creator Badge -->
+                <div class="drop-media-wrap">
+                  <img
+                    src={item.image_url}
+                    alt={item.caption || item.author_name}
+                    class="drop-img parallax-img"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span class="drop-cat-tag">
+                    {catInfo.icon} {catInfo.label}
+                  </span>
+                  <span class="drop-creator-badge">
+                    {item.author_social || item.author_name}
+                  </span>
+                </div>
+
+                <!-- Drop Info & Interactive Actions -->
+                <div class="drop-info-body">
+                  <div class="drop-author-header">
+                    <span class="drop-author-name">{item.author_name}</span>
+                    <span class="drop-verified-dot" title="Verified Community Creator">✓</span>
+                  </div>
+
+                  <p class="drop-caption">{item.caption || 'Aesthetic creation submitted to TeenTimeGlow.'}</p>
+
+                  <div class="drop-footer">
+                    <button
+                      type="button"
+                      class="btn-like-heart magnetic-btn"
+                      onclick={`likeGalleryItem('${item.id}', event)`}
+                      aria-label="Like creation"
+                    >
+                      <span class="heart-symbol" id={`like-${item.id}`}>♡ {item.likes_count}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn-share-creation magnetic-btn"
+                      onclick={`shareCreationCard('${item.id}', '${item.caption ? item.caption.replace(/'/g, "\\'") : 'Community Creation'}', event)`}
+                      title="Share this creation"
+                    >
+                      <span>Share ↗</span>
+                    </button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <!-- Empty State -->
+        <div class="gallery-empty-state" id="galleryEmptyState" style="display: none;">
+          <div class="empty-icon">🎨</div>
+          <h3>No creations found matching that vibe</h3>
+          <p>Try searching for a different keyword or reset to browse all community drops.</p>
+          <button type="button" class="btn-black-pill" id="resetGalleryFiltersBtn">
+            Reset Filters
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Creator Spotlight Callout -->
+    <section class="creator-spotlight-section">
+      <div class="container">
+        <div class="spotlight-card">
+          <div class="spotlight-text-col">
+            <span class="section-pill-tag">✦ BECOME A FEATURED CREATOR</span>
+            <h2 class="spotlight-title">Want Your Room, Outfit or Nail Art Featured?</h2>
+            <p class="spotlight-desc">
+              TeenTimeGlow is built for and powered by the global teen aesthetic community. Upload your photo or mockup, tag your social handle, and get discovered by thousands of aesthetic lovers every day.
+            </p>
+            <div class="spotlight-perks">
+              <div class="perk-item">
+                <span class="perk-check">✦</span>
+                <span>Direct shoutout to your Instagram / TikTok</span>
+              </div>
+              <div class="perk-item">
+                <span class="perk-check">✦</span>
+                <span>Featured in Rini’s weekly editorial lookbooks</span>
+              </div>
+              <div class="perk-item">
+                <span class="perk-check">✦</span>
+                <span>100% free, safe & moderated for teen creators</span>
+              </div>
+            </div>
+            <button type="button" class="btn-black-pill magnetic-btn" onclick="openSubmitModal()">
+              <span>Upload Your Drop Now ✨</span>
+            </button>
+          </div>
+          <div class="spotlight-visual-col">
+            <div class="curated-badge-stack tilt-card">
+              <span class="badge-tag">COMMUNITY CURATION</span>
+              <h3>Weekly Creator Picks</h3>
+              <p>Curated every Friday by Rini</p>
+              <div class="curated-avatars-row">
+                <span class="avatar-pill">💅 Nails</span>
+                <span class="avatar-pill">🧥 OOTD</span>
+                <span class="avatar-pill">🛋️ Decor</span>
+                <span class="avatar-pill">🎨 Art</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Floating Action Button (FAB) for Mobile & Desktop -->
+    <button
+      type="button"
+      class="gallery-fab-btn magnetic-btn"
+      onclick="openSubmitModal()"
+      title="Submit your creation to TeenTimeGlow"
+    >
+      <span class="fab-icon">✨</span>
+      <span class="fab-text">Share Creation +</span>
+    </button>
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  // Client-side category filtering & live keyword search
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterTabs = document.querySelectorAll('#galleryFilterTabs .filter-pill');
+    const searchInput = document.getElementById('gallerySearchInput');
+    const clearSearchBtn = document.getElementById('clearGallerySearchBtn');
+    const cards = document.querySelectorAll('.gallery-drop-card');
+    const emptyState = document.getElementById('galleryEmptyState');
+    const resetBtn = document.getElementById('resetGalleryFiltersBtn');
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function filterCreations() {
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const cat = card.getAttribute('data-category');
+        const title = card.getAttribute('data-title') || '';
+        const author = card.getAttribute('data-author') || '';
+
+        const matchesCat = currentCategory === 'all' || cat === currentCategory;
+        const matchesSearch = !searchQuery || title.includes(searchQuery) || author.includes(searchQuery);
+
+        if (matchesCat && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (emptyState) {
+        emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    }
+
+    filterTabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach((t) => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentCategory = tab.getAttribute('data-category') || 'all';
+        filterCreations();
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        searchQuery = (e.target.value || '').trim().toLowerCase();
+        if (clearSearchBtn) {
+          clearSearchBtn.style.display = searchQuery ? 'block' : 'none';
+        }
+        filterCreations();
+      });
+    }
+
+    if (clearSearchBtn) {
+      clearSearchBtn.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
+        searchQuery = '';
+        clearSearchBtn.style.display = 'none';
+        filterCreations();
+      });
+    }
+
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        if (searchInput) searchInput.value = '';
+        searchQuery = '';
+        if (clearSearchBtn) clearSearchBtn.style.display = 'none';
+        currentCategory = 'all';
+        filterTabs.forEach((t) => {
+          if (t.getAttribute('data-category') === 'all') t.classList.add('active');
+          else t.classList.remove('active');
+        });
+        filterCreations();
+      });
+    }
+  });
+
+  // Share creation helper
+  function shareCreationCard(id, caption, e) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    const url = window.location.origin + '/gallery#drop-card-' + id;
+    if (navigator.share) {
+      navigator.share({
+        title: 'TeenTimeGlow Community Drop',
+        text: caption + ' on TeenTimeGlow',
+        url: url
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        if (window.showToast) {
+          window.showToast('🔗 Link copied to clipboard!', '✨');
+        } else {
+          alert('Link copied to clipboard!');
+        }
+      });
+    }
+  }
+</script>
+
+<style>
+  .gallery-page-container {
+    min-height: 100vh;
+    padding-top: calc(var(--nav-height, 80px) + 24px);
+    padding-bottom: 110px;
+    background: 
+      radial-gradient(circle at top right, rgba(255, 222, 89, 0.14), transparent 45%),
+      radial-gradient(circle at bottom left, rgba(255, 110, 199, 0.12), transparent 50%),
+      #FFFDF9;
+  }
+
+  .breadcrumb-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .breadcrumb-link {
+    color: #6B7280;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-link:hover {
+    color: #E85D04;
+  }
+
+  .breadcrumb-sep {
+    color: #9CA3AF;
+  }
+
+  .breadcrumb-current {
+    color: #111827;
+  }
+
+  .btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 9999px;
+    color: #111827;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
+  }
+
+  .btn-back-home:hover {
+    background: #111827;
+    color: #FFFFFF;
+    transform: translateX(-3px);
+  }
+
+  /* Gallery Hero */
+  .gallery-hero {
+    margin-bottom: 48px;
+  }
+
+  .hero-badge-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .hero-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(232, 93, 4, 0.1);
+    border: 1px solid rgba(232, 93, 4, 0.25);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #E85D04;
+    letter-spacing: 0.06em;
+  }
+
+  .gallery-hero-title {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: clamp(2.3rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #111827;
+    margin-bottom: 16px;
+  }
+
+  .glow-gradient-text {
+    background: linear-gradient(135deg, #FF6EC7, #E85D04, #FFDE59);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gallery-hero-subtitle {
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    color: #4B5563;
+    max-width: 700px;
+    margin: 0 auto 30px auto;
+    line-height: 1.6;
+  }
+
+  .gallery-hero-cta-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-submit-hero {
+    padding: 14px 28px;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+
+  .btn-quiz-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 24px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 9999px;
+    color: #111827;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+  }
+
+  .btn-quiz-link:hover {
+    border-color: #E85D04;
+    color: #E85D04;
+    transform: translateY(-2px);
+  }
+
+  /* Toolbar: Filters & Search */
+  .gallery-toolbar-section {
+    margin-bottom: 40px;
+  }
+
+  .toolbar-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.85);
+    padding: 18px 24px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.03);
+  }
+
+  .filter-pills-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .filter-pill {
+    padding: 8px 16px;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 9999px;
+    color: #4B5563;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-pill:hover {
+    background: #F3F4F6;
+    color: #111827;
+  }
+
+  .filter-pill.active {
+    background: #111827;
+    color: #FFFFFF;
+    border-color: #111827;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .gallery-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 280px;
+    flex-grow: 1;
+    max-width: 360px;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 0.85rem;
+    color: #9CA3AF;
+    pointer-events: none;
+  }
+
+  .gallery-search-box input {
+    width: 100%;
+    padding: 9px 36px 9px 38px;
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    color: #111827;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .gallery-search-box input:focus {
+    background: #FFFFFF;
+    border-color: #E85D04;
+    box-shadow: 0 0 0 3px rgba(232, 93, 4, 0.1);
+  }
+
+  .clear-search-btn {
+    position: absolute;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    color: #9CA3AF;
+    cursor: pointer;
+  }
+
+  /* Gallery Grid */
+  .gallery-grid-section {
+    margin-bottom: 80px;
+  }
+
+  .gallery-drops-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
+  }
+
+  .gallery-drop-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .gallery-drop-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 40px rgba(255, 110, 199, 0.15);
+  }
+
+  .drop-media-wrap {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    overflow: hidden;
+    background: #F3F4F6;
+  }
+
+  .drop-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .gallery-drop-card:hover .drop-img {
+    transform: scale(1.05);
+  }
+
+  .drop-cat-tag {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 6px 12px;
+    background: rgba(17, 24, 39, 0.75);
+    border-radius: 9999px;
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+    letter-spacing: 0.02em;
+  }
+
+  .drop-creator-badge {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    padding: 5px 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 9999px;
+    color: #111827;
+    font-size: 0.75rem;
+    font-weight: 800;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .drop-info-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: space-between;
+  }
+
+  .drop-author-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .drop-author-name {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: #111827;
+  }
+
+  .drop-verified-dot {
+    width: 16px;
+    height: 16px;
+    background: #E85D04;
+    color: #FFFFFF;
+    border-radius: 50%;
+    font-size: 0.65rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+  }
+
+  .drop-caption {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #4B5563;
+    margin-bottom: 16px;
+  }
+
+  .drop-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid #F3F4F6;
+  }
+
+  .btn-like-heart {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #6B7280;
+    padding: 4px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .btn-like-heart:hover {
+    color: #E85D04;
+    background: rgba(232, 93, 4, 0.08);
+  }
+
+  .heart-symbol {
+    display: inline-block;
+  }
+
+  .btn-share-creation {
+    background: transparent;
+    border: 1px solid #E5E7EB;
+    border-radius: 9999px;
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #4B5563;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-share-creation:hover {
+    background: #111827;
+    color: #FFFFFF;
+    border-color: #111827;
+  }
+
+  /* Empty State */
+  .gallery-empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #FFFFFF;
+    border-radius: 24px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+  }
+
+  .gallery-empty-state h3 {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: 1.6rem;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+
+  .gallery-empty-state p {
+    font-size: 0.95rem;
+    color: #6B7280;
+    margin-bottom: 20px;
+  }
+
+  /* Creator Spotlight */
+  .creator-spotlight-section {
+    margin-bottom: 60px;
+  }
+
+  .spotlight-card {
+    background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+    border-radius: 28px;
+    padding: 48px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotlight-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(232, 93, 4, 0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .spotlight-text-col {
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .spotlight-title {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+
+  .spotlight-desc {
+    font-size: 0.95rem;
+    color: #D1D5DB;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .spotlight-perks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .perk-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #F3F4F6;
+  }
+
+  .perk-check {
+    color: #FFDE59;
+    font-weight: 800;
+  }
+
+  .spotlight-visual-col {
+    position: relative;
+    z-index: 1;
+  }
+
+  .curated-badge-stack {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 28px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    min-width: 260px;
+  }
+
+  .badge-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #FFDE59;
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .curated-badge-stack h3 {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: 1.35rem;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+  }
+
+  .curated-badge-stack p {
+    font-size: 0.78rem;
+    color: #9CA3AF;
+    margin-bottom: 18px;
+  }
+
+  .curated-avatars-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .avatar-pill {
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 4px 10px;
+    border-radius: 9999px;
+    color: #FFFFFF;
+  }
+
+  /* Floating Action Button (FAB) */
+  .gallery-fab-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 99;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 22px;
+    background: linear-gradient(135deg, #111827 0%, #E85D04 100%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 9999px;
+    box-shadow: 0 10px 25px rgba(232, 93, 4, 0.35);
+    cursor: pointer;
+    font-size: 0.88rem;
+    font-weight: 700;
+    transition: all 0.3s ease;
+  }
+
+  .gallery-fab-btn:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 15px 35px rgba(232, 93, 4, 0.5);
+  }
+
+  .fab-icon {
+    font-size: 1.05rem;
+  }
+
+  @media (max-width: 900px) {
+    .spotlight-card {
+      flex-direction: column;
+      text-align: center;
+      padding: 36px 24px;
+    }
+
+    .spotlight-perks {
+      align-items: center;
+    }
+
+    .toolbar-box {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .gallery-search-box {
+      max-width: none;
+    }
+
+    .gallery-fab-btn .fab-text {
+      display: none;
+    }
+
+    .gallery-fab-btn {
+      padding: 16px;
+      border-radius: 50%;
+    }
+  }
+</style>

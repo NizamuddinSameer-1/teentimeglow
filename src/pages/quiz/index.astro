@@ -1,0 +1,757 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import QuizPlayer from '@/components/interactive/QuizPlayer';
+
+export const prerender = false;
+
+const archetypes = [
+  {
+    key: 'sunset_muse',
+    name: 'Sunset Muse',
+    tagline: 'The Golden Hour Tastemaker',
+    badge: 'Aura: Sunset Muse ✨',
+    description: 'You thrive on warm golden-hour light, romanticizing everyday teenage moments, layered effortless styling, and inspiring confidence in everyone around you.',
+    palette: [
+      { name: 'Golden Hour', hex: '#FFDE59' },
+      { name: 'Sunset Rose', hex: '#FF6EC7' },
+      { name: 'Terracotta', hex: '#E85D04' },
+      { name: 'Warm Cream', hex: '#FFF8E7' }
+    ],
+    essentials: ['Tinted sunglasses', 'Oversized linen trench', 'Dewy liquid bronzer', 'Gold layered chains'],
+    soundtrack: 'Indie bedroom pop, coastal acoustic guitar & nostalgic sunset anthems',
+    matchedEditSlug: 'glass-skin-korean-routine',
+    matchedEditTitle: 'The 7-Step Korean Glass Skin Routine',
+    matchedWallpaper: 'Cotton Candy Sunset Clouds'
+  },
+  {
+    key: 'clean_girl',
+    name: 'Clean Girl Dew',
+    tagline: 'The Glass Skin Minimalist',
+    badge: 'Aura: Clean Girl Dew ✨',
+    description: 'Effortless gold tube hoops, glazed lip oil, slicked-back claw clips, and iced matcha. You bring organized elegance, clarity, and refreshing calm to every room.',
+    palette: [
+      { name: 'Matcha Frost', hex: '#E8F5E9' },
+      { name: 'Dewy Blush', hex: '#FCE4EC' },
+      { name: 'Linen Sand', hex: '#F5F5DC' },
+      { name: 'Clean White', hex: '#FFFFFF' }
+    ],
+    essentials: ['Glazed peptide lip oil', 'Chunky gold hoops', 'Slick hair wax stick', 'Crisp cotton poplin'],
+    soundtrack: 'Dreamy atmospheric R&B, night-drive lo-fi & quiet ambient synth',
+    matchedEditSlug: 'ceramide-barrier-repair',
+    matchedEditTitle: 'Ceramide Magic: Barrier Repair',
+    matchedWallpaper: 'Clean Girl Dewy Glass Aesthetic'
+  },
+  {
+    key: 'cozy_vanilla',
+    name: 'Vanilla Warmth',
+    tagline: 'The Cozy Room Romantic',
+    badge: 'Aura: Vanilla Warmth 🍦',
+    description: 'Chunky knit blankets, vanilla chai lattes, fairy lights, and reading romance books until 2 AM. Your gentle energy and warmth make everyone feel instantly at home.',
+    palette: [
+      { name: 'Vanilla Cream', hex: '#FFF8E7' },
+      { name: 'Soft Honey', hex: '#F9E79F' },
+      { name: 'Dusty Rose', hex: '#FADBD8' },
+      { name: 'Oat Milk', hex: '#FDFBF7' }
+    ],
+    essentials: ['Chunky knit cardigan', 'Vanilla scented candle', 'Wired white earphones', 'Fairy light garland'],
+    soundtrack: 'Warm study lo-fi beats, soft rainy piano melodies & Gracie Abrams folk',
+    matchedEditSlug: 'study-aesthetic-sanctuary',
+    matchedEditTitle: 'Curating The Ultimate Study Sanctuary',
+    matchedWallpaper: 'Iced Matcha Latte Minimalist'
+  },
+  {
+    key: 'downtown',
+    name: 'Downtown Indie',
+    tagline: 'The Vintage Vinyl Collector',
+    badge: 'Aura: Downtown Indie 🎸',
+    description: 'Oversized vintage leather jackets, thrift store vinyl crates, film cameras, and headphones on full blast. You move to your own beat with authentic downtown attitude.',
+    palette: [
+      { name: 'Worn Leather', hex: '#3E2723' },
+      { name: 'Vinyl Black', hex: '#1A1A1A' },
+      { name: 'Cherry Accent', hex: '#C62828' },
+      { name: 'Mustard Gold', hex: '#FBC02D' }
+    ],
+    essentials: ['Vintage leather bomber', '35mm point & shoot camera', 'Chunky retro sneakers', 'Graphic baby tee'],
+    soundtrack: '70s rock revival, indie alt-pop, The 1975 & energetic garage rock',
+    matchedEditSlug: 'autumn-capsule-wardrobe',
+    matchedEditTitle: 'Autumn Capsule: 10 Pieces, 30 Outfits',
+    matchedWallpaper: 'Vintage Editorial Studio Glow'
+  }
+];
+---
+
+<BaseLayout
+  title="Discover Your Glow Aura Quiz — Interactive Teen Aesthetic Test | TeenTimeGlow by Rini"
+  description="Take Rini's 3-minute aesthetic aura quiz to uncover your signature teen glow vibe, personal color palette, playlist soundtrack, and curated fashion lookbook recommendations."
+>
+  <main class="quiz-page-container">
+    <!-- Breadcrumb & Back Bar -->
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">Aesthetic Glow Quiz</span>
+      </nav>
+      <a href="/" class="btn-back-home magnetic-btn">
+        <span>← Back to Main Magazine</span>
+      </a>
+    </div>
+
+    <!-- Hero Header -->
+    <section class="quiz-hero">
+      <div class="container text-center">
+        <div class="hero-badge-wrap">
+          <span class="section-pill-tag">✦ INTERACTIVE GLOW EXPERIENCE</span>
+          <span class="hero-live-badge">✦ 14,200+ TEENS QUIZZED</span>
+        </div>
+        <h1 class="quiz-hero-title">Discover Your Aesthetic Aura.<br /><span class="glow-gradient-text">Unveil Your Signature Glow.</span></h1>
+        <p class="quiz-hero-subtitle">
+          Answer 3 intuitive questions to find your aesthetic archetype, personal color swatches, wardrobe essentials, and signature soundtrack curated by Rini.
+        </p>
+
+        <!-- Trust Badges Strip -->
+        <div class="quiz-trust-strip">
+          <div class="trust-item">
+            <span class="trust-icon">✨</span>
+            <span class="trust-text">100% Free & Instant</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">🔒</span>
+            <span class="trust-text">Zero Email or Sign-up</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">🎨</span>
+            <span class="trust-text">Custom Palette & Playlist</span>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">💖</span>
+            <span class="trust-text">Shareable Story Badges</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Quiz Player Island Section -->
+    <section class="quiz-player-section">
+      <div class="container">
+        <div class="quiz-player-frame">
+          <QuizPlayer
+            client:load
+            headerPill="✨ Interactive Aesthetic Test"
+            heading="Which Teenage Aesthetic Truly Matches Your Spirit?"
+            description="Trust your initial instinct. Each choice decodes your morning ritual, style essentials, and soundtrack vibe."
+            trustPills={['✦ 3 Quick Steps', '✦ Instant Aura Card', '✦ Curated Recommendations']}
+          />
+        </div>
+      </div>
+    </section>
+
+    <!-- Archetype Deep Dive Section -->
+    <section class="archetypes-section">
+      <div class="container">
+        <div class="section-header text-center">
+          <span class="section-pill-tag">✦ THE FOUR SIGNATURE ARCHETYPES</span>
+          <h2 class="section-title split-title">Explore The Aesthetic Archetypes</h2>
+          <p class="section-subtitle">
+            Every teen possesses a distinctive frequency. Here are the 4 core aesthetics curated inside Rini's creative universe.
+          </p>
+        </div>
+
+        <div class="archetypes-grid">
+          {archetypes.map((arch) => (
+            <div class="archetype-card tilt-card" id={`arch-${arch.key}`}>
+              <div class="arch-header">
+                <span class="arch-badge">{arch.badge}</span>
+                <h3 class="arch-name">{arch.name}</h3>
+                <p class="arch-tagline">{arch.tagline}</p>
+              </div>
+
+              <p class="arch-desc">{arch.description}</p>
+
+              <!-- Color Palette Swatches -->
+              <div class="arch-swatches-box">
+                <span class="arch-sub-heading">Signature Palette</span>
+                <div class="swatches-row">
+                  {arch.palette.map((color) => (
+                    <div class="swatch-item">
+                      <span class="swatch-circle" style={`background-color: ${color.hex};`}></span>
+                      <span class="swatch-name">{color.name}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <!-- Style Essentials -->
+              <div class="arch-essentials-box">
+                <span class="arch-sub-heading">Wardrobe & Vibe Essentials</span>
+                <ul class="essentials-list">
+                  {arch.essentials.map((item) => (
+                    <li>✦ {item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <!-- Soundtrack -->
+              <div class="arch-soundtrack-box">
+                <span class="arch-sub-heading">🎧 Sound Profile</span>
+                <p class="arch-soundtrack-text">{arch.soundtrack}</p>
+              </div>
+
+              <!-- Cross Links -->
+              <div class="arch-actions">
+                <a href={`/edits/${arch.matchedEditSlug}`} class="arch-link-btn">
+                  Read Curated Edit →
+                </a>
+                <a href="/wallpapers" class="arch-link-secondary">
+                  Get 4K Wallpaper ↗
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Story Sharing & Social Banner -->
+    <section class="quiz-share-banner">
+      <div class="container">
+        <div class="share-banner-card">
+          <div class="banner-content">
+            <span class="section-pill-tag">✦ SOCIAL COMMUNITY</span>
+            <h2 class="banner-title">Screenshot & Share Your Aura</h2>
+            <p class="banner-desc">
+              Completed the quiz? Tag <strong>@teentimeglow</strong> and <strong>#MyGlowAura</strong> on your Instagram Stories or TikTok. Rini reposts the community's favorite aesthetic grids every Friday!
+            </p>
+            <div class="banner-buttons">
+              <a href="/gallery" class="btn-black-pill magnetic-btn">
+                <span>View Community Drops 💅</span>
+              </a>
+              <a href="/quotes" class="btn-quote-pill magnetic-btn">
+                <span>Explore Daily Mindset Quotes ✨</span>
+              </a>
+            </div>
+          </div>
+          <div class="banner-illustration">
+            <div class="aura-preview-pill tilt-card">
+              <span class="aura-tag">AURA CERTIFICATE</span>
+              <div class="aura-glow-orb"></div>
+              <h4>Golden Hour Muse</h4>
+              <p>Top 8% Aesthetic Match • Verified by TeenTimeGlow</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .quiz-page-container {
+    min-height: 100vh;
+    padding-top: calc(var(--nav-height, 80px) + 24px);
+    padding-bottom: 90px;
+    background: 
+      radial-gradient(circle at top right, rgba(255, 222, 89, 0.15), transparent 45%),
+      radial-gradient(circle at bottom left, rgba(255, 110, 199, 0.12), transparent 50%),
+      #FFFDF9;
+  }
+
+  .breadcrumb-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+
+  .breadcrumb-link {
+    color: #6B7280;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .breadcrumb-link:hover {
+    color: #E85D04;
+  }
+
+  .breadcrumb-sep {
+    color: #9CA3AF;
+  }
+
+  .breadcrumb-current {
+    color: #111827;
+  }
+
+  .btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 9999px;
+    color: #111827;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
+  }
+
+  .btn-back-home:hover {
+    background: #111827;
+    color: #FFFFFF;
+    transform: translateX(-3px);
+  }
+
+  .quiz-hero {
+    margin-bottom: 48px;
+  }
+
+  .hero-badge-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .hero-live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(232, 93, 4, 0.1);
+    border: 1px solid rgba(232, 93, 4, 0.25);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #E85D04;
+    letter-spacing: 0.06em;
+  }
+
+  .quiz-hero-title {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: clamp(2.3rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: #111827;
+    margin-bottom: 16px;
+  }
+
+  .glow-gradient-text {
+    background: linear-gradient(135deg, #FF6EC7, #E85D04, #FFDE59);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .quiz-hero-subtitle {
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    color: #4B5563;
+    max-width: 680px;
+    margin: 0 auto 30px auto;
+    line-height: 1.6;
+  }
+
+  .quiz-trust-strip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #374151;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 6px 14px;
+    border-radius: 9999px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(8px);
+  }
+
+  .trust-icon {
+    font-size: 1rem;
+  }
+
+  /* Quiz Player Frame */
+  .quiz-player-section {
+    margin-bottom: 80px;
+  }
+
+  .quiz-player-frame {
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 110, 199, 0.25);
+    border-radius: 28px;
+    padding: 36px 30px;
+    box-shadow: 
+      0 20px 50px -15px rgba(255, 110, 199, 0.18),
+      0 0 0 1px rgba(0, 0, 0, 0.04);
+    backdrop-filter: blur(14px);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Archetypes Section */
+  .archetypes-section {
+    margin-bottom: 80px;
+  }
+
+  .section-header {
+    margin-bottom: 44px;
+  }
+
+  .section-title {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 700;
+    color: #111827;
+    margin-top: 10px;
+    margin-bottom: 12px;
+  }
+
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: #4B5563;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  .archetypes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 28px;
+  }
+
+  .archetype-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 24px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .archetype-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 45px rgba(255, 110, 199, 0.16);
+  }
+
+  .arch-header {
+    margin-bottom: 16px;
+  }
+
+  .arch-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(255, 110, 199, 0.12);
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #E85D04;
+    margin-bottom: 8px;
+  }
+
+  .arch-name {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 4px;
+  }
+
+  .arch-tagline {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #E85D04;
+    letter-spacing: 0.02em;
+  }
+
+  .arch-desc {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #4B5563;
+    margin-bottom: 20px;
+  }
+
+  .arch-sub-heading {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: #9CA3AF;
+    margin-bottom: 10px;
+  }
+
+  .arch-swatches-box {
+    margin-bottom: 20px;
+  }
+
+  .swatches-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .swatch-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: #F9FAFB;
+    padding: 4px 8px;
+    border-radius: 9999px;
+    border: 1px solid #E5E7EB;
+  }
+
+  .swatch-circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .swatch-name {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #4B5563;
+  }
+
+  .arch-essentials-box {
+    margin-bottom: 20px;
+  }
+
+  .essentials-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #374151;
+  }
+
+  .arch-soundtrack-box {
+    background: #FFFDF9;
+    border: 1px solid rgba(255, 222, 89, 0.4);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 24px;
+  }
+
+  .arch-soundtrack-text {
+    font-size: 0.82rem;
+    color: #4B5563;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .arch-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+  }
+
+  .arch-link-btn {
+    display: block;
+    text-align: center;
+    padding: 10px 16px;
+    background: #111827;
+    color: #FFFFFF;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .arch-link-btn:hover {
+    background: #E85D04;
+    transform: translateY(-2px);
+  }
+
+  .arch-link-secondary {
+    display: block;
+    text-align: center;
+    padding: 8px 16px;
+    background: transparent;
+    color: #6B7280;
+    border: 1px solid #E5E7EB;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  .arch-link-secondary:hover {
+    color: #111827;
+    border-color: #111827;
+  }
+
+  /* Share Banner */
+  .quiz-share-banner {
+    margin-top: 40px;
+  }
+
+  .share-banner-card {
+    background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+    border-radius: 28px;
+    padding: 48px;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .share-banner-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 110, 199, 0.3) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .banner-content {
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .banner-title {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 12px;
+  }
+
+  .banner-desc {
+    font-size: 0.95rem;
+    color: #D1D5DB;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .banner-buttons {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  .btn-quote-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    color: #FFFFFF;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-decoration: none;
+    backdrop-filter: blur(6px);
+    transition: all 0.25s ease;
+  }
+
+  .btn-quote-pill:hover {
+    background: #FFFFFF;
+    color: #111827;
+  }
+
+  .banner-illustration {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  .aura-preview-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 24px;
+    padding: 24px 28px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    min-width: 240px;
+  }
+
+  .aura-tag {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: #FFDE59;
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .aura-glow-orb {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 12px auto;
+    background: linear-gradient(135deg, #FF6EC7, #FFDE59);
+    filter: blur(4px);
+    animation: pulseOrb 3s infinite alternate ease-in-out;
+  }
+
+  @keyframes pulseOrb {
+    0% { transform: scale(0.9); opacity: 0.8; }
+    100% { transform: scale(1.15); opacity: 1; }
+  }
+
+  .aura-preview-pill h4 {
+    font-family: var(--font-editorial, 'Playfair Display', serif);
+    font-size: 1.25rem;
+    color: #FFFFFF;
+    margin-bottom: 4px;
+  }
+
+  .aura-preview-pill p {
+    font-size: 0.75rem;
+    color: #9CA3AF;
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .share-banner-card {
+      flex-direction: column;
+      text-align: center;
+      padding: 36px 24px;
+    }
+
+    .banner-buttons {
+      justify-content: center;
+    }
+  }
+</style>
