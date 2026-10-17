@@ -132,11 +132,11 @@
   2. [x] Create `src/pages/gallery/index.astro` with masonry showcase grid, category tabs (Nails, DIY, Sketch, Room Decor), live like increments (`/api/community/like`), and prominent "Upload Creation" floating button.
   3. [x] Mount `CommunitySubmitModal.tsx` on `/gallery`.
 
-### Phase 12: Unified Navigation, Global Links & Production Verification
+### Phase 12: Unified Navigation, Global Links & Production Verification [x] (Completed: 2026-10-17)
 * **Goal**: Update global navigation, links across all components, and run full test & build verification.
 * **Tasks**:
-  1. Update `Navbar.astro` to handle cross-page routing intelligently (linking to `/wallpapers`, `/quotes`, `/rankings`, `/edits`, `/quiz`, `/gallery` from any page).
-  2. Add breadcrumb navigation and "← Back to Home" pills on subpages.
-  3. Run `npm run build` and ensure 0 errors across all routes.
-  4. Perform visual checks in the browser to ensure pixel-perfect design parity.
+  1. [x] Update `Navbar.astro` to handle cross-page routing intelligently (linking to `/wallpapers`, `/quotes`, `/rankings`, `/edits`, `/quiz`, `/gallery` from any page).
+  2. [x] Add breadcrumb navigation and "← Back to Home" pills on subpages.
+  3. [x] Run `npm run build` and ensure 0 errors across all routes.
+  4. [x] Perform visual checks in the browser to ensure pixel-perfect design parity.
 

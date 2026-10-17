@@ -74,8 +74,8 @@ const {
         <h2 class="hero-left-heading" set:html={headline} />
         <p class="hero-left-subtext">{subtext}</p>
         <div class="hero-btn-group">
-          <a href="#edits" class="btn-black-pill magnetic-btn">{exploreBtnText}</a>
-          <a href="#quiz" class="btn-glass-pill magnetic-btn">{quizBtnText}</a>
+          <a href="/edits" class="btn-black-pill magnetic-btn">{exploreBtnText}</a>
+          <a href="/quiz" class="btn-glass-pill magnetic-btn">{quizBtnText}</a>
         </div>
         <div class="hero-meta-badge-row">
           <span class="hero-meta-badge">{badge1}</span>
@@ -89,7 +89,7 @@ const {
           <img src="/assets/hero-glow-creator.jpg" alt="Rini — TeenTimeGlow Creator & Curator" class="hero-model-img" id="heroModelImg" fetchpriority="high" decoding="async" />
 
           <!-- Floating Glass Card 1 (Skincare Edit) -->
-          <a href="#edits" class="floating-card floating-card-1" id="floatCard1">
+          <a href="/edits/glass-skin-korean-routine" class="floating-card floating-card-1" id="floatCard1">
             <img src="/assets/feature-skincare.jpg" alt="Skincare Glow Routine" class="floating-card-img" loading="lazy" decoding="async" width="60" height="60" />
             <div class="floating-text-wrap">
               <span class="floating-tag">{card1Tag}</span>
@@ -98,7 +98,7 @@ const {
           </a>
 
           <!-- Floating Glass Card 2 (Free 4K Wallpapers) -->
-          <a href="#wallpapers" class="floating-card floating-card-2" id="floatCard2">
+          <a href="/wallpapers" class="floating-card floating-card-2" id="floatCard2">
             <img src="/assets/wallpaper-sunset.jpg" alt="Free 4K Wallpapers" class="floating-card-img" loading="lazy" decoding="async" width="60" height="60" />
             <div class="floating-text-wrap">
               <span class="floating-tag">{card2Tag}</span>

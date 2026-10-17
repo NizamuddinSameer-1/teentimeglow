@@ -58,10 +58,16 @@ const filterKeys: Record<string, string> = {
               <span class="stars">★★★★★</span>
               <span class="meta-time">• {post.read_time_minutes} min read</span>
             </div>
-            <span class="btn-read-edit">Read Full Edit &rarr;</span>
+            <a href={`/edits/${post.slug}`} class="btn-read-edit">Read Full Edit &rarr;</a>
           </div>
         </div>
       ))}
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="/edits" class="btn-black-pill magnetic-btn">
+        <span>Explore All Lookbooks & Edits →</span>
+      </a>
     </div>
   </div>
 </section>

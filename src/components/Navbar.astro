@@ -25,6 +25,9 @@ const {
   searchPlaceholder = siteContent.navbar.searchPlaceholder,
   quizCtaText = siteContent.navbar.quizCtaText
 } = Astro.props;
+
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHome = currentPath === '/';
 ---
 <header id="siteHeader">
   <div class="nav-container">
@@ -35,12 +38,20 @@ const {
         <span class="brand-logo-text">{brandTitle} <span class="brand-logo-glow">{brandGlow}</span></span>
       </a>
 
-      <!-- Center Nav Items with Active Home Pill -->
+      <!-- Center Nav Items with Active Route Pill -->
       <ul class="nav-links">
-        <li><a href="/" class="nav-pill-home">{homeText}</a></li>
-        {links.map((link) => (
-          <li><a href={link.href}>{link.label}</a></li>
-        ))}
+        <li><a href="/" class={isHome ? "nav-pill-home" : "nav-link"}>{homeText}</a></li>
+        {links.map((link) => {
+          const cleanHref = link.href.replace(/\/$/, '');
+          const isActive = cleanHref !== '/' && (currentPath === cleanHref || currentPath.startsWith(cleanHref + '/'));
+          return (
+            <li>
+              <a href={link.href} class={isActive ? "nav-pill-home" : "nav-link"}>
+                {link.label}
+              </a>
+            </li>
+          );
+        })}
       </ul>
 
       <!-- Subtle Vertical Divider -->
@@ -69,7 +80,7 @@ const {
         </div>
 
         <!-- Take Quiz CTA Button -->
-        <a href="#quiz" class="quiz-pill-btn magnetic-btn">{quizCtaText}</a>
+        <a href="/quiz" class="quiz-pill-btn magnetic-btn">{quizCtaText}</a>
 
         <!-- Mobile Hamburger -->
         <button class="mobile-menu-toggle" onclick="toggleDrawer(true)" aria-label="Open navigation menu">☰</button>
@@ -92,10 +103,22 @@ const {
   </div>
 
   <ul class="drawer-links">
-    <li><a href="/" onclick="toggleDrawer(false)" style="color: var(--sunset-accent); font-weight: 800;">✦ {homeText}</a></li>
-    {links.map((link) => (
-      <li><a href={link.href} onclick="toggleDrawer(false)">{link.label}</a></li>
-    ))}
+    <li><a href="/" onclick="toggleDrawer(false)" style={isHome ? "color: var(--sunset-accent); font-weight: 800;" : "font-weight: 700;"}>✦ {homeText}</a></li>
+    {links.map((link) => {
+      const cleanHref = link.href.replace(/\/$/, '');
+      const isActive = cleanHref !== '/' && (currentPath === cleanHref || currentPath.startsWith(cleanHref + '/'));
+      return (
+        <li>
+          <a
+            href={link.href}
+            onclick="toggleDrawer(false)"
+            style={isActive ? "color: var(--sunset-accent); font-weight: 800;" : ""}
+          >
+            {link.label}
+          </a>
+        </li>
+      );
+    })}
     <li><a href="#newsletter" onclick="toggleDrawer(false)">Join Glow Club</a></li>
   </ul>
 </div>
