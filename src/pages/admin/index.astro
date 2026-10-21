@@ -403,6 +403,213 @@ const currentSettings = settingsData?.value || {
       align-items: center;
       gap: 8px;
     }
+
+    /* Preview & Status Badges */
+    .btn-preview-action {
+      background: #FFFFFF;
+      color: #111827;
+      border: 1.5px solid #E5E7EB;
+      padding: 13px 22px;
+      border-radius: 999px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-preview-action:hover {
+      background: #F9FAFB;
+      border-color: #9CA3AF;
+      transform: translateY(-1px);
+    }
+
+    .status-badge-live {
+      background: #DCFCE7;
+      color: #166534;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
+    .status-badge-draft {
+      background: #FEF3C7;
+      color: #92400E;
+      font-size: 0.68rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Live Story Preview Modal */
+    .preview-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 17, 21, 0.78);
+      backdrop-filter: blur(8px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .preview-modal-card {
+      background: #FAF7F2;
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      border-radius: 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .preview-modal-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .preview-modal-body {
+      padding: 36px 32px 48px;
+    }
+
+    .preview-article-wrap {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .preview-category-badge {
+      display: inline-block;
+      background: #FFE8D6;
+      color: var(--sunset-accent);
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+
+    .preview-article-title {
+      font-family: var(--font-editorial);
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.25;
+      color: #0F1115;
+      margin: 0 0 16px 0;
+    }
+
+    .preview-article-excerpt {
+      font-family: var(--font-editorial);
+      font-size: 1.15rem;
+      font-style: italic;
+      color: #4B5563;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .preview-byline-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      background: #FFFFFF;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+
+    .preview-cover-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 32px;
+      background: #111827;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
+
+    .preview-cover-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .preview-content-box {
+      background: #FFFFFF;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      border-radius: 20px;
+      padding: 36px 32px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #2D3748;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    }
+
+    .preview-content-box h2 {
+      font-family: var(--font-editorial);
+      font-size: 1.65rem;
+      margin: 28px 0 12px;
+      color: #0F1115;
+    }
+
+    .preview-content-box h3 {
+      font-family: var(--font-editorial);
+      font-size: 1.35rem;
+      margin: 22px 0 10px;
+      color: #0F1115;
+    }
+
+    .preview-content-box p {
+      margin-bottom: 18px;
+    }
+
+    .preview-content-box blockquote {
+      border-left: 3px solid var(--sunset-accent);
+      padding: 14px 20px;
+      background: #FAF9F6;
+      border-radius: 0 14px 14px 0;
+      font-family: var(--font-editorial);
+      font-style: italic;
+      font-size: 1.15rem;
+      margin: 24px 0;
+    }
+
+    .preview-content-box hr.editorial-divider {
+      border: none;
+      height: 1px;
+      background: #E5E7EB;
+      margin: 32px 0;
+    }
+
+    .preview-content-box a.editorial-affiliate-link {
+      color: var(--sunset-accent);
+      text-decoration: underline;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -469,13 +676,22 @@ const currentSettings = settingsData?.value || {
             <input type="text" id="postTitle" required placeholder="e.g. 5 Korean Lip Oils That Give Glass Gloss" class="form-input" />
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Category *</label>
-            <select id="postCategory" class="form-select">
-              <option value="beauty">Beauty & Skincare</option>
-              <option value="fashion">Fashion Lookbook</option>
-              <option value="decor">Cozy Decor</option>
-            </select>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select id="postCategory" class="form-select">
+                <option value="beauty">Beauty & Skincare</option>
+                <option value="fashion">Fashion Lookbook</option>
+                <option value="decor">Cozy Decor</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Publication Status *</label>
+              <select id="postIsPublished" class="form-select">
+                <option value="true">🟢 Publish Live (Visible on site)</option>
+                <option value="false">🟡 Save as Draft (Work in progress)</option>
+              </select>
+            </div>
           </div>
 
           <!-- Direct Photo Upload for Cover Image -->
@@ -500,9 +716,12 @@ const currentSettings = settingsData?.value || {
             <RichTextEditor />
           </div>
 
-          <div style="display: flex; align-items: center; margin-top: 24px;">
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 24px; flex-wrap: wrap;">
             <button type="submit" id="btnSavePost" class="btn-submit-action">
               <span>✨ Publish Story Live</span>
+            </button>
+            <button type="button" id="btnPreviewStory" class="btn-preview-action" onclick="openStoryPreviewModal()">
+              <span>👁️ Preview Story</span>
             </button>
             <button type="button" id="btnCancelPostEdit" class="btn-cancel-edit" onclick="cancelPostEdit()">Cancel Edit</button>
           </div>
@@ -510,14 +729,21 @@ const currentSettings = settingsData?.value || {
       </div>
 
       <!-- Published Articles Catalog -->
-      <h3 style="font-size: 1.25rem; font-weight: 800; margin: 32px 0 16px 0;">Published Magazine Articles ({postsList.length})</h3>
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin: 32px 0 16px 0;">Magazine Articles ({postsList.length})</h3>
       <div class="items-grid">
         {postsList.map((post) => (
           <div class="item-card" id={`post-card-${post.id}`}>
             <img src={post.cover_image_url} alt={post.title} class="item-card-thumb" />
             <div class="item-card-body">
               <div>
-                <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--sunset-accent);">{post.category}</span>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+                  <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--sunset-accent);">{post.category}</span>
+                  {post.is_published === false ? (
+                    <span class="status-badge-draft">🟡 DRAFT</span>
+                  ) : (
+                    <span class="status-badge-live">🟢 LIVE</span>
+                  )}
+                </div>
                 <h4 style="font-size: 1rem; font-weight: 700; margin: 6px 0;">{post.title}</h4>
                 <p style="font-size: 0.82rem; color: #6B7280; margin: 0 0 12px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{post.excerpt}</p>
               </div>
@@ -525,7 +751,7 @@ const currentSettings = settingsData?.value || {
                 <button
                   type="button"
                   class="btn-card-action btn-card-edit"
-                  onclick={`editPost(${JSON.stringify({ id: post.id, title: post.title, category: post.category, excerpt: post.excerpt, cover_image_url: post.cover_image_url, content_html: post.content_html })})`}
+                  onclick={`editPost(${JSON.stringify({ id: post.id, title: post.title, category: post.category, excerpt: post.excerpt, cover_image_url: post.cover_image_url, content_html: post.content_html, is_published: post.is_published !== false })})`}
                 >
                   ✏️ Edit
                 </button>
@@ -845,17 +1071,25 @@ const currentSettings = settingsData?.value || {
       }
     }
 
-    // Safe API Response Parser (prevents JSON syntax errors on HTML/server errors)
+    // Safe API Response Parser (robustly handles JSON, text, or HTML errors)
     async function parseApiResponse(res) {
-      const contentType = res.headers.get('content-type') || '';
-      if (contentType.includes('application/json')) {
-        try {
-          return await res.json();
-        } catch (e) {
-          return { success: false, error: 'Invalid JSON response from server' };
-        }
-      }
       const text = await res.text();
+      try {
+        const json = JSON.parse(text);
+        if (json && typeof json === 'object') {
+          // If server returned a success field, trust it
+          if (typeof json.success === 'boolean') {
+            return json;
+          }
+          // If HTTP status is ok, treat as success
+          return { success: res.ok, ...json };
+        }
+      } catch (e) {}
+
+      // If it's not JSON, evaluate based on HTTP status
+      if (res.ok) {
+        return { success: true, data: text };
+      }
       return { success: false, error: text || `Server error (${res.status})` };
     }
 
@@ -919,6 +1153,7 @@ const currentSettings = settingsData?.value || {
       const cover_image_url = document.getElementById('postCoverUrl').value;
       const excerpt = document.getElementById('postExcerpt').value;
       const content_html = window.getRichEditorContent ? window.getRichEditorContent() : '';
+      const is_published = document.getElementById('postIsPublished').value === 'true';
 
       const submitBtn = document.getElementById('btnSavePost');
       submitBtn.disabled = true;
@@ -929,8 +1164,8 @@ const currentSettings = settingsData?.value || {
         const url = '/api/admin/posts';
         const method = isEdit ? 'PUT' : 'POST';
         const payload = isEdit 
-          ? { id: editId, title, category, cover_image_url, excerpt, content_html }
-          : { title, category, cover_image_url, excerpt, content_html };
+          ? { id: editId, title, category, cover_image_url, excerpt, content_html, is_published }
+          : { title, category, cover_image_url, excerpt, content_html, is_published };
 
         const res = await fetch(url, {
           method,
@@ -940,7 +1175,7 @@ const currentSettings = settingsData?.value || {
         const data = await parseApiResponse(res);
 
         if (data.success) {
-          showToast(isEdit ? '✨ Lookbook updated!' : '✨ Story published live!');
+          showToast(isEdit ? '✨ Lookbook updated!' : (is_published ? '✨ Story published live!' : '🟡 Story saved as draft!'));
           setTimeout(() => window.location.reload(), 1200);
         } else {
           alert('Error: ' + data.error);
@@ -960,6 +1195,10 @@ const currentSettings = settingsData?.value || {
       document.getElementById('postCategory').value = post.category;
       document.getElementById('postExcerpt').value = post.excerpt;
       document.getElementById('postCoverUrl').value = post.cover_image_url;
+      const isPublishedVal = post.is_published !== false ? 'true' : 'false';
+      const statusSelect = document.getElementById('postIsPublished');
+      if (statusSelect) statusSelect.value = isPublishedVal;
+
       const preview = document.getElementById('postCoverPreview');
       if (preview) { preview.src = post.cover_image_url; preview.style.display = 'block'; }
       if (window.setRichEditorContent) window.setRichEditorContent(post.content_html);
@@ -975,10 +1214,48 @@ const currentSettings = settingsData?.value || {
       document.getElementById('editPostId').value = '';
       document.getElementById('postTitle').value = '';
       document.getElementById('postExcerpt').value = '';
+      const statusSelect = document.getElementById('postIsPublished');
+      if (statusSelect) statusSelect.value = 'true';
       if (window.setRichEditorContent) window.setRichEditorContent('');
       document.getElementById('articleFormHeading').textContent = 'Create New Magazine Lookbook / Story';
       document.getElementById('btnSavePost').textContent = '✨ Publish Story Live';
       document.getElementById('btnCancelPostEdit').style.display = 'none';
+    }
+
+    // Live Story Preview Modal Controls
+    function openStoryPreviewModal() {
+      const title = document.getElementById('postTitle').value || 'Untitled Story';
+      const category = document.getElementById('postCategory').value;
+      const coverUrl = document.getElementById('postCoverUrl').value || '/assets/feature-skincare.jpg';
+      const excerpt = document.getElementById('postExcerpt').value || 'No summary teaser entered yet.';
+      const content = window.getRichEditorContent ? window.getRichEditorContent() : '';
+      const isPublished = document.getElementById('postIsPublished').value === 'true';
+
+      const categoryMap = {
+        beauty: 'Beauty & Skincare',
+        fashion: 'Fashion Lookbook',
+        decor: 'Cozy Decor'
+      };
+
+      document.getElementById('previewTitle').textContent = title;
+      document.getElementById('previewCategoryBadge').textContent = (categoryMap[category] || category).toUpperCase();
+      document.getElementById('previewExcerpt').textContent = excerpt;
+      document.getElementById('previewCoverImg').src = coverUrl;
+      document.getElementById('previewContentBody').innerHTML = content || '<p style="color: #9CA3AF; font-style: italic;">No body content written yet. Type your story above to preview it here.</p>';
+
+      const badge = document.getElementById('previewModalStatusBadge');
+      if (badge) {
+        badge.className = isPublished ? 'status-badge-live' : 'status-badge-draft';
+        badge.textContent = isPublished ? '🟢 LIVE' : '🟡 DRAFT';
+      }
+
+      const modal = document.getElementById('storyPreviewModal');
+      if (modal) modal.style.display = 'flex';
+    }
+
+    function closeStoryPreviewModal() {
+      const modal = document.getElementById('storyPreviewModal');
+      if (modal) modal.style.display = 'none';
     }
 
     async function deletePost(id) {
@@ -1208,5 +1485,51 @@ const currentSettings = settingsData?.value || {
       }
     }
   </script>
+
+  <!-- Live Story Preview Modal -->
+  <div id="storyPreviewModal" class="preview-modal-backdrop" onclick="if(event.target === this) closeStoryPreviewModal()">
+    <div class="preview-modal-card">
+      <div class="preview-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.1rem;">👁️</span>
+          <span style="font-weight: 800; font-size: 1rem;">Reader Preview Mode</span>
+          <span id="previewModalStatusBadge" class="status-badge-live">🟢 LIVE</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button type="button" class="btn-submit-action" style="padding: 8px 18px; font-size: 0.85rem;" onclick="closeStoryPreviewModal(); document.getElementById('btnSavePost').click();">
+            <span>Looks Good — Save!</span>
+          </button>
+          <button type="button" onclick="closeStoryPreviewModal()" style="background: none; border: 1px solid #D1D5DB; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; color: #4B5563;">✕</button>
+        </div>
+      </div>
+
+      <div class="preview-modal-body">
+        <div class="preview-article-wrap">
+          <span id="previewCategoryBadge" class="preview-category-badge">BEAUTY & SKINCARE</span>
+          <h1 id="previewTitle" class="preview-article-title">Story Title Goes Here</h1>
+          <p id="previewExcerpt" class="preview-article-excerpt">Article excerpt and teaser text appears here in editorial italic style...</p>
+
+          <div class="preview-byline-bar">
+            <img src="/assets/logo.jpg" alt="Rini" style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--sunset-accent); object-fit: cover;" />
+            <div>
+              <div style="font-weight: 800; font-size: 0.88rem; color: #111827;">Rini</div>
+              <div style="font-size: 0.72rem; color: #6B7280;">Founder & Lifestyle Curator • TeenTimeGlow</div>
+            </div>
+            <div style="margin-left: auto; font-size: 0.75rem; color: #9CA3AF; font-weight: 600;">
+              📖 ~3 min read
+            </div>
+          </div>
+
+          <div class="preview-cover-frame">
+            <img id="previewCoverImg" src="/assets/feature-skincare.jpg" alt="Cover Preview" />
+          </div>
+
+          <div id="previewContentBody" class="preview-content-box">
+            <!-- Rendered rich text content -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
