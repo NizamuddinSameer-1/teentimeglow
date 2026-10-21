@@ -12,13 +12,19 @@ const checkAuth = (cookies: any) => {
 // Create new article
 export const POST: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized: Admin session required' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized: Admin session required' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
-    const { title, category, excerpt, content_html, cover_image_url } = await request.json();
+    const { title, category, excerpt, content_html, cover_image_url, is_published } = await request.json();
     if (!title || !title.trim()) {
-      return new Response(JSON.stringify({ error: 'Title is required' }), { status: 400 });
+      return new Response(JSON.stringify({ error: 'Title is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     const rawCategory = (category || 'beauty').toLowerCase().trim();
@@ -50,7 +56,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
         content_html: content_html?.trim() || `<p>${excerpt || title}</p>`,
         cover_image_url: cover_image_url?.trim() || '/assets/feature-skincare.jpg',
         read_time_minutes: Math.max(2, Math.ceil((content_html || '').split(' ').length / 150)),
-        is_published: true
+        is_published: is_published !== undefined ? Boolean(is_published) : true
       })
       .select()
       .single();
@@ -59,22 +65,36 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       console.error('Database post insert error:', error);
       throw error;
     }
-    return new Response(JSON.stringify({ success: true, post: data }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, post: data }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (err: any) {
     console.error('Post API error:', err);
-    return new Response(JSON.stringify({ error: err.message || 'Failed to save post' }), { status: 500 });
+    return new Response(JSON.stringify({ error: err.message || 'Failed to save post' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };
 
 // Update existing article
 export const PUT: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
-    const { id, title, category, excerpt, content_html, cover_image_url } = await request.json();
-    if (!id) return new Response(JSON.stringify({ error: 'Post ID is required' }), { status: 400 });
+    const { id, title, category, excerpt, content_html, cover_image_url, is_published } = await request.json();
+    if (!id) {
+      return new Response(JSON.stringify({ error: 'Post ID is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     const adminClient = getAdminClient();
     const updateData: any = {
@@ -91,6 +111,7 @@ export const PUT: APIRoute = async ({ request, cookies }) => {
       updateData.read_time_minutes = Math.max(2, Math.ceil(content_html.split(' ').length / 150));
     }
     if (cover_image_url) updateData.cover_image_url = cover_image_url;
+    if (is_published !== undefined) updateData.is_published = Boolean(is_published);
 
     const { data, error } = await adminClient
       .from('posts')
@@ -100,22 +121,36 @@ export const PUT: APIRoute = async ({ request, cookies }) => {
       .single();
 
     if (error) throw error;
-    return new Response(JSON.stringify({ success: true, post: data }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, post: data }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };
 
 // Delete article
 export const DELETE: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
     const url = new URL(request.url);
     const id = url.searchParams.get('id');
-    if (!id) return new Response(JSON.stringify({ error: 'Post ID is required' }), { status: 400 });
+    if (!id) {
+      return new Response(JSON.stringify({ error: 'Post ID is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     const adminClient = getAdminClient();
     const { error } = await adminClient
@@ -124,8 +159,14 @@ export const DELETE: APIRoute = async ({ request, cookies }) => {
       .eq('id', id);
 
     if (error) throw error;
-    return new Response(JSON.stringify({ success: true, message: 'Post deleted' }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, message: 'Post deleted' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };
