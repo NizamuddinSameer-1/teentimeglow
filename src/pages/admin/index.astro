@@ -845,6 +845,20 @@ const currentSettings = settingsData?.value || {
       }
     }
 
+    // Safe API Response Parser (prevents JSON syntax errors on HTML/server errors)
+    async function parseApiResponse(res) {
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        try {
+          return await res.json();
+        } catch (e) {
+          return { success: false, error: 'Invalid JSON response from server' };
+        }
+      }
+      const text = await res.text();
+      return { success: false, error: text || `Server error (${res.status})` };
+    }
+
     // Direct Photo Upload Helper
     async function uploadPhotoFile(file, previewImgId, hiddenUrlInputId, statusDivId) {
       const statusDiv = document.getElementById(statusDivId);
@@ -859,7 +873,7 @@ const currentSettings = settingsData?.value || {
           method: 'POST',
           body: formData
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
 
         if (data.success && data.url) {
           const previewImg = document.getElementById(previewImgId);
@@ -872,7 +886,7 @@ const currentSettings = settingsData?.value || {
           if (statusDiv) statusDiv.textContent = '✓ Photo Ready!';
           showToast('📸 Photo uploaded!');
         } else {
-          alert('Upload failed: ' + (data.error || 'Unknown'));
+          alert('Upload failed: ' + (data.error || 'Unknown error'));
           if (statusDiv) statusDiv.textContent = originalText;
         }
       } catch (err) {
@@ -923,7 +937,7 @@ const currentSettings = settingsData?.value || {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
 
         if (data.success) {
           showToast(isEdit ? '✨ Lookbook updated!' : '✨ Story published live!');
@@ -936,6 +950,7 @@ const currentSettings = settingsData?.value || {
       } catch (err) {
         alert('Error: ' + err.message);
         submitBtn.disabled = false;
+        submitBtn.textContent = isEdit ? '💾 Save Changes' : '✨ Publish Story Live';
       }
     }
 
@@ -970,13 +985,13 @@ const currentSettings = settingsData?.value || {
       if (!confirm('Are you sure you want to delete this article?')) return;
       try {
         const res = await fetch(`/api/admin/posts?id=${id}`, { method: 'DELETE' });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           const card = document.getElementById(`post-card-${id}`);
           if (card) card.remove();
           showToast('🗑️ Article deleted');
         } else {
-          alert(data.error);
+          alert('Delete failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
@@ -999,11 +1014,11 @@ const currentSettings = settingsData?.value || {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ heroBadge, heroHeading, heroSubtext, readersCount, satisfactionRate, footerQuote })
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           showToast('🌸 Website text updated live!');
         } else {
-          alert(data.error);
+          alert('Save failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
@@ -1023,12 +1038,12 @@ const currentSettings = settingsData?.value || {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ title, device_type, thumbnail_url, download_url: thumbnail_url })
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           showToast('🖼️ 4K Wallpaper uploaded to Vault!');
           setTimeout(() => window.location.reload(), 1200);
         } else {
-          alert(data.error);
+          alert('Save failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
@@ -1039,13 +1054,13 @@ const currentSettings = settingsData?.value || {
       if (!confirm('Remove this wallpaper from the vault?')) return;
       try {
         const res = await fetch(`/api/admin/wallpapers?id=${id}`, { method: 'DELETE' });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           const card = document.getElementById(`wp-card-${id}`);
           if (card) card.remove();
           showToast('🗑️ Wallpaper removed');
         } else {
-          alert(data.error);
+          alert('Delete failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
@@ -1076,12 +1091,12 @@ const currentSettings = settingsData?.value || {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           showToast(isEdit ? '🏆 Leaderboard updated!' : '🏆 Review added to Leaderboard!');
           setTimeout(() => window.location.reload(), 1200);
         } else {
-          alert(data.error);
+          alert('Save failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
@@ -1118,13 +1133,13 @@ const currentSettings = settingsData?.value || {
       if (!confirm('Delete this review from leaderboard?')) return;
       try {
         const res = await fetch(`/api/admin/rankings?id=${id}`, { method: 'DELETE' });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           const card = document.getElementById(`rank-card-${id}`);
           if (card) card.remove();
           showToast('🗑️ Review removed');
         } else {
-          alert(data.error);
+          alert('Delete failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
@@ -1143,12 +1158,12 @@ const currentSettings = settingsData?.value || {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ content_text, author })
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           showToast('💬 Affirmation published!');
           setTimeout(() => window.location.reload(), 1200);
         } else {
-          alert(data.error);
+          alert('Save failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
@@ -1159,13 +1174,13 @@ const currentSettings = settingsData?.value || {
       if (!confirm('Delete this quote?')) return;
       try {
         const res = await fetch(`/api/admin/quotes?id=${id}`, { method: 'DELETE' });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           const row = document.getElementById(`quote-row-${id}`);
           if (row) row.remove();
           showToast('🗑️ Quote deleted');
         } else {
-          alert(data.error);
+          alert('Delete failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
@@ -1180,13 +1195,13 @@ const currentSettings = settingsData?.value || {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id, status })
         });
-        const data = await res.json();
+        const data = await parseApiResponse(res);
         if (data.success) {
           const card = document.getElementById(`moderation-${id}`);
           if (card) card.remove();
           showToast(status === 'approved' ? '✓ Submission Approved to Public Dropboard!' : '✕ Submission Rejected');
         } else {
-          alert(data.error);
+          alert('Moderation failed: ' + (data.error || 'Unknown error'));
         }
       } catch (err) {
         alert('Error: ' + err.message);
