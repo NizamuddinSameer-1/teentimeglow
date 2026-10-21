@@ -168,15 +168,16 @@
   6. [x] Implement Wallpapers, Rankings & Quotes management tabs: Add, edit, or delete items with automatic public updates.
   7. [x] Implement Moderation Inbox for community creations with 1-click Approve/Reject.
 
-### Phase 15: Admin Studio 2.0 (Quiz Builder, Advanced Article Rich Editor & Affiliate Links) [ ]
+### Phase 15: Admin Studio 2.0 (Quiz Builder, Advanced Article Rich Editor & Affiliate Links) [x] (Completed: 2026-10-21)
 * **Goal**: Deliver full dynamic quiz authoring (multi-question, custom options, photo answers, archetype scoring), rich-text editor customization (affiliate hyperlinks, rock-solid in-between image uploads with caret restoration, text alignment, and dividers), draft vs. published workflow, and live preview.
 * **Tasks**:
-  1. [ ] Implement dedicated "Interactive Quizzes" tab in `/admin` with question creator, dynamic option adder/remover, photo support, and archetype weighting.
-  2. [ ] Build backend CRUD routes for quizzes (`POST /api/admin/quizzes`, `DELETE /api/admin/quizzes`).
-  3. [ ] Overhaul `RichTextEditor.astro` with an Affiliate Link modal dialog (`target="_blank"`, `rel="sponsored noopener"`), text align (left, center), and horizontal divider formatting.
-  4. [ ] Fix inline image upload in `RichTextEditor.astro` with range preservation so photos insert directly where the cursor was positioned without losing input bindings.
-  5. [ ] Add Draft vs Published status toggle and live preview modal before publishing stories or quizzes.
-  6. [ ] Verify full build and end-to-end admin experience.
+  1. [x] Implement dedicated "Interactive Quizzes" tab in `/admin` with question creator, dynamic option adder/remover, photo support, and archetype weighting.
+  2. [x] Build backend CRUD routes for quizzes (`POST /api/admin/quizzes`, `DELETE /api/admin/quizzes`).
+  3. [x] Overhaul `RichTextEditor.astro` with an Affiliate Link modal dialog (`target="_blank"`, `rel="sponsored noopener"`), text align (left, center), and horizontal divider formatting.
+  4. [x] Fix inline image upload in `RichTextEditor.astro` with range preservation so photos insert directly where the cursor was positioned without losing input bindings.
+  5. [x] Add Draft vs Published status toggle and live preview modal before publishing stories or quizzes.
+  6. [x] Verify full build and end-to-end admin experience.
+
 
 
 
