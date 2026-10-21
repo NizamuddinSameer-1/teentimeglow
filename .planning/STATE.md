@@ -1,10 +1,10 @@
 # Current State: TeenTimeGlow Dedicated Standalone Pages
 
-**Last Updated:** 2026-10-18  
+**Last Updated:** 2026-10-21  
 **Branch:** `gsd-super/separate-pages`  
-**Current Milestone:** Milestone 3 (Google SEO, Analytics & Search Console Indexing)  
-**Current Phase Completed:** Phase 12: Unified Navigation, Global Links & Production Verification  
-**Next Phase:** Phase 13: Google Analytics 4, Search Console, Sitemap & Search Engine Optimization  
+**Current Milestone:** Milestone 4 (Rini's Zero-Tech Visual Admin Studio & Enhancements)  
+**Current Phase Completed:** Phase 14: Rini's Zero-Tech Visual Admin Studio (/admin)  
+**Next Phase:** Phase 15: Admin Studio 2.0 (Quiz Builder, Advanced Article Rich Editor & Affiliate Links)  
 **Mode:** Mode B — Milestone Pauses  
 
 ## Phase Tracking
@@ -22,12 +22,11 @@
 * [x] **Phase 12: Unified Navigation, Global Links & Production Verification** (COMPLETED & VERIFIED)
 * [x] **Phase 13: Google Analytics 4, Search Console, Sitemap & Search Engine Optimization** (COMPLETED & VERIFIED in Search Console)
 * [x] **Phase 14: Rini's Zero-Tech Visual Admin Studio (/admin)** (COMPLETED & VERIFIED)
+* [ ] **Phase 15: Admin Studio 2.0 (Quiz Builder, Advanced Article Rich Editor & Affiliate Links)** (Context gathered, ready for planning)
 
 ## Last Activity
-2026-10-18 — Phase 14 Executed & Verified:
-- Built complete Zero-Tech Visual Admin Studio for Rini at `/admin`:
-  - Plan 14-01: Direct photo upload API (`/api/admin/upload`), 30-day persistent session, PIN login (`2026`), and full CRUD API endpoints.
-  - Plan 14-02: Visual Rich-Text Editor (`RichTextEditor.astro`) with zero HTML/markdown needed, inline image insertion, and lookbook article studio.
-  - Plan 14-03: Live Website Text Customizer for hero copy & stats, dedicated tabs for Wallpapers, Curated Rankings, Daily Quotes, and Moderation Inbox.
-- Build verified with `npm run build` (0 errors in 12.84s).
-- Verified against all must-haves in `14-VERIFICATION.md`.
+2026-10-21 — Phase 15 Context Gathered:
+- Captured implementation decisions for dynamic interactive quiz builder (add/remove options, photo answers, archetype scoring points, and CRUD management).
+- Captured article rich-text editor requirements: Affiliate hyperlink dialog (`target="_blank"`, `rel="sponsored noopener"`), rock-solid inline photo insertion with caret position preservation, text alignment (left, center), and horizontal divider formatting.
+- Captured publishing workflows: Draft vs Published status toggle, Live Preview modal, and Quiz CRUD operations.
+
