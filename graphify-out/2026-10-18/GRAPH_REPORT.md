@@ -1,26 +1,28 @@
-# Graph Report - rini website  (2026-10-17)
+# Graph Report - rini website  (2026-10-18)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 134 files · ~1,107,286 words
+- Verdict: corpus is large enough that graph structure adds value.
+- Unclassified: 5 file(s) not represented in the graph (top: (none) 2, .example 1, .xml 1)
 
 ## Summary
-- 808 nodes · 967 edges · 68 communities (51 shown, 17 thin omitted)
-- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 48 edges (avg confidence: 0.9)
+- 964 nodes · 1154 edges · 101 communities (81 shown, 20 thin omitted)
+- Extraction: 94% EXTRACTED · 6% INFERRED · 0% AMBIGUOUS · INFERRED: 69 edges (avg confidence: 0.91)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `f0cea722`
+- Built from commit: `26819484`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- Aesthetic Navigation & Brand Identity
+- api.ts
 - public/scripts/main.js
 - src/scripts/main.js
 - getAdminClient
 - 3. Detailed Functional Requirements
 - Romantic Pink Hearts Interactions
-- Zero CLS & Lighthouse QA
+- package.json
 - Cinematic Preloader & Organic Blobs
 - Edge Rate Limiting
 - GA4 Analytics & Telemetry
@@ -41,7 +43,7 @@
 - Steps
 - File Template
 - PART 8 — Advanced and underexplored techniques (what's actually effective)
-- Overview of Phases
+- wallpapers/index.astro
 - GSD Commit Memory — Context Preservation 🧠
 - anti-ai-slop-frontend-playbook.md
 - FINAL DELIVERABLES
@@ -82,6 +84,39 @@
 - Google Analytics 4 Telemetry Integration
 - Cozy Study & Bedroom Aesthetic Decor
 - Glazed Donut Skincare Routines
+- pages/index.astro
+- astro
+- Tasks
+- dependencies
+- [slug].astro
+- Implementation Decisions
+- quotes/index.astro
+- getRankings
+- gallery/index.astro
+- BaseLayout.astro
+- edits/index.astro
+- scripts
+- Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics
+- Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics — Summary
+- Plan 5-1: Rini's Zero-Code Admin Cockpit, Authentication & Publishing System
+- Plan 6-1: Verification, Security Audit & Build Quality — Summary
+- Phase 12: Unified Navigation, Global Links & Production Verification — Verification
+- Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds
+- Phase 8: Dedicated Daily Mindset & Quotes Hub — Verification
+- Phase 9: Dedicated Curated Leaderboard — Verification
+- Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`) — Verification
+- Plan 12-1: Unified Navigation, Global Links & Full Production Verification — Summary
+- seed.cjs
+- devDependencies
+- Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds — Summary
+- Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page (`/quotes`)
+- Plan 9-1: Dedicated Curated Leaderboard Standalone Page (`/rankings`)
+- Plan 12-1: Unified Navigation, Global Links & Full Production Verification
+- Phase 13: Google SEO, Search Console & Analytics Integration Plan
+- Phase 13: Google SEO & Analytics Verification Report
+- login.astro
+- Plan 10-1: Editorial Magazine Lookbooks & Dynamic Reader Routes — Summary
+- Preloader.astro
 
 ## God Nodes (most connected - your core abstractions)
 1. `playTone()` - 19 edges
@@ -90,22 +125,22 @@
 4. `PART 12 — Google Stitch: deep dive` - 18 edges
 5. `showToast()` - 12 edges
 6. `showToast()` - 12 edges
-7. `siteContent` - 11 edges
-8. `Steps` - 11 edges
-9. `Steps` - 9 edges
-10. `Steps` - 9 edges
+7. `astro` - 11 edges
+8. `siteContent` - 11 edges
+9. `Steps` - 11 edges
+10. `CommunityCreation` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Tasks` --references--> `getActiveQuiz()`  [INFERRED]
-  .planning/phases/03-supabase-database-layer/03-01-PLAN.md → src/lib/api.ts
-- `Tasks` --references--> `getAdminClient()`  [INFERRED]
-  .planning/phases/03-supabase-database-layer/03-01-PLAN.md → src/lib/supabase.ts
+- `Tasks` --references--> `getRankings()`  [INFERRED]
+  .planning/phases/09-curated-leaderboard/09-01-PLAN.md → src/lib/api.ts
+- `Tasks` --references--> `getQuotes()`  [INFERRED]
+  .planning/phases/08-quotes-hub/08-01-PLAN.md → src/lib/api.ts
+- `Phase 8: Daily Mindset & Quotes Hub (`/quotes`) [x] (Completed: 2026-10-17)` --references--> `getQuotes()`  [INFERRED]
+  .planning/ROADMAP.md → src/lib/api.ts
+- `Must-Haves Check` --references--> `getCommunityCreations()`  [INFERRED]
+  .planning/phases/11-quiz-and-gallery/11-VERIFICATION.md → src/lib/api.ts
 - `Code Patterns (Model Resilience)` --references--> `getAdminClient()`  [INFERRED]
   .planning/phases/04-serverless-api-endpoints/04-01-PLAN.md → src/lib/supabase.ts
-- `Files Created/Modified` --references--> `getAdminClient()`  [INFERRED]
-  .planning/phases/04-serverless-api-endpoints/04-01-SUMMARY.md → src/lib/supabase.ts
-- `Notable Decisions` --references--> `getAdminClient()`  [INFERRED]
-  .planning/phases/04-serverless-api-endpoints/04-01-SUMMARY.md → src/lib/supabase.ts
 
 ## Import Cycles
 - None detected.
@@ -115,11 +150,11 @@
 - **Visitor-to-Admin Moderation & Security Shield** — brain_backend_rls_policies, brain_security_upload_hardening, brain_security_stored_xss_dompurify, brain_memory_adr_005_moderation_sandbox [EXTRACTED 1.00]
 - **Teen Time Glow Aesthetic Design System** — brain_designs_two_tone_brand, brain_designs_color_tokens, brain_designs_typography, brain_designs_floating_navbar, brain_designs_pink_hearts_fx [EXTRACTED 1.00]
 
-## Communities (68 total, 17 thin omitted)
+## Communities (101 total, 20 thin omitted)
 
-### Community 0 - "Aesthetic Navigation & Brand Identity"
-Cohesion: 0.06
-Nodes (49): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds, Tasks, Live Database Counts Verified, Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds — Summary, Verification Results (+41 more)
+### Community 0 - "api.ts"
+Cohesion: 0.19
+Nodes (19): What Was Built, categoryLabels, filterKeys, Props, fallbackCommunity, fallbackPosts, fallbackQuotes, fallbackRankings (+11 more)
 
 ### Community 1 - "public/scripts/main.js"
 Cohesion: 0.07
@@ -130,8 +165,8 @@ Cohesion: 0.07
 Nodes (44): ambientGlow, calculateQuizResult(), closeStoryModalDirect(), closeSubmitModalDirect(), copyQuote(), executeNavSearch(), filterEdits(), filterWallpapers() (+36 more)
 
 ### Community 3 - "getAdminClient"
-Cohesion: 0.05
-Nodes (35): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics, Tasks, Files Created/Modified, Notable Decisions, Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics — Summary (+27 more)
+Cohesion: 0.18
+Nodes (12): getAdminClient(), supabase, POST(), prerender, POST(), prerender, POST(), prerender (+4 more)
 
 ### Community 4 - "3. Detailed Functional Requirements"
 Cohesion: 0.04
@@ -141,9 +176,9 @@ Nodes (42): 📚 Master Document Directory, Master Knowledge Index — TeenTimeG
 Cohesion: 0.05
 Nodes (38): 1.1 Project State Detection, 1.2 Existing Codebase Analysis (For Existing Projects), 1.3 Environment Detection, 3.1 Auto-Generate Project Files, 3.2 Auto-Scaffold Project, 3.3 Auto-Plan All Phases, 3.4 Dependency Resolution, 4.1 Phase Execution Flow (+30 more)
 
-### Community 6 - "Zero CLS & Lighthouse QA"
-Cohesion: 0.05
-Nodes (35): dependencies, astro, @astrojs/react, @astrojs/vercel, dompurify, react, react-dom, @supabase/supabase-js (+27 more)
+### Community 6 - "package.json"
+Cohesion: 0.15
+Nodes (12): name, type, version, @astrojs/react, @astrojs/vercel, dompurify, react-dom, @types/dompurify (+4 more)
 
 ### Community 7 - "Cinematic Preloader & Organic Blobs"
 Cohesion: 0.06
@@ -154,16 +189,16 @@ Cohesion: 0.09
 Nodes (18): colors, commitMemory(), ensureMemoryDir(), extractField(), extractPhases(), findPlanningDir(), formatSize(), fs (+10 more)
 
 ### Community 9 - "GA4 Analytics & Telemetry"
-Cohesion: 0.11
-Nodes (8): adminClient, approvedList, pendingList, postsList, prerender, quotesList, wallpapersList, prerender
+Cohesion: 0.13
+Nodes (7): adminClient, approvedList, pendingList, postsList, prerender, quotesList, wallpapersList
 
 ### Community 10 - "Cozy Bedroom & Study Decor"
 Cohesion: 0.11
 Nodes (18): 12.A The "Stitch magic" — what the best results actually did, 12.B Stitch prompt engineering — what actually produces better output, 12.C "Don't make it look AI-generated" — Stitch-specific techniques, 12.D Reference hacks, 12.E The multi-pass workflow (verified optimal strategy), 12.F "Design director mode" — does role prompting work?, 12.G Steal the principles, not the design, 12.H Design-system engineering in Stitch — making 10 screens feel like one product (+10 more)
 
 ### Community 11 - "Glazed Donut Skincare Routines"
-Cohesion: 0.12
-Nodes (11): react, CategoryOption, CommunitySubmitModalProps, defaultCategories, defaultOutcomes, defaultQuestions, QuizOption, QuizOutcome (+3 more)
+Cohesion: 0.07
+Nodes (22): Objective, Plan 11-1: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`), Tasks, Files Created/Modified, Notable Decisions, Plan 11-1: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`) — Summary, Verification Results, react (+14 more)
 
 ### Community 12 - "Steps"
 Cohesion: 0.14
@@ -225,9 +260,9 @@ Nodes (7): Accumulated Context, Current Position, File Template, Performance Met
 Cohesion: 0.25
 Nodes (8): 8.1 Encode taste as strict, explainable rules — packaged as an agent skill ⭐ strongest new technique, 8.2 Screenshot-diff self-critique loops — officially documented, rarely practiced, 8.3 Generate competing directions; refuse the median, 8.4 Treat "tasteful defaults" as tells too — and gate in CI, 8.5 Reference-first and named-direction specification, 8.6 Front-load plan review; budget prompts for it, 8.7 Other techniques — verdicts, PART 8 — Advanced and underexplored techniques (what's actually effective)
 
-### Community 27 - "Overview of Phases"
-Cohesion: 0.25
-Nodes (7): Overview of Phases, Phase 1: Astro Scaffolding & Build Pipeline, Phase 2: Modular Frontend Components & Design Parity, Phase 4: Serverless API Endpoints & Community Uploads [x] (Completed: 2026-10-17), Phase 5: Rini's Zero-Code Admin Dashboard (`/admin`) [x] (Completed: 2026-10-17), Phase 6: Verification, Security Audit & Build Quality [x] (Completed: 2026-10-17), Roadmap: TeenTimeGlow Astro & Backend Migration
+### Community 27 - "wallpapers/index.astro"
+Cohesion: 0.06
+Nodes (29): Objective, Plan 7-1: Dedicated 4K Wallpaper Vault Standalone Page (`/wallpapers`), Tasks, Plan 7-1: Dedicated 4K Wallpaper Vault Standalone Page — Summary, What Was Built, Phase 7: Dedicated 4K Wallpaper Vault — Verification, Verification Checklist, Milestone 2: Dedicated Standalone Pages (+21 more)
 
 ### Community 28 - "GSD Commit Memory — Context Preservation 🧠"
 Cohesion: 0.29
@@ -319,27 +354,147 @@ Nodes (4): PART 10 — The ultimate anti-AI-slop workflows, Workflow A — FAST 
 
 ### Community 50 - "Current State: TeenTimeGlow Astro & Backend Migration"
 Cohesion: 0.50
-Nodes (3): Current State: TeenTimeGlow Astro & Backend Migration, Last Activity, Phase Tracking
+Nodes (3): Current State: TeenTimeGlow Dedicated Standalone Pages, Last Activity, Phase Tracking
+
+### Community 68 - "pages/index.astro"
+Cohesion: 0.17
+Nodes (10): Props, Props, Props, Props, Props, Props, Props, StatItem (+2 more)
+
+### Community 69 - "astro"
+Cohesion: 0.15
+Nodes (5): astro, prerender, prerender, prerender, prerender
+
+### Community 70 - "Tasks"
+Cohesion: 0.18
+Nodes (10): Tasks, Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page — Summary, What Was Built, Objective, Plan 10-1: Editorial Magazine Lookbooks & Dynamic Reader Routes (`/edits` & `/edits/[slug]`), Tasks, Phase 3: Supabase Database Layer & Fallback Seeds, getActiveQuiz() (+2 more)
+
+### Community 71 - "dependencies"
+Cohesion: 0.20
+Nodes (10): dependencies, astro, @astrojs/react, @astrojs/vercel, dompurify, react, react-dom, @supabase/supabase-js (+2 more)
+
+### Community 72 - "[slug].astro"
+Cohesion: 0.20
+Nodes (8): Gaps, Must-Haves Check, Phase 10: Editorial Magazine & Full Article Reader — Verification, Requirements Coverage, getPostBySlug(), categoryLabels, prerender, relatedPosts
+
+### Community 73 - "Implementation Decisions"
+Cohesion: 0.20
+Nodes (9): 1. Domain & Canonical URLs, 2. Google Analytics 4 (GA4) Tracking, 3. Google Search Console Verification, 4. XML Sitemap & Robots.txt, 5. Google Structured Data (JSON-LD Schemas), 6. User Step-by-Step Action Guide, Implementation Decisions, Phase 13: Google Analytics 4, Search Console, Sitemap & Search Engine Optimization - Context (+1 more)
+
+### Community 74 - "quotes/index.astro"
+Cohesion: 0.24
+Nodes (6): copyFeaturedQuote(), filterQuotesByMood(), prerender, quotesJson, resetQuoteFilters(), shareFeaturedQuote()
+
+### Community 75 - "getRankings"
+Cohesion: 0.22
+Nodes (7): Plan 9-1: Dedicated Curated Leaderboard Standalone Page — Summary, What Was Built, Phase 9: Curated Leaderboard (`/rankings`) [x] (Completed: 2026-10-17), getRankings(), audiobooks, prerender, primeSeries
+
+### Community 76 - "gallery/index.astro"
+Cohesion: 0.22
+Nodes (6): What Was Built, getCommunityCreations(), categoryCounts, categoryDisplayMap, prerender, totalLikes
+
+### Community 77 - "BaseLayout.astro"
+Cohesion: 0.29
+Nodes (3): NavLink, Props, Props
+
+### Community 78 - "edits/index.astro"
+Cohesion: 0.33
+Nodes (5): categoryLabels, filterEditsPage(), prerender, remainingPosts, resetEditsFilters()
+
+### Community 79 - "scripts"
+Cohesion: 0.33
+Nodes (6): scripts, astro, build, dev, preview, start
+
+### Community 80 - "Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics"
+Cohesion: 0.33
+Nodes (5): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics, Tasks
+
+### Community 81 - "Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics — Summary"
+Cohesion: 0.33
+Nodes (5): Files Created/Modified, Notable Decisions, Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics — Summary, Verification Results, What Was Built
+
+### Community 82 - "Plan 5-1: Rini's Zero-Code Admin Cockpit, Authentication & Publishing System"
+Cohesion: 0.33
+Nodes (5): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 5-1: Rini's Zero-Code Admin Cockpit, Authentication & Publishing System, Tasks
+
+### Community 83 - "Plan 6-1: Verification, Security Audit & Build Quality — Summary"
+Cohesion: 0.33
+Nodes (5): Files Created/Modified, Notable Decisions, Plan 6-1: Verification, Security Audit & Build Quality — Summary, Verification Results, What Was Built & Hardened
+
+### Community 84 - "Phase 12: Unified Navigation, Global Links & Production Verification — Verification"
+Cohesion: 0.33
+Nodes (5): Gaps, Milestone 2 Deliverables Summary, Must-Haves Check, Phase 12: Unified Navigation, Global Links & Production Verification — Verification, Requirements Coverage
+
+### Community 85 - "Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds"
+Cohesion: 0.40
+Nodes (4): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds
+
+### Community 86 - "Phase 8: Dedicated Daily Mindset & Quotes Hub — Verification"
+Cohesion: 0.40
+Nodes (4): Gaps, Must-Haves Check, Phase 8: Dedicated Daily Mindset & Quotes Hub — Verification, Requirements Coverage
+
+### Community 87 - "Phase 9: Dedicated Curated Leaderboard — Verification"
+Cohesion: 0.40
+Nodes (4): Gaps, Must-Haves Check, Phase 9: Dedicated Curated Leaderboard — Verification, Requirements Coverage
+
+### Community 88 - "Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`) — Verification"
+Cohesion: 0.40
+Nodes (4): Gaps, Must-Haves Check, Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`) — Verification, Requirements Coverage
+
+### Community 89 - "Plan 12-1: Unified Navigation, Global Links & Full Production Verification — Summary"
+Cohesion: 0.40
+Nodes (4): Files Created/Modified, Plan 12-1: Unified Navigation, Global Links & Full Production Verification — Summary, Verification Results, What Was Built
+
+### Community 90 - "seed.cjs"
+Cohesion: 0.40
+Nodes (3): @supabase/supabase-js, { createClient }, supabase
+
+### Community 91 - "devDependencies"
+Cohesion: 0.50
+Nodes (4): devDependencies, @types/dompurify, @types/node, typescript
+
+### Community 92 - "Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds — Summary"
+Cohesion: 0.50
+Nodes (3): Live Database Counts Verified, Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds — Summary, Verification Results
+
+### Community 93 - "Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page (`/quotes`)"
+Cohesion: 0.50
+Nodes (3): Objective, Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page (`/quotes`), Tasks
+
+### Community 94 - "Plan 9-1: Dedicated Curated Leaderboard Standalone Page (`/rankings`)"
+Cohesion: 0.50
+Nodes (3): Objective, Plan 9-1: Dedicated Curated Leaderboard Standalone Page (`/rankings`), Tasks
+
+### Community 95 - "Plan 12-1: Unified Navigation, Global Links & Full Production Verification"
+Cohesion: 0.50
+Nodes (3): Objective, Plan 12-1: Unified Navigation, Global Links & Full Production Verification, Tasks
+
+### Community 96 - "Phase 13: Google SEO, Search Console & Analytics Integration Plan"
+Cohesion: 0.50
+Nodes (3): Core Deliverables, Goal, Phase 13: Google SEO, Search Console & Analytics Integration Plan
+
+### Community 97 - "Phase 13: Google SEO & Analytics Verification Report"
+Cohesion: 0.50
+Nodes (3): Next User Action, Phase 13: Google SEO & Analytics Verification Report, Verification Checklist
 
 ## Knowledge Gaps
-- **32 isolated node(s):** `astro/tsconfigs/strict`, `dompurify`, `react-dom`, `@types/dompurify`, `@types/node` (+27 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 514 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **17 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **32 isolated node(s):** `@types/react`, `@types/react-dom`, `dompurify`, `react-dom`, `@types/dompurify` (+27 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 606 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `getAdminClient()` connect `getAdminClient` to `Aesthetic Navigation & Brand Identity`, `GA4 Analytics & Telemetry`?**
-  _High betweenness centrality (0.018) - this node is a cross-community bridge._
+- **Why does `getAdminClient()` connect `getAdminClient` to `Tasks`, `GA4 Analytics & Telemetry`, `Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics`, `Plan 4-1: Serverless API Endpoints, Community Submissions & Analytics — Summary`, `Plan 5-1: Rini's Zero-Code Admin Cockpit, Authentication & Publishing System`, `Plan 6-1: Verification, Security Audit & Build Quality — Summary`?**
+  _High betweenness centrality (0.021) - this node is a cross-community bridge._
 - **Are the 6 inferred relationships involving `getAdminClient()` (e.g. with `Tasks` and `Code Patterns (Model Resilience)`) actually correct?**
   _`getAdminClient()` has 6 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `astro/tsconfigs/strict`, `dompurify`, `react-dom` to the rest of the system?**
+- **What connects `@types/react`, `@types/react-dom`, `dompurify` to the rest of the system?**
   _32 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Aesthetic Navigation & Brand Identity` be split into smaller, more focused modules?**
-  _Cohesion score 0.05926251097453907 - nodes in this community are weakly interconnected._
-- **Why does `@supabase/supabase-js` connect `Zero CLS & Lighthouse QA` to `getAdminClient`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
 - **Should `public/scripts/main.js` be split into smaller, more focused modules?**
   _Cohesion score 0.07058001397624039 - nodes in this community are weakly interconnected._
-- **Why does `astro` connect `getAdminClient` to `Zero CLS & Lighthouse QA`?**
-  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+- **Why does `@supabase/supabase-js` connect `seed.cjs` to `getAdminClient`, `package.json`?**
+  _High betweenness centrality (0.014) - this node is a cross-community bridge._
+- **Should `src/scripts/main.js` be split into smaller, more focused modules?**
+  _Cohesion score 0.07058001397624039 - nodes in this community are weakly interconnected._
+- **Why does `astro` connect `astro` to `getAdminClient`, `package.json`?**
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._

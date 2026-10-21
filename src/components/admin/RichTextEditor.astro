@@ -205,8 +205,7 @@ const {
 </style>
 
 <script is:inline>
-  // Handle toolbar formatting buttons
-  document.addEventListener('DOMContentLoaded', () => {
+  function initRichEditor() {
     const toolbar = document.querySelector('.rich-toolbar');
     const canvas = document.getElementById('visualEditorCanvas');
     const output = document.getElementById('richEditorOutput');
@@ -240,7 +239,13 @@ const {
     window.getRichEditorContent = function() {
       return canvas ? canvas.innerHTML : '';
     };
-  });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRichEditor);
+  } else {
+    initRichEditor();
+  }
 
   // Handle inline image upload inside article body
   async function handleInlinePhotoUpload(event) {
@@ -259,7 +264,10 @@ const {
         method: 'POST',
         body: formData
       });
-      const data = await res.json();
+      const contentType = res.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? await res.json()
+        : { success: false, error: (await res.text()) || `Upload error (${res.status})` };
 
       if (data.success && data.url) {
         document.execCommand('insertImage', false, data.url);

@@ -222,7 +222,10 @@ if (adminSession && adminSession === expectedSecret) {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ password, rememberMe })
         });
-        const data = await res.json();
+        const contentType = res.headers.get('content-type') || '';
+        const data = contentType.includes('application/json')
+          ? await res.json()
+          : { error: (await res.text()) || 'Login failed' };
 
         if (data.success) {
           window.location.href = '/admin';
