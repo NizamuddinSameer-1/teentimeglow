@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import QuizPlayer from '@/components/interactive/QuizPlayer';
+import { getActiveQuiz } from '@/lib/api';
 
 export const prerender = false;
 
@@ -78,11 +79,32 @@ const archetypes = [
     matchedWallpaper: 'Vintage Editorial Studio Glow'
   }
 ];
+
+// Fetch custom active quiz from Supabase (or seamless fallback)
+const { quiz: customQuiz, questions: customDbQuestions } = await getActiveQuiz();
+
+const hasCustomQuestions = customQuiz && Array.isArray(customDbQuestions) && customDbQuestions.length > 0;
+const customQuestions = hasCustomQuestions
+  ? customDbQuestions.map((q, idx) => ({
+      id: idx + 1,
+      indicator: q.indicator || `Step ${idx + 1}`,
+      question: q.question_text,
+      options: (q.options || []).map((opt) => ({
+        text: opt.option_text,
+        outcomeKey: opt.outcome_key || 'sunset_muse'
+      }))
+    }))
+  : undefined;
+
+const quizTitle = customQuiz?.title || "Discover Your Aesthetic Aura";
+const quizSubtitle = customQuiz?.description || "Answer intuitive questions to find your aesthetic archetype, personal color swatches, wardrobe essentials, and signature soundtrack curated by Rini.";
+const pageTitle = `${quizTitle} — Interactive Teen Aesthetic Test | TeenTimeGlow by Rini`;
+const pageDescription = quizSubtitle;
 ---
 
 <BaseLayout
-  title="Discover Your Glow Aura Quiz — Interactive Teen Aesthetic Test | TeenTimeGlow by Rini"
-  description="Take Rini's 3-minute aesthetic aura quiz to uncover your signature teen glow vibe, personal color palette, playlist soundtrack, and curated fashion lookbook recommendations."
+  title={pageTitle}
+  description={pageDescription}
 >
   <main class="quiz-page-container">
     <!-- Breadcrumb & Back Bar -->
@@ -104,9 +126,9 @@ const archetypes = [
           <span class="section-pill-tag">✦ INTERACTIVE GLOW EXPERIENCE</span>
           <span class="hero-live-badge">✦ 14,200+ TEENS QUIZZED</span>
         </div>
-        <h1 class="quiz-hero-title">Discover Your Aesthetic Aura.<br /><span class="glow-gradient-text">Unveil Your Signature Glow.</span></h1>
+        <h1 class="quiz-hero-title">{quizTitle}.<br /><span class="glow-gradient-text">Unveil Your Signature Glow.</span></h1>
         <p class="quiz-hero-subtitle">
-          Answer 3 intuitive questions to find your aesthetic archetype, personal color swatches, wardrobe essentials, and signature soundtrack curated by Rini.
+          {quizSubtitle}
         </p>
 
         <!-- Trust Badges Strip -->
@@ -138,9 +160,10 @@ const archetypes = [
           <QuizPlayer
             client:load
             headerPill="✨ Interactive Aesthetic Test"
-            heading="Which Teenage Aesthetic Truly Matches Your Spirit?"
-            description="Trust your initial instinct. Each choice decodes your morning ritual, style essentials, and soundtrack vibe."
-            trustPills={['✦ 3 Quick Steps', '✦ Instant Aura Card', '✦ Curated Recommendations']}
+            heading={quizTitle}
+            description={quizSubtitle}
+            trustPills={[`✦ ${customQuestions ? customQuestions.length : 3} Quick Steps`, '✦ Instant Aura Card', '✦ Curated Recommendations']}
+            questions={customQuestions}
           />
         </div>
       </div>
