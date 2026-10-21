@@ -3,7 +3,7 @@ import '@/styles/global.css';
 import { supabase, getAdminClient } from '@/lib/supabase';
 import RichTextEditor from '@/components/admin/RichTextEditor.astro';
 import { siteContent } from '@/config/siteContent';
-import type { CommunityCreation, Post, Wallpaper, StoryMemeQuote, Ranking } from '@/types/database';
+import type { CommunityCreation, Post, Wallpaper, StoryMemeQuote, Ranking, Quiz } from '@/types/database';
 
 export const prerender = false;
 
@@ -24,7 +24,8 @@ const [
   { data: wallpapers },
   { data: quotes },
   { data: rankings },
-  { data: settingsData }
+  { data: settingsData },
+  { data: quizzesData }
 ] = await Promise.all([
   adminClient.from('community_creations').select('*').eq('status', 'pending').order('created_at', { ascending: false }),
   adminClient.from('community_creations').select('*').eq('status', 'approved').order('created_at', { ascending: false }),
@@ -32,7 +33,15 @@ const [
   adminClient.from('wallpapers').select('*').order('created_at', { ascending: false }),
   adminClient.from('stories_memes_quotes').select('*').order('created_at', { ascending: false }),
   adminClient.from('rankings').select('*').order('rank_order', { ascending: true }),
-  adminClient.from('site_settings').select('*').eq('key', 'homepage_copy').single()
+  adminClient.from('site_settings').select('*').eq('key', 'homepage_copy').single(),
+  adminClient.from('quizzes').select(`
+    *,
+    questions:quiz_questions (
+      *,
+      options:quiz_options (*)
+    ),
+    outcomes:quiz_outcomes (*)
+  `).order('created_at', { ascending: false })
 ]);
 
 const pendingList = (pendingCreations || []) as CommunityCreation[];
@@ -41,6 +50,7 @@ const postsList = (posts || []) as Post[];
 const wallpapersList = (wallpapers || []) as Wallpaper[];
 const quotesList = (quotes || []) as StoryMemeQuote[];
 const rankingsList = (rankings || []) as Ranking[];
+const quizzesList = (quizzesData || []) as any[];
 const currentSettings = settingsData?.value || {
   heroBadge: siteContent.hero.issueBadge,
   heroHeading: siteContent.hero.mainHeadingHtml,
@@ -610,6 +620,162 @@ const currentSettings = settingsData?.value || {
       text-decoration: underline;
       font-weight: 700;
     }
+
+    /* Quiz Studio & Builder Styles */
+    .quiz-question-card {
+      background: #FAFAF9;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 24px;
+      position: relative;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .quiz-question-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #E5E7EB;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .quiz-question-title {
+      font-weight: 800;
+      font-size: 1.05rem;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quiz-options-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 14px;
+      margin-bottom: 16px;
+    }
+
+    .quiz-option-row {
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: 85px 1.5fr 1.2fr auto;
+      gap: 12px;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    @media (max-width: 900px) {
+      .quiz-option-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .quiz-option-badge {
+      background: #F3F4F6;
+      color: #4B5563;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 6px 10px;
+      border-radius: 8px;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .btn-add-option {
+      background: #FFFFFF;
+      border: 1.5px dashed var(--sunset-accent);
+      color: var(--sunset-accent);
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-add-option:hover {
+      background: rgba(232, 93, 4, 0.06);
+    }
+
+    .btn-add-question {
+      background: #111827;
+      color: #FFFFFF;
+      border: none;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-add-question:hover {
+      background: #000000;
+      transform: translateY(-1px);
+    }
+
+    .btn-order-icon {
+      background: #F3F4F6;
+      border: 1px solid #E5E7EB;
+      border-radius: 8px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      transition: background 0.15s;
+    }
+
+    .btn-order-icon:hover {
+      background: #E5E7EB;
+    }
+
+    /* Quiz Preview Interactive Styles */
+    .preview-quiz-option-card {
+      background: #FFFFFF;
+      border: 2px solid #E5E7EB;
+      border-radius: 16px;
+      padding: 18px 22px;
+      text-align: left;
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: #111827;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .preview-quiz-option-card:hover {
+      border-color: var(--sunset-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(232, 93, 4, 0.12);
+    }
+
+    .preview-quiz-option-card.selected {
+      border-color: var(--sunset-accent);
+      background: #FFF8F0;
+    }
   </style>
 </head>
 <body>
@@ -639,6 +805,10 @@ const currentSettings = settingsData?.value || {
         <div class="stat-card-val stat-highlight">{postsList.length}</div>
       </div>
       <div class="stat-card">
+        <div class="stat-card-title">Interactive Quizzes</div>
+        <div class="stat-card-val stat-highlight">{quizzesList.length}</div>
+      </div>
+      <div class="stat-card">
         <div class="stat-card-title">4K Wallpapers</div>
         <div class="stat-card-val">{wallpapersList.length}</div>
       </div>
@@ -648,13 +818,14 @@ const currentSettings = settingsData?.value || {
       </div>
       <div class="stat-card">
         <div class="stat-card-title">Pending Fan Submissions</div>
-        <div class="stat-card-val stat-highlight">{pendingList.length}</div>
+        <div class="stat-card-val">{pendingList.length}</div>
       </div>
     </div>
 
     <!-- Studio Navigation Tabs -->
     <div class="admin-tabs">
       <button class="admin-tab-btn active" onclick="switchTab('articles', this)">📝 Magazine Stories</button>
+      <button class="admin-tab-btn" onclick="switchTab('quizzes', this)">🔮 Interactive Quizzes ({quizzesList.length})</button>
       <button class="admin-tab-btn" onclick="switchTab('copy', this)">🌸 Live Website Text</button>
       <button class="admin-tab-btn" onclick="switchTab('wallpapers', this)">🖼️ 4K Wallpapers Vault</button>
       <button class="admin-tab-btn" onclick="switchTab('rankings', this)">🏆 Curated Leaderboard</button>
@@ -759,6 +930,148 @@ const currentSettings = settingsData?.value || {
                   type="button"
                   class="btn-card-action btn-card-delete"
                   onclick={`deletePost('${post.id}')`}
+                >
+                  🗑️ Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- ==================== TAB: INTERACTIVE QUIZZES ==================== -->
+    <div id="tab-quizzes" class="admin-panel">
+      <div class="admin-card">
+        <h2 id="quizFormHeading" style="font-size: 1.4rem; font-weight: 800; margin-top: 0; margin-bottom: 6px;">🔮 Interactive Quiz Studio & Builder</h2>
+        <p style="font-size: 0.9rem; color: #6B7280; margin-bottom: 24px;">
+          Create multi-step personality & aesthetic aura tests. You can add questions, add custom answer options (Option 1, 2, 3, 4+), and map each option to an aesthetic archetype.
+        </p>
+
+        <form id="quizForm" onsubmit="handleSaveQuiz(event)">
+          <input type="hidden" id="editQuizId" value="" />
+
+          <div class="form-group">
+            <label class="form-label">Quiz Title *</label>
+            <input type="text" id="quizTitle" required placeholder="e.g. Discover Your Aesthetic Aura" class="form-input" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Quiz Teaser / Description *</label>
+            <textarea id="quizDescription" rows="2" required placeholder="Short summary explaining what readers will discover..." class="form-textarea"></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <!-- Cover Photo Upload for Quiz -->
+            <div class="form-group">
+              <label class="form-label">Cover Photo (Upload from device)</label>
+              <div class="photo-upload-box" onclick="document.getElementById('quizCoverFile').click()">
+                <div id="quizCoverUploadText" style="font-weight: 700; color: #4B5563;">📸 Tap to Choose Quiz Cover Photo</div>
+                <input type="file" id="quizCoverFile" accept="image/*" style="display: none;" onchange="handleQuizCoverUpload(event)" />
+                <img id="quizCoverPreview" src="/assets/arrival-1.jpg" class="photo-preview-thumb" style="display: block;" />
+                <input type="hidden" id="quizCoverUrl" value="/assets/arrival-1.jpg" />
+              </div>
+            </div>
+
+            <!-- Quiz Status Switch -->
+            <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; background: #FAFAF9; padding: 20px; border-radius: 16px; border: 1.5px solid #E5E7EB;">
+              <label style="font-weight: 800; font-size: 0.95rem; margin-bottom: 8px; color: #111827;">Live Status on Website</label>
+              <p style="font-size: 0.82rem; color: #6B7280; margin-bottom: 14px;">When checked, this quiz will immediately become the active test on the public <code>/quiz</code> page.</p>
+              <label style="display: flex; align-items: center; gap: 10px; font-weight: 700; cursor: pointer;">
+                <input type="checkbox" id="quizIsActive" checked style="width: 18px; height: 18px; accent-color: var(--sunset-accent);" />
+                <span>🟢 Set as Active Quiz on /quiz</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Dynamic Question Builder Container -->
+          <div style="margin-top: 32px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+              <div>
+                <h3 style="font-size: 1.2rem; font-weight: 800; margin: 0;">🔮 Questions & Options Builder</h3>
+                <span style="font-size: 0.85rem; color: #6B7280;">Add questions and configure custom options (Option 1, 2, 3, 4+)</span>
+              </div>
+              <button type="button" class="btn-add-question" onclick="addQuestion()" style="margin-bottom: 0;">
+                <span>➕ Add Another Question</span>
+              </button>
+            </div>
+
+            <div id="quizQuestionsContainer">
+              <!-- Dynamically populated by renderQuizQuestionsBuilder() -->
+            </div>
+
+            <button type="button" class="btn-add-question" onclick="addQuestion()" style="width: 100%; justify-content: center; margin-top: 8px;">
+              <span>➕ Add New Question to Quiz</span>
+            </button>
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display: flex; gap: 12px; align-items: center; margin-top: 28px; flex-wrap: wrap;">
+            <button type="submit" id="btnSaveQuiz" class="btn-submit-action">
+              <span>✨ Save & Publish Quiz</span>
+            </button>
+            <button type="button" id="btnPreviewQuiz" class="btn-preview-action" onclick="openQuizPreviewModal()">
+              <span>👁️ Test & Preview Quiz</span>
+            </button>
+            <button type="button" id="btnCancelQuizEdit" class="btn-cancel-edit" onclick="cancelQuizEdit()">Cancel Edit</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Existing Quizzes Catalog -->
+      <h3 style="font-size: 1.25rem; font-weight: 800; margin: 36px 0 16px 0;">All Quizzes ({quizzesList.length})</h3>
+      <div class="items-grid">
+        {quizzesList.map((quiz) => (
+          <div class="item-card" id={`quiz-card-${quiz.id}`}>
+            <img src={quiz.cover_image_url || '/assets/arrival-1.jpg'} alt={quiz.title} class="item-card-thumb" />
+            <div class="item-card-body">
+              <div>
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px;">
+                  <span style="font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: var(--sunset-accent);">
+                    {(quiz.questions || []).length} Questions
+                  </span>
+                  {quiz.is_active ? (
+                    <span class="status-badge-live">🟢 ACTIVE ON /QUIZ</span>
+                  ) : (
+                    <span class="status-badge-draft">⚪ INACTIVE</span>
+                  )}
+                </div>
+                <h4 style="font-size: 1rem; font-weight: 700; margin: 6px 0;">{quiz.title}</h4>
+                <p style="font-size: 0.82rem; color: #6B7280; margin: 0 0 12px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                  {quiz.description || 'No description entered.'}
+                </p>
+              </div>
+              <div style="display: flex; gap: 8px; border-top: 1px solid #F3F4F6; padding-top: 12px; flex-wrap: wrap;">
+                <button
+                  type="button"
+                  class="btn-card-action btn-card-edit"
+                  onclick={`editQuiz(${JSON.stringify({
+                    id: quiz.id,
+                    title: quiz.title,
+                    description: quiz.description,
+                    cover_image_url: quiz.cover_image_url,
+                    is_active: quiz.is_active,
+                    questions: quiz.questions || []
+                  })})`}
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  type="button"
+                  class="btn-card-action"
+                  style="background: #F3F4F6; color: #374151;"
+                  onclick={`previewExistingQuiz(${JSON.stringify({
+                    title: quiz.title,
+                    description: quiz.description,
+                    questions: quiz.questions || []
+                  })})`}
+                >
+                  👁️ Test
+                </button>
+                <button
+                  type="button"
+                  class="btn-card-action btn-card-delete"
+                  onclick={`deleteQuiz('${quiz.id}')`}
                 >
                   🗑️ Delete
                 </button>
@@ -1484,6 +1797,513 @@ const currentSettings = settingsData?.value || {
         alert('Error: ' + err.message);
       }
     }
+
+    // ==================== QUIZ BUILDER STATE & FUNCTIONS ====================
+    let currentQuizQuestions = [
+      {
+        indicator: 'Step 1: Morning Ritual',
+        question_text: 'What is your dream Saturday morning ritual?',
+        image_url: '',
+        options: [
+          { option_text: '🍵 Iced matcha latte & slow aesthetic journaling', outcome_key: 'clean_girl', image_url: '' },
+          { option_text: '🧥 Oversized hoodie & thrift store hunting', outcome_key: 'downtown', image_url: '' },
+          { option_text: '🌅 Golden hour rooftop photography with friends', outcome_key: 'sunset_muse', image_url: '' },
+          { option_text: '🎧 Cozy bed, fairy lights & nostalgic vinyl records', outcome_key: 'cozy_vanilla', image_url: '' }
+        ]
+      },
+      {
+        indicator: 'Step 2: Signature Style',
+        question_text: 'Pick your ultimate go-to wardrobe essential:',
+        image_url: '',
+        options: [
+          { option_text: '✨ Glazed lip oil, gold hoops & clean linen', outcome_key: 'clean_girl', image_url: '' },
+          { option_text: '👟 Chunky vintage sneakers & boxy denim', outcome_key: 'downtown', image_url: '' },
+          { option_text: '🧥 Flowing sunset trench coat & tinted sunglasses', outcome_key: 'sunset_muse', image_url: '' },
+          { option_text: '🧶 Soft chunky knit cardigan & wired earphones', outcome_key: 'cozy_vanilla', image_url: '' }
+        ]
+      },
+      {
+        indicator: 'Step 3: Soundtrack',
+        question_text: 'What soundtrack best matches your soul right now?',
+        image_url: '',
+        options: [
+          { option_text: '🎶 Indie bedroom pop & coastal acoustic melodies', outcome_key: 'sunset_muse', image_url: '' },
+          { option_text: '🎧 Dreamy atmospheric lo-fi beats & soft R&B', outcome_key: 'clean_girl', image_url: '' },
+          { option_text: '🎸 70s rock revival, vinyl anthems & energetic guitar', outcome_key: 'downtown', image_url: '' },
+          { option_text: '☕ Warm acoustic folk, Gracie Abrams & soft rain melodies', outcome_key: 'cozy_vanilla', image_url: '' }
+        ]
+      }
+    ];
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function renderQuizQuestionsBuilder() {
+      const container = document.getElementById('quizQuestionsContainer');
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      currentQuizQuestions.forEach((q, qIdx) => {
+        const qCard = document.createElement('div');
+        qCard.className = 'quiz-question-card';
+        qCard.id = `quiz-question-${qIdx}`;
+
+        const isFirst = qIdx === 0;
+        const isLast = qIdx === currentQuizQuestions.length - 1;
+
+        qCard.innerHTML = `
+          <div class="quiz-question-header">
+            <div class="quiz-question-title">
+              <span style="background: var(--sunset-accent); color:#FFF; font-size:0.75rem; padding:3px 8px; border-radius:6px;">Q${qIdx + 1}</span>
+              <span>Question #${qIdx + 1}</span>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button type="button" class="btn-order-icon" onclick="moveQuestion(${qIdx}, -1)" ${isFirst ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} title="Move Up">▲</button>
+              <button type="button" class="btn-order-icon" onclick="moveQuestion(${qIdx}, 1)" ${isLast ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''} title="Move Down">▼</button>
+              <button type="button" class="btn-card-action btn-card-delete" onclick="deleteQuestion(${qIdx})" ${currentQuizQuestions.length <= 1 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''}>
+                🗑️ Delete Question
+              </button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 14px; margin-bottom: 14px;">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.8rem;">Step Indicator Pill</label>
+              <input type="text" class="form-input q-indicator-input" data-qidx="${qIdx}" value="${escapeHtml(q.indicator || `Step ${qIdx + 1}`)}" placeholder="e.g. Step 1: Morning Ritual" />
+            </div>
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" style="font-size: 0.8rem;">Question Prompt / Headline *</label>
+              <input type="text" class="form-input q-text-input" data-qidx="${qIdx}" required value="${escapeHtml(q.question_text || '')}" placeholder="e.g. What is your dream Saturday morning ritual?" />
+            </div>
+          </div>
+
+          <!-- Options Container -->
+          <div style="margin-top: 14px;">
+            <label class="form-label" style="font-size: 0.82rem; margin-bottom: 8px;">
+              Answer Options (${q.options.length}):
+            </label>
+            <div class="quiz-options-container" id="options-for-q-${qIdx}">
+              ${q.options.map((opt, optIdx) => `
+                <div class="quiz-option-row">
+                  <div class="quiz-option-badge">Option ${optIdx + 1}</div>
+                  <div>
+                    <input
+                      type="text"
+                      class="form-input opt-text-input"
+                      data-qidx="${qIdx}"
+                      data-optidx="${optIdx}"
+                      required
+                      value="${escapeHtml(opt.option_text || '')}"
+                      placeholder="e.g. Option ${optIdx + 1} text..."
+                    />
+                  </div>
+                  <div>
+                    <select class="form-select opt-archetype-select" data-qidx="${qIdx}" data-optidx="${optIdx}">
+                      <option value="sunset_muse" ${opt.outcome_key === 'sunset_muse' ? 'selected' : ''}>Sunset Muse ✨</option>
+                      <option value="clean_girl" ${opt.outcome_key === 'clean_girl' ? 'selected' : ''}>Clean Girl Dew 🍵</option>
+                      <option value="cozy_vanilla" ${opt.outcome_key === 'cozy_vanilla' ? 'selected' : ''}>Vanilla Warmth 🍦</option>
+                      <option value="downtown" ${opt.outcome_key === 'downtown' ? 'selected' : ''}>Downtown Indie 🎸</option>
+                    </select>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn-card-action btn-card-delete"
+                      onclick="removeOption(${qIdx}, ${optIdx})"
+                      ${q.options.length <= 2 ? 'disabled style="opacity:0.4; cursor:not-allowed;"' : ''}
+                      title="Remove option"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <button type="button" class="btn-add-option" onclick="addOption(${qIdx})">
+              <span>➕ Add Option ${q.options.length + 1}</span>
+            </button>
+          </div>
+        `;
+
+        container.appendChild(qCard);
+      });
+    }
+
+    function syncQuizQuestionsFromDOM() {
+      currentQuizQuestions.forEach((q, qIdx) => {
+        const indInput = document.querySelector(`.q-indicator-input[data-qidx="${qIdx}"]`);
+        const textInput = document.querySelector(`.q-text-input[data-qidx="${qIdx}"]`);
+        if (indInput) q.indicator = indInput.value;
+        if (textInput) q.question_text = textInput.value;
+
+        q.options.forEach((opt, optIdx) => {
+          const optInput = document.querySelector(`.opt-text-input[data-qidx="${qIdx}"][data-optidx="${optIdx}"]`);
+          const sel = document.querySelector(`.opt-archetype-select[data-qidx="${qIdx}"][data-optidx="${optIdx}"]`);
+          if (optInput) opt.option_text = optInput.value;
+          if (sel) opt.outcome_key = sel.value;
+        });
+      });
+    }
+
+    function addQuestion() {
+      syncQuizQuestionsFromDOM();
+      const nextNum = currentQuizQuestions.length + 1;
+      currentQuizQuestions.push({
+        indicator: `Step ${nextNum}`,
+        question_text: '',
+        image_url: '',
+        options: [
+          { option_text: '', outcome_key: 'sunset_muse', image_url: '' },
+          { option_text: '', outcome_key: 'clean_girl', image_url: '' },
+          { option_text: '', outcome_key: 'cozy_vanilla', image_url: '' },
+          { option_text: '', outcome_key: 'downtown', image_url: '' }
+        ]
+      });
+      renderQuizQuestionsBuilder();
+    }
+
+    function deleteQuestion(qIdx) {
+      if (currentQuizQuestions.length <= 1) {
+        alert('A quiz must have at least 1 question.');
+        return;
+      }
+      syncQuizQuestionsFromDOM();
+      currentQuizQuestions.splice(qIdx, 1);
+      renderQuizQuestionsBuilder();
+    }
+
+    function moveQuestion(qIdx, dir) {
+      const targetIdx = qIdx + dir;
+      if (targetIdx < 0 || targetIdx >= currentQuizQuestions.length) return;
+      syncQuizQuestionsFromDOM();
+      const temp = currentQuizQuestions[qIdx];
+      currentQuizQuestions[qIdx] = currentQuizQuestions[targetIdx];
+      currentQuizQuestions[targetIdx] = temp;
+      renderQuizQuestionsBuilder();
+    }
+
+    function addOption(qIdx) {
+      syncQuizQuestionsFromDOM();
+      const q = currentQuizQuestions[qIdx];
+      if (!q) return;
+      const archetypeKeys = ['sunset_muse', 'clean_girl', 'cozy_vanilla', 'downtown'];
+      const nextArchetype = archetypeKeys[q.options.length % archetypeKeys.length];
+      q.options.push({
+        option_text: '',
+        outcome_key: nextArchetype,
+        image_url: ''
+      });
+      renderQuizQuestionsBuilder();
+    }
+
+    function removeOption(qIdx, optIdx) {
+      const q = currentQuizQuestions[qIdx];
+      if (!q) return;
+      if (q.options.length <= 2) {
+        alert('Each question must have at least 2 options.');
+        return;
+      }
+      syncQuizQuestionsFromDOM();
+      q.options.splice(optIdx, 1);
+      renderQuizQuestionsBuilder();
+    }
+
+    function handleQuizCoverUpload(e) {
+      const file = e.target.files?.[0];
+      if (file) uploadPhotoFile(file, 'quizCoverPreview', 'quizCoverUrl', 'quizCoverUploadText');
+    }
+
+    async function handleSaveQuiz(e) {
+      e.preventDefault();
+      syncQuizQuestionsFromDOM();
+
+      const editId = document.getElementById('editQuizId').value;
+      const title = document.getElementById('quizTitle').value.trim();
+      const description = document.getElementById('quizDescription').value.trim();
+      const cover_image_url = document.getElementById('quizCoverUrl').value.trim();
+      const is_active = document.getElementById('quizIsActive').checked;
+
+      if (!title) {
+        alert('Please enter a quiz title');
+        return;
+      }
+
+      if (currentQuizQuestions.length === 0) {
+        alert('Please add at least 1 question to your quiz');
+        return;
+      }
+
+      for (let i = 0; i < currentQuizQuestions.length; i++) {
+        const q = currentQuizQuestions[i];
+        if (!q.question_text || !q.question_text.trim()) {
+          alert(`Question #${i + 1} needs question prompt text.`);
+          return;
+        }
+        if (!q.options || q.options.length < 2) {
+          alert(`Question #${i + 1} needs at least 2 options.`);
+          return;
+        }
+        for (let j = 0; j < q.options.length; j++) {
+          if (!q.options[j].option_text || !q.options[j].option_text.trim()) {
+            alert(`Question #${i + 1}, Option #${j + 1} text cannot be empty.`);
+            return;
+          }
+        }
+      }
+
+      const submitBtn = document.getElementById('btnSaveQuiz');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Saving Quiz... ⏳';
+
+      try {
+        const payload = {
+          id: editId || undefined,
+          title,
+          description,
+          cover_image_url,
+          is_active,
+          questions: currentQuizQuestions
+        };
+
+        const res = await fetch('/api/admin/quizzes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await parseApiResponse(res);
+
+        if (data.success) {
+          showToast(editId ? '🔮 Quiz updated successfully!' : '✨ New quiz created & published!');
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          alert('Error saving quiz: ' + (data.error || 'Unknown error'));
+          submitBtn.disabled = false;
+          submitBtn.textContent = '✨ Save & Publish Quiz';
+        }
+      } catch (err) {
+        alert('Save error: ' + err.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = '✨ Save & Publish Quiz';
+      }
+    }
+
+    function editQuiz(quiz) {
+      document.getElementById('editQuizId').value = quiz.id;
+      document.getElementById('quizTitle').value = quiz.title;
+      document.getElementById('quizDescription').value = quiz.description || '';
+      document.getElementById('quizCoverUrl').value = quiz.cover_image_url || '/assets/arrival-1.jpg';
+      const preview = document.getElementById('quizCoverPreview');
+      if (preview) {
+        preview.src = quiz.cover_image_url || '/assets/arrival-1.jpg';
+        preview.style.display = 'block';
+      }
+      document.getElementById('quizIsActive').checked = Boolean(quiz.is_active);
+
+      if (Array.isArray(quiz.questions) && quiz.questions.length > 0) {
+        currentQuizQuestions = quiz.questions.map((q, idx) => ({
+          indicator: q.indicator || `Step ${idx + 1}`,
+          question_text: q.question_text || '',
+          image_url: q.image_url || '',
+          options: (q.options || []).map(opt => ({
+            option_text: opt.option_text || '',
+            outcome_key: opt.outcome_key || 'sunset_muse',
+            image_url: opt.image_url || ''
+          }))
+        }));
+      }
+
+      renderQuizQuestionsBuilder();
+      document.getElementById('quizFormHeading').textContent = 'Edit Interactive Quiz';
+      document.getElementById('btnSaveQuiz').textContent = '💾 Update Quiz';
+      document.getElementById('btnCancelQuizEdit').style.display = 'inline-block';
+
+      // Switch to quizzes tab and scroll up
+      const quizzesTabBtn = document.querySelector('[onclick*="\'quizzes\'"]');
+      if (quizzesTabBtn) switchTab('quizzes', quizzesTabBtn);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function cancelQuizEdit() {
+      document.getElementById('editQuizId').value = '';
+      document.getElementById('quizTitle').value = '';
+      document.getElementById('quizDescription').value = '';
+      document.getElementById('quizFormHeading').textContent = '🔮 Interactive Quiz Studio & Builder';
+      document.getElementById('btnSaveQuiz').textContent = '✨ Save & Publish Quiz';
+      document.getElementById('btnCancelQuizEdit').style.display = 'none';
+    }
+
+    async function deleteQuiz(id) {
+      if (!confirm('Are you sure you want to delete this quiz? All child questions and options will be removed.')) return;
+      try {
+        const res = await fetch(`/api/admin/quizzes?id=${id}`, { method: 'DELETE' });
+        const data = await parseApiResponse(res);
+        if (data.success) {
+          const card = document.getElementById(`quiz-card-${id}`);
+          if (card) card.remove();
+          showToast('🗑️ Quiz deleted');
+        } else {
+          alert('Delete failed: ' + (data.error || 'Unknown error'));
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    // ==================== QUIZ PREVIEW MODAL CONTROLLER ====================
+    let previewQuizStep = 0;
+    let previewScores = { sunset_muse: 0, clean_girl: 0, cozy_vanilla: 0, downtown: 0 };
+    let activePreviewQuestions = [];
+
+    const archetypesData = {
+      sunset_muse: {
+        name: 'Sunset Muse ✨',
+        tagline: 'The Golden Hour Tastemaker',
+        desc: 'You thrive on warm golden-hour light, romanticizing everyday moments, layered effortless styling, and inspiring confidence in everyone around you.'
+      },
+      clean_girl: {
+        name: 'Clean Girl Dew 🍵',
+        tagline: 'The Glass Skin Minimalist',
+        desc: 'Effortless gold tube hoops, glazed lip oil, slicked-back claw clips, and iced matcha. You bring organized elegance, clarity, and refreshing calm.'
+      },
+      cozy_vanilla: {
+        name: 'Vanilla Warmth 🍦',
+        tagline: 'The Cozy Room Romantic',
+        desc: 'Chunky knit blankets, vanilla chai lattes, fairy lights, and reading romance books until 2 AM. Your gentle energy makes everyone feel at home.'
+      },
+      downtown: {
+        name: 'Downtown Indie 🎸',
+        tagline: 'The Vintage Vinyl Collector',
+        desc: 'Oversized vintage leather jackets, thrift store crates, film cameras, and headphones on full blast. You move to your own beat with authentic downtown attitude.'
+      }
+    };
+
+    function openQuizPreviewModal() {
+      syncQuizQuestionsFromDOM();
+      if (!currentQuizQuestions || currentQuizQuestions.length === 0) {
+        alert('Please add at least 1 question before previewing.');
+        return;
+      }
+
+      activePreviewQuestions = currentQuizQuestions;
+      previewQuizStep = 0;
+      previewScores = { sunset_muse: 0, clean_girl: 0, cozy_vanilla: 0, downtown: 0 };
+
+      renderQuizPreviewStep();
+      document.getElementById('quizPreviewModal').style.display = 'flex';
+    }
+
+    function previewExistingQuiz(quiz) {
+      if (!quiz.questions || quiz.questions.length === 0) {
+        alert('This quiz has no questions.');
+        return;
+      }
+      activePreviewQuestions = quiz.questions.map((q, idx) => ({
+        indicator: q.indicator || `Step ${idx + 1}`,
+        question_text: q.question_text,
+        options: (q.options || []).map(o => ({
+          option_text: o.option_text,
+          outcome_key: o.outcome_key
+        }))
+      }));
+      previewQuizStep = 0;
+      previewScores = { sunset_muse: 0, clean_girl: 0, cozy_vanilla: 0, downtown: 0 };
+
+      renderQuizPreviewStep();
+      document.getElementById('quizPreviewModal').style.display = 'flex';
+    }
+
+    function renderQuizPreviewStep() {
+      document.getElementById('quizPreviewQuestionView').style.display = 'block';
+      document.getElementById('quizPreviewOutcomeView').style.display = 'none';
+
+      const total = activePreviewQuestions.length;
+      const q = activePreviewQuestions[previewQuizStep];
+
+      document.getElementById('quizPreviewStepBadge').textContent = `Step ${previewQuizStep + 1} of ${total}`;
+      document.getElementById('quizPreviewIndicatorPill').textContent = (q.indicator || `Step ${previewQuizStep + 1}`).toUpperCase();
+      document.getElementById('quizPreviewQuestionPrompt').textContent = q.question_text || 'Question Prompt';
+
+      const optionsList = document.getElementById('quizPreviewOptionsList');
+      optionsList.innerHTML = '';
+
+      (q.options || []).forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'preview-quiz-option-card';
+        btn.onclick = () => selectQuizPreviewOption(opt.outcome_key, btn);
+
+        btn.innerHTML = `
+          <span style="width:28px; height:28px; border-radius:50%; background:#FAF9F6; border:1px solid #E5E7EB; display:inline-flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:800; color:#4B5563;">${idx + 1}</span>
+          <span style="flex-grow:1;">${escapeHtml(opt.option_text)}</span>
+          <span style="font-size:0.75rem; color:#9CA3AF; text-transform:uppercase; font-weight:700;">${(opt.outcome_key || 'sunset_muse').replace('_', ' ')}</span>
+        `;
+        optionsList.appendChild(btn);
+      });
+    }
+
+    function selectQuizPreviewOption(outcomeKey, btn) {
+      if (btn) btn.classList.add('selected');
+      if (previewScores[outcomeKey] !== undefined) {
+        previewScores[outcomeKey]++;
+      }
+
+      setTimeout(() => {
+        if (previewQuizStep + 1 < activePreviewQuestions.length) {
+          previewQuizStep++;
+          renderQuizPreviewStep();
+        } else {
+          showQuizPreviewOutcome();
+        }
+      }, 350);
+    }
+
+    function showQuizPreviewOutcome() {
+      document.getElementById('quizPreviewQuestionView').style.display = 'none';
+      document.getElementById('quizPreviewOutcomeView').style.display = 'block';
+
+      // Find highest score
+      let winningKey = 'sunset_muse';
+      let maxScore = -1;
+      for (const [key, score] of Object.entries(previewScores)) {
+        if (score > maxScore) {
+          maxScore = score;
+          winningKey = key;
+        }
+      }
+
+      const outcome = archetypesData[winningKey] || archetypesData.sunset_muse;
+      document.getElementById('quizPreviewOutcomeTitle').textContent = outcome.name;
+      document.getElementById('quizPreviewOutcomeTagline').textContent = outcome.tagline;
+      document.getElementById('quizPreviewOutcomeDesc').textContent = outcome.desc;
+    }
+
+    function restartQuizPreview() {
+      previewQuizStep = 0;
+      previewScores = { sunset_muse: 0, clean_girl: 0, cozy_vanilla: 0, downtown: 0 };
+      renderQuizPreviewStep();
+    }
+
+    function closeQuizPreviewModal() {
+      const modal = document.getElementById('quizPreviewModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    // Initialize Quiz Builder on page ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        renderQuizQuestionsBuilder();
+      });
+    } else {
+      renderQuizQuestionsBuilder();
+    }
   </script>
 
   <!-- Live Story Preview Modal -->
@@ -1526,6 +2346,63 @@ const currentSettings = settingsData?.value || {
 
           <div id="previewContentBody" class="preview-content-box">
             <!-- Rendered rich text content -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Quiz Preview Modal -->
+  <div id="quizPreviewModal" class="preview-modal-backdrop" onclick="if(event.target === this) closeQuizPreviewModal()">
+    <div class="preview-modal-card" style="max-width: 680px;">
+      <div class="preview-modal-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.1rem;">🔮</span>
+          <span style="font-weight: 800; font-size: 1rem;">Quiz Player Preview</span>
+          <span id="quizPreviewStepBadge" class="status-badge-live">Step 1 of 3</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button type="button" class="btn-submit-action" style="padding: 8px 18px; font-size: 0.85rem;" onclick="closeQuizPreviewModal(); document.getElementById('btnSaveQuiz').click();">
+            <span>Looks Good — Save Quiz!</span>
+          </button>
+          <button type="button" onclick="closeQuizPreviewModal()" style="background: none; border: 1px solid #D1D5DB; border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; color: #4B5563;">✕</button>
+        </div>
+      </div>
+
+      <div class="preview-modal-body" style="padding: 32px 28px;">
+        <!-- Step View Container -->
+        <div id="quizPreviewQuestionView">
+          <div style="text-align: center; margin-bottom: 24px;">
+            <span id="quizPreviewIndicatorPill" class="preview-category-badge">Step 1: Morning Ritual</span>
+            <h2 id="quizPreviewQuestionPrompt" style="font-family: var(--font-editorial); font-size: 1.6rem; margin: 12px 0 6px; color: #0F1115;">What is your dream Saturday morning?</h2>
+            <div id="quizPreviewQuestionPhotoWrap" style="display: none; margin: 16px auto; max-width: 320px; border-radius: 14px; overflow: hidden;">
+              <img id="quizPreviewQuestionPhoto" src="" style="width: 100%; display: block;" />
+            </div>
+          </div>
+
+          <div id="quizPreviewOptionsList" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- Options dynamically injected -->
+          </div>
+        </div>
+
+        <!-- Outcome Result View (Shown at the end of the test) -->
+        <div id="quizPreviewOutcomeView" style="display: none; text-align: center; padding: 20px 10px;">
+          <span class="preview-category-badge" style="background: #FFE8D6; color: var(--sunset-accent);">✦ YOUR AURA ARCHETYPE RESULT</span>
+          <div style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, #FF6EC7, #FFDE59); margin: 20px auto; display: flex; align-items: center; justify-content: center; font-size: 2rem; box-shadow: 0 10px 30px rgba(232, 93, 4, 0.3);">
+            ✨
+          </div>
+          <h2 id="quizPreviewOutcomeTitle" style="font-family: var(--font-editorial); font-size: 2rem; margin-bottom: 8px; color: #0F1115;">Sunset Muse</h2>
+          <p id="quizPreviewOutcomeTagline" style="font-weight: 700; color: var(--sunset-accent); margin-bottom: 16px;">The Golden Hour Tastemaker</p>
+          <p id="quizPreviewOutcomeDesc" style="font-size: 0.95rem; color: #4B5563; max-width: 480px; margin: 0 auto 24px; line-height: 1.6;">
+            You thrive on warm golden-hour light, romanticizing everyday teenage moments, layered effortless styling, and inspiring confidence in everyone around you.
+          </p>
+          <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+            <button type="button" class="btn-preview-action" onclick="restartQuizPreview()">
+              <span>🔄 Retake Preview</span>
+            </button>
+            <button type="button" class="btn-submit-action" onclick="closeQuizPreviewModal(); document.getElementById('btnSaveQuiz').click();">
+              <span>✨ Publish Quiz to Website</span>
+            </button>
           </div>
         </div>
       </div>
