@@ -3,6 +3,8 @@ import { getAdminClient } from '@/lib/supabase';
 
 export const prerender = false;
 
+const jsonHeaders = { 'Content-Type': 'application/json' };
+
 const checkAuth = (cookies: any) => {
   const session = cookies.get('ttg_admin_session')?.value;
   const expectedSecret = process.env.ADMIN_SECRET_KEY || 'rini-glow-2026';
@@ -12,12 +14,12 @@ const checkAuth = (cookies: any) => {
 // Create ranking
 export const POST: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
   }
 
   try {
     const { title, category, cover_image_url, rating, review_text, watch_url, tags } = await request.json();
-    if (!title) return new Response(JSON.stringify({ error: 'Title is required' }), { status: 400 });
+    if (!title) return new Response(JSON.stringify({ error: 'Title is required' }), { status: 400, headers: jsonHeaders });
 
     const adminClient = getAdminClient();
     const { data, error } = await adminClient
@@ -36,21 +38,21 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       .single();
 
     if (error) throw error;
-    return new Response(JSON.stringify({ success: true, ranking: data }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, ranking: data }), { status: 200, headers: jsonHeaders });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: jsonHeaders });
   }
 };
 
 // Update ranking
 export const PUT: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
   }
 
   try {
     const { id, title, category, cover_image_url, rating, review_text, watch_url, tags } = await request.json();
-    if (!id) return new Response(JSON.stringify({ error: 'Ranking ID is required' }), { status: 400 });
+    if (!id) return new Response(JSON.stringify({ error: 'Ranking ID is required' }), { status: 400, headers: jsonHeaders });
 
     const adminClient = getAdminClient();
     const updateData: any = {};
@@ -70,22 +72,22 @@ export const PUT: APIRoute = async ({ request, cookies }) => {
       .single();
 
     if (error) throw error;
-    return new Response(JSON.stringify({ success: true, ranking: data }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, ranking: data }), { status: 200, headers: jsonHeaders });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: jsonHeaders });
   }
 };
 
 // Delete ranking
 export const DELETE: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
   }
 
   try {
     const url = new URL(request.url);
     const id = url.searchParams.get('id');
-    if (!id) return new Response(JSON.stringify({ error: 'Ranking ID is required' }), { status: 400 });
+    if (!id) return new Response(JSON.stringify({ error: 'Ranking ID is required' }), { status: 400, headers: jsonHeaders });
 
     const adminClient = getAdminClient();
     const { error } = await adminClient
@@ -94,8 +96,8 @@ export const DELETE: APIRoute = async ({ request, cookies }) => {
       .eq('id', id);
 
     if (error) throw error;
-    return new Response(JSON.stringify({ success: true, message: 'Ranking deleted' }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, message: 'Ranking deleted' }), { status: 200, headers: jsonHeaders });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: err.message }), { status: 500, headers: jsonHeaders });
   }
 };

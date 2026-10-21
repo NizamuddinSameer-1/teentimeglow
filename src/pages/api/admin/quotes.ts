@@ -9,15 +9,17 @@ const checkAuth = (cookies: any) => {
   return session && (session === expectedSecret || session === '2026');
 };
 
+const jsonHeaders = { 'Content-Type': 'application/json' };
+
 // Create quote
 export const POST: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
   }
 
   try {
     const { content_text, author } = await request.json();
-    if (!content_text) return new Response(JSON.stringify({ error: 'Quote text is required' }), { status: 400 });
+    if (!content_text) return new Response(JSON.stringify({ error: 'Quote text is required' }), { status: 400, headers: jsonHeaders });
 
     const adminClient = getAdminClient();
     const { data, error } = await adminClient

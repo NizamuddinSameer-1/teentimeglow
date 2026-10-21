@@ -1576,7 +1576,8 @@ const currentSettings = settingsData?.value || {
       try {
         const res = await fetch(`/api/admin/posts?id=${id}`, { method: 'DELETE' });
         const data = await parseApiResponse(res);
-        if (data.success) {
+        const isSuccess = data.success || res.ok || (typeof data.error === 'string' && data.error.includes('"success":true'));
+        if (isSuccess) {
           const card = document.getElementById(`post-card-${id}`);
           if (card) card.remove();
           showToast('🗑️ Article deleted');
@@ -1645,7 +1646,8 @@ const currentSettings = settingsData?.value || {
       try {
         const res = await fetch(`/api/admin/wallpapers?id=${id}`, { method: 'DELETE' });
         const data = await parseApiResponse(res);
-        if (data.success) {
+        const isSuccess = data.success || res.ok || (typeof data.error === 'string' && data.error.includes('"success":true'));
+        if (isSuccess) {
           const card = document.getElementById(`wp-card-${id}`);
           if (card) card.remove();
           showToast('🗑️ Wallpaper removed');
@@ -1724,7 +1726,8 @@ const currentSettings = settingsData?.value || {
       try {
         const res = await fetch(`/api/admin/rankings?id=${id}`, { method: 'DELETE' });
         const data = await parseApiResponse(res);
-        if (data.success) {
+        const isSuccess = data.success || res.ok || (typeof data.error === 'string' && data.error.includes('"success":true'));
+        if (isSuccess) {
           const card = document.getElementById(`rank-card-${id}`);
           if (card) card.remove();
           showToast('🗑️ Review removed');
@@ -1765,7 +1768,8 @@ const currentSettings = settingsData?.value || {
       try {
         const res = await fetch(`/api/admin/quotes?id=${id}`, { method: 'DELETE' });
         const data = await parseApiResponse(res);
-        if (data.success) {
+        const isSuccess = data.success || res.ok || (typeof data.error === 'string' && data.error.includes('"success":true'));
+        if (isSuccess) {
           const row = document.getElementById(`quote-row-${id}`);
           if (row) row.remove();
           showToast('🗑️ Quote deleted');
@@ -1786,7 +1790,8 @@ const currentSettings = settingsData?.value || {
           body: JSON.stringify({ id, status })
         });
         const data = await parseApiResponse(res);
-        if (data.success) {
+        const isSuccess = data.success || res.ok || (typeof data.error === 'string' && data.error.includes('"success":true'));
+        if (isSuccess) {
           const card = document.getElementById(`moderation-${id}`);
           if (card) card.remove();
           showToast(status === 'approved' ? '✓ Submission Approved to Public Dropboard!' : '✕ Submission Rejected');
@@ -2145,7 +2150,8 @@ const currentSettings = settingsData?.value || {
       try {
         const res = await fetch(`/api/admin/quizzes?id=${id}`, { method: 'DELETE' });
         const data = await parseApiResponse(res);
-        if (data.success) {
+        const isSuccess = data.success || res.ok || (typeof data.error === 'string' && data.error.includes('"success":true'));
+        if (isSuccess) {
           const card = document.getElementById(`quiz-card-${id}`);
           if (card) card.remove();
           showToast('🗑️ Quiz deleted');
