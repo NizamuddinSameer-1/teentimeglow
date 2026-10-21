@@ -9,15 +9,17 @@ const checkAuth = (cookies: any) => {
   return session && (session === expectedSecret || session === '2026');
 };
 
+const jsonHeaders = { 'Content-Type': 'application/json' };
+
 // Create quote
 export const POST: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
   }
 
   try {
     const { content_text, author } = await request.json();
-    if (!content_text) return new Response(JSON.stringify({ error: 'Quote text is required' }), { status: 400 });
+    if (!content_text) return new Response(JSON.stringify({ error: 'Quote text is required' }), { status: 400, headers: jsonHeaders });
 
     const adminClient = getAdminClient();
     const { data, error } = await adminClient
@@ -32,22 +34,36 @@ export const POST: APIRoute = async ({ request, cookies }) => {
       .single();
 
     if (error) throw error;
-    return new Response(JSON.stringify({ success: true, quote: data }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, quote: data }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };
 
 // Delete quote
 export const DELETE: APIRoute = async ({ request, cookies }) => {
   if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 
   try {
     const url = new URL(request.url);
     const id = url.searchParams.get('id');
-    if (!id) return new Response(JSON.stringify({ error: 'Quote ID is required' }), { status: 400 });
+    if (!id) {
+      return new Response(JSON.stringify({ error: 'Quote ID is required' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
 
     const adminClient = getAdminClient();
     const { error } = await adminClient
@@ -56,8 +72,14 @@ export const DELETE: APIRoute = async ({ request, cookies }) => {
       .eq('id', id);
 
     if (error) throw error;
-    return new Response(JSON.stringify({ success: true, message: 'Quote deleted' }), { status: 200 });
+    return new Response(JSON.stringify({ success: true, message: 'Quote deleted' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' }
+    });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    return new Response(JSON.stringify({ error: err.message }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 };

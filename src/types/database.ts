@@ -41,6 +41,8 @@ export interface Quiz {
   cover_image_url: string;
   is_active: boolean;
   created_at: string;
+  questions?: QuizQuestion[];
+  outcomes?: QuizOutcome[];
 }
 
 export interface QuizQuestion {
@@ -48,6 +50,8 @@ export interface QuizQuestion {
   quiz_id: string;
   question_text: string;
   question_order: number;
+  indicator?: string | null;
+  image_url?: string | null;
   created_at: string;
   options?: QuizOption[];
 }
@@ -57,6 +61,8 @@ export interface QuizOption {
   question_id: string;
   option_text: string;
   outcome_key: string;
+  image_url?: string | null;
+  option_order?: number;
   created_at: string;
 }
 

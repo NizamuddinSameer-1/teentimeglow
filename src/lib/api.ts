@@ -172,3 +172,45 @@ export async function getSiteSettings(): Promise<any | null> {
   return null;
 }
 
+export async function getAllQuizzes(): Promise<Quiz[]> {
+  try {
+    const { data, error } = await supabase
+      .from('quizzes')
+      .select(`
+        *,
+        questions:quiz_questions (
+          *,
+          options:quiz_options (*)
+        ),
+        outcomes:quiz_outcomes (*)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error || !data) {
+      return [];
+    }
+    return data as Quiz[];
+  } catch (err) {
+    console.warn('Supabase fetch all quizzes error:', err);
+    return [];
+  }
+}
+
+export async function getAllPostsAdmin(): Promise<Post[]> {
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error || !data || data.length === 0) {
+      return fallbackPosts;
+    }
+    return data as Post[];
+  } catch (err) {
+    console.warn('Supabase fetch all admin posts error, using fallback:', err);
+    return fallbackPosts;
+  }
+}
+
+
