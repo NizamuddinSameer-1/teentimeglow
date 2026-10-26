@@ -1,0 +1,49 @@
+{
+  "researched_on": "2026-10-26",
+  "site": "TeenTimeGlow",
+  "research_method": "SEO specialist topic and competitor research, followed by verification of source pages. Keyword choices reflect search intent and editorial fit; no measured search volume or difficulty is claimed.",
+  "articles": [
+    {
+      "title": "Capsule Wardrobe for Teens: 20 Budget-Friendly Pieces",
+      "slug": "capsule-wardrobe-for-teens-on-a-budget",
+      "category": "fashion",
+      "excerpt": "Build a capsule wardrobe for teens using what you own: 20 flexible pieces, 10 outfit formulas, uniform-aware tips and a realistic budget plan.",
+      "cover_image_url": "/assets/feature-fashion.jpg",
+      "content_file": "research/capsule-wardrobe-for-teens-on-a-budget.html",
+      "primary_keyword": "capsule wardrobe for teens",
+      "secondary_keywords": [
+        "teen capsule wardrobe on a budget",
+        "budget outfit ideas for teens",
+        "capsule wardrobe for school uniforms",
+        "outfit formulas for teens"
+      ],
+      "search_intent": "Informational: make a small, affordable wardrobe that produces complete everyday outfits.",
+      "original_angle": "A wardrobe-first, uniform-aware guide with exactly 20 real items, 10 complete outfit formulas, flexible swaps and explicitly hypothetical rupee budgeting.",
+      "sources": [
+        "https://www.projectcece.com/blog/786/how-to-build-an-ethical-spring-capsule-wardrobe/",
+        "https://www.wrap.ngo/resources/case-study/extending-product-lifetimes-wraps-work-clothing-durability"
+      ]
+    },
+    {
+      "title": "Small Bedroom Ideas for Teens on a Budget: 9 Fixes",
+      "slug": "small-bedroom-ideas-for-teens-on-a-budget",
+      "category": "decor",
+      "excerpt": "Try nine small bedroom ideas for teens on a budget, from study-space resets to clothes storage and shared-room privacy, without a renovation.",
+      "cover_image_url": "/assets/feature-decor.jpg",
+      "content_file": "research/small-bedroom-ideas-for-teens-on-a-budget.html",
+      "primary_keyword": "small bedroom ideas for teens",
+      "secondary_keywords": [
+        "teen bedroom on a budget",
+        "small bedroom storage ideas",
+        "renter-friendly teen bedroom ideas",
+        "small room study setup",
+        "shared bedroom ideas for teens"
+      ],
+      "search_intent": "Informational: organize and personalize a small teen bedroom affordably without permanent changes.",
+      "original_angle": "Nine problem-first improvements with no-cost alternatives, uniform/clothes storage crosslinks, shared-room boundaries and explicit furniture, adhesive and electrical safety limits.",
+      "sources": [
+        "https://renohacks.com/posts/teen-bedroom-ideas-2026"
+      ]
+    }
+  ]
+}
