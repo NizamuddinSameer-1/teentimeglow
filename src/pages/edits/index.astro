@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPosts } from '@/lib/api';
+import { CATEGORIES, SITE_URL, absoluteUrl } from '@/config/seo';
 import type { Post } from '@/types/database';
 
 export const prerender = false;
@@ -20,11 +21,32 @@ const categoryLabels: Record<string, string> = {
 const beautyCount = posts.filter(p => p.category === 'beauty').length;
 const fashionCount = posts.filter(p => p.category === 'fashion').length;
 const decorCount = posts.filter(p => p.category === 'decor').length;
+
+const editsUrl = absoluteUrl('/edits');
+const editsSchema = {
+  '@type': 'CollectionPage',
+  '@id': `${editsUrl}#collection`,
+  url: editsUrl,
+  name: 'Editorial Magazine — TeenTimeGlow',
+  isPartOf: { '@id': `${SITE_URL}/#website` },
+  inLanguage: 'en',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: posts.length,
+    itemListElement: posts.slice(0, 20).map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: absoluteUrl(`/edits/${p.slug}`),
+      name: p.title
+    }))
+  }
+};
 ---
 
 <BaseLayout
   title="Editorial Magazine & Lookbooks — TeenTimeGlow by Rini"
   description="Explore curated teen fashion lookbooks, Korean glass skincare rituals, and cozy bedroom aesthetic decor guides by Rini. High-fashion inspiration for everyday life."
+  schema={[editsSchema]}
 >
   <main class="edits-page-container">
     <!-- Breadcrumb & Back Bar -->
@@ -52,6 +74,19 @@ const decorCount = posts.filter(p => p.category === 'decor').length;
         </p>
       </div>
     </section>
+
+    <!-- Category hub links: crawlable entry points into each topical cluster.
+         The filter tabs below are JS-only, so Google needs real anchors. -->
+    <nav class="container cat-hub-strip" aria-label="Browse by category">
+      {CATEGORIES.map((c) => (
+        <a href={`/edits/category/${c.slug}`} class="cat-hub-link">
+          <span class="cat-hub-label">{c.label}</span>
+          <span class="cat-hub-count">
+            {c.dbValue === 'beauty' ? beautyCount : c.dbValue === 'fashion' ? fashionCount : decorCount} guides
+          </span>
+        </a>
+      ))}
+    </nav>
 
     <!-- Featured Cover Story Spotlight Banner -->
     {featuredPost && (
@@ -279,6 +314,38 @@ const decorCount = posts.filter(p => p.category === 'decor').length;
     border-color: var(--sunset-accent);
     color: var(--sunset-accent);
     transform: translateX(-2px);
+  }
+
+  /* Category hub strip */
+  .cat-hub-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 8px auto 4px;
+  }
+  .cat-hub-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 20px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .cat-hub-link:hover {
+    border-color: var(--sunset-accent);
+    transform: translateY(-2px);
+  }
+  .cat-hub-label {
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: #111827;
+  }
+  .cat-hub-count {
+    font-size: 0.76rem;
+    color: var(--text-muted);
   }
 
   /* Hero Section */

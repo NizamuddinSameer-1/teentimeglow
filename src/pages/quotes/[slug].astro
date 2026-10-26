@@ -1,0 +1,286 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getQuotes } from '@/lib/api';
+import { SITE_URL, absoluteUrl } from '@/config/seo';
+import { buildQuoteSlugMap, quoteTheme } from '@/lib/slugs';
+import { QUOTE_COPY, quoteFallbackCopy } from '@/config/quoteCopy';
+import type { StoryMemeQuote } from '@/types/database';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+const quotes: StoryMemeQuote[] = await getQuotes();
+const slugMap = buildQuoteSlugMap(quotes);
+
+const current = quotes.find((q) => slugMap.get(q.id) === slug);
+
+if (!current) {
+  return Astro.rewrite('/404');
+}
+
+const text = (current.content_text || '').trim();
+const author = current.author || 'Rini';
+const theme = quoteTheme(author);
+const pageUrl = absoluteUrl(`/quotes/${slug}`);
+
+const copy = QUOTE_COPY[slug as string] || quoteFallbackCopy(theme);
+
+const related = quotes.filter((q) => q.id !== current.id).slice(0, 3);
+
+const safeText = text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+const metaDescription = `${text.replace(/\s+/g, ' ').slice(0, 120)} — a ${copy.theme.toLowerCase()} note from Rini's mindset archive.`.slice(0, 158);
+
+const quoteSchema = {
+  '@type': 'Quotation',
+  '@id': `${pageUrl}#quotation`,
+  text,
+  spokenByCharacter: {
+    '@type': 'Person',
+    name: 'Rini',
+    url: `${SITE_URL}/about`
+  },
+  author: { '@id': `${SITE_URL}/#person-rini` },
+  inLanguage: 'en',
+  isPartOf: { '@id': `${SITE_URL}/#website` },
+  url: pageUrl
+};
+
+const breadcrumbSchema = {
+  '@type': 'BreadcrumbList',
+  '@id': `${pageUrl}#breadcrumb`,
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'Quotes', item: `${SITE_URL}/quotes` },
+    { '@type': 'ListItem', position: 3, name: copy.theme }
+  ]
+};
+---
+
+<BaseLayout
+  title={`"${text.replace(/\s+/g, ' ').slice(0, 55)}…" — ${copy.theme} Quote by Rini`}
+  description={metaDescription}
+  schema={[quoteSchema, breadcrumbSchema]}
+>
+  <main class="q-page">
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/quotes" class="breadcrumb-link">Quotes</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{copy.theme}</span>
+      </nav>
+    </div>
+
+    <article class="container q-layout">
+      <div class="q-card">
+        <span class="q-pill">✦ {copy.theme}</span>
+        <blockquote class="q-text">{text}</blockquote>
+        <div class="q-byline">— {author}</div>
+        <div class="q-actions">
+          <button class="q-copy" onclick={`copyQuote('${safeText}', event)`}>
+            <span aria-hidden="true">📋</span> Copy this quote
+          </button>
+          {current.likes_count && current.likes_count > 0 ? (
+            <span class="q-likes">♡ {current.likes_count.toLocaleString()}</span>
+          ) : null}
+        </div>
+      </div>
+
+      <div class="q-body">
+        <h2 class="q-section-title">What it means</h2>
+        <p class="q-meaning">{copy.meaning}</p>
+
+        <a href={copy.relatedHref} class="q-related-link">
+          {copy.relatedLabel} &rarr;
+        </a>
+      </div>
+    </article>
+
+    {related.length > 0 && (
+      <section class="container q-more">
+        <h2 class="q-section-title">More from the mindset archive</h2>
+        <div class="q-more-grid">
+          {related.map((r) => (
+            <a href={`/quotes/${slugMap.get(r.id)}`} class="q-more-card">
+              <span class="q-more-theme">{quoteTheme(r.author)}</span>
+              <p class="q-more-text">{r.content_text}</p>
+              <span class="q-more-cta">Read the note &rarr;</span>
+            </a>
+          ))}
+        </div>
+        <a href="/quotes" class="q-back">See all quotes &rarr;</a>
+      </section>
+    )}
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  function copyQuote(text, event) {
+    if (event) event.preventDefault();
+    navigator.clipboard.writeText(text).then(function () {
+      if (typeof window.showToast === 'function') window.showToast('Quote copied ✨');
+      if (typeof window.playTone === 'function') window.playTone(600, 'sine', 0.15);
+    }).catch(function () {});
+  }
+</script>
+
+<style>
+  .q-page {
+    padding-top: 110px;
+    padding-bottom: 90px;
+    background: #FAF7F2;
+    min-height: 100vh;
+  }
+  .breadcrumb-wrap { margin-bottom: 28px; }
+  .breadcrumb-nav { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 600; }
+  .breadcrumb-link { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb-link:hover { color: var(--sunset-accent); }
+  .breadcrumb-sep { color: #CBD5E1; }
+  .breadcrumb-current { color: #111827; }
+
+  .q-layout {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 48px;
+    align-items: start;
+    margin-bottom: 72px;
+  }
+  .q-card {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 24px;
+    padding: 44px 40px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.05);
+  }
+  .q-pill {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--sunset-accent);
+    background: rgba(232, 93, 4, 0.08);
+    padding: 5px 13px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+  }
+  .q-text {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    font-style: italic;
+    line-height: 1.5;
+    color: #0F1115;
+    margin: 0 0 20px;
+  }
+  .q-byline {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 28px;
+  }
+  .q-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .q-copy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--sunset-accent);
+    color: #fff;
+    border: none;
+    font-weight: 800;
+    font-size: 0.86rem;
+    padding: 11px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: filter 0.2s ease;
+  }
+  .q-copy:hover { filter: brightness(1.06); }
+  .q-likes {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+
+  .q-section-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    color: #0F1115;
+    margin-bottom: 16px;
+  }
+  .q-meaning {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-bottom: 26px;
+  }
+  .q-related-link {
+    display: inline-block;
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--sunset-accent);
+    text-decoration: none;
+  }
+
+  .q-more {
+    padding-top: 40px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .q-more-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 26px;
+  }
+  .q-more-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 24px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  .q-more-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(232, 93, 4, 0.35);
+  }
+  .q-more-theme {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--sunset-accent);
+    text-transform: uppercase;
+  }
+  .q-more-text {
+    font-family: var(--font-editorial);
+    font-size: 1rem;
+    font-style: italic;
+    line-height: 1.55;
+    color: #111827;
+    flex: 1;
+  }
+  .q-more-cta {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+  }
+  .q-back {
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--sunset-accent);
+    text-decoration: none;
+  }
+
+  @media (max-width: 900px) {
+    .q-layout { grid-template-columns: 1fr; gap: 32px; }
+    .q-more-grid { grid-template-columns: 1fr; }
+    .q-card { padding: 30px 24px; }
+  }
+</style>

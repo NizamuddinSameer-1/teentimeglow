@@ -5,22 +5,97 @@ import Navbar from '@/components/Navbar.astro';
 import Footer from '@/components/Footer.astro';
 import Modals from '@/components/Modals.astro';
 import Analytics from '@/components/Analytics.astro';
+import {
+  SITE_URL,
+  SITE_NAME,
+  LOGO_URL,
+  DEFAULT_OG_IMAGE,
+  AUTHOR,
+  SOCIAL_PROFILES,
+  absoluteUrl
+} from '@/config/seo';
 
 interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** Set to true on admin, auth, thank-you and filtered views. */
+  noindex?: boolean;
+  /** article = blog posts, website = hubs and landing pages. */
+  ogType?: 'website' | 'article';
+  /** Optional extra JSON-LD nodes appended to the @graph. */
+  schema?: Record<string, any>[];
 }
 
 const {
   title = "TeenTimeGlow — Feel The Glow | Curated Fashion, Beauty & Lifestyle by Rini",
   description = "Feel the vibes with TeenTimeGlow. Curated teen fashion lookbooks, glass skincare routines, cozy bedroom aesthetics, Prime Video rankings, daily quotes, and free 4K wallpapers by Rini.",
-  ogImage = "https://teentimeglow.me/assets/hero-glow-creator.jpg"
+  ogImage = DEFAULT_OG_IMAGE,
+  noindex = false,
+  ogType = 'website',
+  schema = []
 } = Astro.props;
 
-// Dynamic canonical URL calculation
-const cleanPath = Astro.url.pathname.replace(/\/+$/, '') || '';
-const canonicalUrl = `https://teentimeglow.me${cleanPath === '' ? '/' : cleanPath}`;
+// Canonical always derives from SITE_URL so it can never drift from the host
+// that actually returns a 200. Trailing slashes are stripped to match
+// `trailingSlash: 'never'` in astro.config.mjs.
+const cleanPath = Astro.url.pathname.replace(/\/+$/, '');
+const canonicalUrl = absoluteUrl(cleanPath || '/');
+const absoluteOgImage = absoluteUrl(ogImage);
+
+const orgId = `${SITE_URL}/#organization`;
+const siteId = `${SITE_URL}/#website`;
+const authorId = `${SITE_URL}/#person-rini`;
+
+const baseGraph = [
+  {
+    '@type': 'WebSite',
+    '@id': siteId,
+    url: `${SITE_URL}/`,
+    name: SITE_NAME,
+    description:
+      'Curated teen fashion lookbooks, glass skincare routines, Prime Video rankings, daily mindset quotes, and free 4K wallpapers by Rini.',
+    publisher: { '@id': orgId },
+    inLanguage: 'en'
+    // NOTE: the previous SearchAction pointed at /edits?q= which does not
+    // perform a server-side search. Claiming a sitelinks searchbox that
+    // doesn't work gets the whole enhancement ignored. Re-add only once a
+    // real /search route exists.
+  },
+  {
+    '@type': 'Organization',
+    '@id': orgId,
+    name: SITE_NAME,
+    url: `${SITE_URL}/`,
+    logo: {
+      '@type': 'ImageObject',
+      url: LOGO_URL,
+      width: 512,
+      height: 512
+    },
+    founder: { '@id': authorId },
+    sameAs: AUTHOR.sameAs,
+    contactPoint: {
+      '@type': 'ContactPoint',
+      contactType: 'editorial',
+      email: 'hello@teentimeglow.me',
+      url: `${SITE_URL}/contact`
+    }
+  },
+  {
+    '@type': 'Person',
+    '@id': authorId,
+    name: AUTHOR.name,
+    url: `${SITE_URL}/about`,
+    jobTitle: 'Founder & Lifestyle Editor',
+    description:
+      'Rini writes and edits every guide on TeenTimeGlow, testing skincare routines, styling formulas and room makeovers before publishing them.',
+    worksFor: { '@id': orgId },
+    sameAs: AUTHOR.sameAs
+  }
+];
+
+const graph = [...baseGraph, ...schema];
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -29,25 +104,37 @@ const canonicalUrl = `https://teentimeglow.me${cleanPath === '' ? '/' : cleanPat
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
-  
+
+  {noindex ? (
+    <meta name="robots" content="noindex, nofollow" />
+  ) : (
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  )}
+
   <!-- Canonical URL -->
   <link rel="canonical" href={canonicalUrl} />
 
   <!-- Google Search Console Site Verification -->
   <meta name="google-site-verification" content="tG2T-OkiuD6VDoDxBltWXnSLnxv3q6qMg2p1kzzT8BQ" />
-  
+
   <!-- OpenGraph / Social Meta -->
+  <meta property="og:locale" content="en_US" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={ogImage} />
+  <meta property="og:image" content={absoluteOgImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={title} />
   <meta property="og:url" content={canonicalUrl} />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="TeenTimeGlow" />
+  <meta property="og:type" content={ogType} />
+  <meta property="og:site_name" content={SITE_NAME} />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={ogImage} />
+  <meta name="twitter:image" content={absoluteOgImage} />
+  <meta name="twitter:site" content="@teentimeglow" />
   <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
+  <link rel="alternate" type="application/rss+xml" title="TeenTimeGlow — Editorial Edits" href={`${SITE_URL}/rss.xml`} />
 
   <!-- Google Analytics 4 -->
   <Analytics />
@@ -55,38 +142,7 @@ const canonicalUrl = `https://teentimeglow.me${cleanPath === '' ? '/' : cleanPat
   <!-- Structured Data (JSON-LD) for Google Rich Snippets & Search Ranking -->
   <script type="application/ld+json" is:inline set:html={JSON.stringify({
     "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://teentimeglow.me/#website",
-        "url": "https://teentimeglow.me/",
-        "name": "TeenTimeGlow",
-        "description": "Curated teen fashion lookbooks, glass skincare routines, Prime Video rankings, daily mindset quotes, and free 4K wallpapers by Rini.",
-        "publisher": {
-          "@id": "https://teentimeglow.me/#organization"
-        },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://teentimeglow.me/edits?q={search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://teentimeglow.me/#organization",
-        "name": "TeenTimeGlow",
-        "url": "https://teentimeglow.me/",
-        "logo": "https://teentimeglow.me/assets/logo.jpg",
-        "founder": {
-          "@type": "Person",
-          "name": "Rini"
-        },
-        "sameAs": [
-          "https://instagram.com/teentimeglow",
-          "https://pinterest.com/teentimeglow"
-        ]
-      }
-    ]
+    "@graph": graph
   })} />
 
   <!-- Google Fonts -->
@@ -105,15 +161,21 @@ const canonicalUrl = `https://teentimeglow.me${cleanPath === '' ? '/' : cleanPat
   <Footer />
   <Modals />
 
-  <!-- World-Class Animation & Motion Libraries -->
-  <script is:inline src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
-  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script is:inline src="https://unpkg.com/split-type"></script>
-  <script is:inline src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <script is:inline src="https://unpkg.com/lucide@latest"></script>
+  <!--
+    Animation & motion libraries.
+    All six are `defer`red: they used to block first paint on every page.
+    lucide was pinned from `@latest` (uncacheable, could break silently) to an
+    immutable version. Order is preserved because classic deferred scripts
+    execute in document order.
+  -->
+  <script is:inline defer src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script is:inline defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script is:inline defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script is:inline defer src="https://unpkg.com/split-type@0.3.4/umd/index.min.js"></script>
+  <script is:inline defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script is:inline defer src="https://cdn.jsdelivr.net/npm/lucide@0.544.0/dist/umd/lucide.min.js"></script>
 
   <!-- Client-Side Motion Design & Logic -->
-  <script is:inline src="/scripts/main.js"></script>
+  <script is:inline defer src="/scripts/main.js"></script>
 </body>
 </html>

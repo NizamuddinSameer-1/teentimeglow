@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getQuotes } from '@/lib/api';
+import { buildQuoteSlugMap } from '@/lib/slugs';
 import type { StoryMemeQuote } from '@/types/database';
 
 export const prerender = false;
@@ -8,17 +9,20 @@ export const prerender = false;
 // Hydrate live quotes with fallback seeds
 const quotes: StoryMemeQuote[] = await getQuotes();
 
+// Each quote now has its own page at /quotes/[slug].
+const slugMap = buildQuoteSlugMap(quotes);
+
 const featuredQuote = quotes[0] || {
   content_text: "You do not just exist; you arrive, you radiate, and you create your own light in every room you step into. ✨",
   author: "Rini • Golden Hour Energy",
-  likes_count: 615
+  likes_count: 0
 };
 
 const quotesJson = JSON.stringify(quotes.map(q => ({
   text: q.content_text,
   author: q.author,
   likes: q.likes_count || 0,
-  category: q.author.includes('•') ? q.author.split('•')[1].trim() : 'Mindset'
+  category: (q.author || '').includes('•') ? (q.author || '').split('•')[1].trim() : 'Mindset'
 })));
 ---
 
@@ -153,12 +157,16 @@ const quotesJson = JSON.stringify(quotes.map(q => ({
               >
                 <div class="card-top-meta">
                   <span class="card-cat-pill">{category}</span>
-                  <span class="card-heart-tag">♡ {q.likes_count || (300 + idx * 35)}</span>
+                  {q.likes_count && q.likes_count > 0 ? (
+                    <span class="card-heart-tag">♡ {q.likes_count.toLocaleString()}</span>
+                  ) : null}
                 </div>
                 <div class="card-quote-mark">“</div>
                 <p class="card-quote-text">{q.content_text}</p>
                 <div class="card-bottom-row">
-                  <span class="card-author-lbl">— {rawAuthor}</span>
+                  <a href={`/quotes/${slugMap.get(q.id)}`} class="card-author-lbl card-permalink">
+                    — {rawAuthor} <span class="card-read-arrow">&rarr;</span>
+                  </a>
                   <button
                     class="btn-copy-card-mini"
                     onclick={`copyDirectQuote('${safeText}', '${rawAuthor}', event)`}
@@ -707,6 +715,17 @@ const quotesJson = JSON.stringify(quotes.map(q => ({
     font-size: 0.82rem;
     font-weight: 700;
     color: var(--text-muted);
+  }
+  .card-permalink {
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .card-permalink:hover {
+    color: var(--sunset-accent);
+  }
+  .card-read-arrow {
+    font-weight: 800;
+    color: var(--sunset-accent);
   }
   .btn-copy-card-mini {
     background: #FAF9F6;

@@ -1,0 +1,339 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { SITE_URL, AUTHOR, absoluteUrl } from '@/config/seo';
+
+const pageUrl = absoluteUrl('/about');
+
+const aboutSchema = {
+  '@type': 'AboutPage',
+  '@id': `${pageUrl}#about`,
+  url: pageUrl,
+  name: 'About Rini & TeenTimeGlow',
+  isPartOf: { '@id': `${SITE_URL}/#website` },
+  mainEntity: { '@id': `${SITE_URL}/#person-rini` }
+};
+
+const breadcrumbSchema = {
+  '@type': 'BreadcrumbList',
+  '@id': `${pageUrl}#breadcrumb`,
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'About', item: pageUrl }
+  ]
+};
+
+const standards = [
+  {
+    title: 'We test before we publish',
+    body: 'Every skincare routine is run for at least four weeks on real skin before it becomes a guide. If a step causes irritation, it gets cut — not softened in the copy.'
+  },
+  {
+    title: 'We name the limits',
+    body: 'TeenTimeGlow is an editorial lifestyle publication, not a dermatology practice. When a concern needs a professional — persistent cystic acne, prescription actives, allergic reactions — we say so and point you to one.'
+  },
+  {
+    title: 'Ads and advice stay separate',
+    body: 'If a guide contains an affiliate link or a gifted product, it is labelled at the top of the article. Nothing here is paid placement dressed up as a personal recommendation.'
+  },
+  {
+    title: 'We correct in public',
+    body: 'If a guide is wrong, we update it and change the "last updated" date on the article. We never quietly delete a correction.'
+  }
+];
+---
+
+<BaseLayout
+  title="About Rini & TeenTimeGlow | Editorial Standards"
+  description="Meet Rini, the editor behind TeenTimeGlow, and read the editorial standards behind every skincare, fashion and decor guide we publish."
+  schema={[aboutSchema, breadcrumbSchema]}
+>
+  <main class="about-page">
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">About</span>
+      </nav>
+    </div>
+
+    <section class="about-hero container">
+      <div class="about-hero-text">
+        <span class="about-pill">✦ The person behind the glow</span>
+        <h1 class="about-title">Hi, I'm Rini.</h1>
+        <p class="about-lede">
+          I write, test and edit everything on TeenTimeGlow — the skincare routines, the outfit formulas,
+          the room makeovers, and the wallpapers that end up on your lock screen.
+        </p>
+        <p class="about-body">
+          TeenTimeGlow started as a moodboard I kept for myself: screenshots of routines that actually worked,
+          outfits built from clothes I already owned, and rooms that felt calm instead of expensive.
+          It turned into a magazine because the internet was full of aesthetic advice that looked beautiful
+          and explained nothing.
+        </p>
+        <p class="about-body">
+          So the rule here is simple. Every guide has to be specific enough to follow tonight, honest about
+          what it costs, and clear about what it can't do. No 14-step routines for a 15-year-old with a
+          school schedule. No "holy grail" product that's secretly an ad.
+        </p>
+      </div>
+      <div class="about-hero-card">
+        <img src="/assets/logo.jpg" alt="Rini, founder and editor of TeenTimeGlow" width="120" height="120" class="about-avatar" />
+        <p class="about-card-name">Rini</p>
+        <p class="about-card-role">Founder & Lifestyle Editor</p>
+        <dl class="about-facts">
+          <div><dt>Writing since</dt><dd>2023</dd></div>
+          <div><dt>Focus</dt><dd>Skincare, styling, small-space decor</dd></div>
+          <div><dt>Based in</dt><dd>Online, publishing weekly</dd></div>
+        </dl>
+        <a href="/edits" class="about-cta">Read the latest edits &rarr;</a>
+      </div>
+    </section>
+
+    <section class="about-standards container">
+      <h2 class="about-section-title">Editorial standards</h2>
+      <p class="about-section-sub">
+        These are the four rules every article on this site has to pass before it goes live.
+      </p>
+      <div class="about-grid">
+        {standards.map((s, i) => (
+          <article class="about-card">
+            <span class="about-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="about-card-title">{s.title}</h3>
+            <p class="about-card-body">{s.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="about-contact container">
+      <h2 class="about-section-title">Get in touch</h2>
+      <p class="about-section-sub">
+        Corrections, collaborations, or a guide you want us to test — email
+        <a href="mailto:hello@teentimeglow.me">hello@teentimeglow.me</a>.
+        We read everything and reply to corrections within two working days.
+      </p>
+      <div class="about-links">
+        {AUTHOR.sameAs.map((url) => (
+          <a href={url} rel="me noopener" target="_blank" class="about-social">{url.replace('https://www.', '').replace(/\/$/, '')}</a>
+        ))}
+        <a href="/edits" class="about-social">/edits</a>
+        <a href="/wallpapers" class="about-social">/wallpapers</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding-top: 110px;
+    padding-bottom: 90px;
+    background: #FAF7F2;
+  }
+  .breadcrumb-wrap {
+    margin-bottom: 26px;
+  }
+  .breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+  .breadcrumb-link {
+    color: var(--text-muted);
+    text-decoration: none;
+  }
+  .breadcrumb-link:hover {
+    color: var(--sunset-accent);
+  }
+  .breadcrumb-sep {
+    color: #CBD5E1;
+  }
+  .breadcrumb-current {
+    color: #111827;
+  }
+
+  .about-hero {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 56px;
+    align-items: start;
+    margin-bottom: 80px;
+  }
+  .about-pill {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--sunset-accent);
+    background: rgba(232, 93, 4, 0.08);
+    padding: 5px 13px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  .about-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    line-height: 1.05;
+    color: #0F1115;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .about-lede {
+    font-family: var(--font-editorial);
+    font-size: 1.3rem;
+    line-height: 1.55;
+    color: #111827;
+    margin-bottom: 20px;
+  }
+  .about-body {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    max-width: 62ch;
+  }
+
+  .about-hero-card {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 22px;
+    padding: 32px 28px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  }
+  .about-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--sunset-accent);
+    margin: 0 auto 16px;
+    display: block;
+  }
+  .about-card-name {
+    font-family: var(--font-editorial);
+    font-size: 1.5rem;
+    color: #0F1115;
+    margin-bottom: 2px;
+  }
+  .about-card-role {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .about-facts {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .about-facts div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.84rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .about-facts dt {
+    color: var(--text-muted);
+  }
+  .about-facts dd {
+    font-weight: 700;
+    color: #111827;
+    text-align: right;
+  }
+  .about-cta {
+    display: inline-block;
+    font-weight: 800;
+    font-size: 0.88rem;
+    color: var(--sunset-accent);
+    text-decoration: none;
+  }
+
+  .about-section-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    color: #0F1115;
+    margin-bottom: 10px;
+  }
+  .about-section-sub {
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.65;
+    margin-bottom: 30px;
+    max-width: 68ch;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  .about-card {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 26px;
+  }
+  .about-num {
+    font-family: var(--font-syne);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .about-card-title {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 8px;
+  }
+  .about-card-body {
+    font-size: 0.9rem;
+    line-height: 1.65;
+    color: var(--text-muted);
+  }
+
+  .about-contact {
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .about-contact a {
+    color: var(--sunset-accent);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .about-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .about-social {
+    padding: 9px 18px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #111827 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease;
+  }
+  .about-social:hover {
+    border-color: var(--sunset-accent);
+  }
+
+  @media (max-width: 900px) {
+    .about-hero {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

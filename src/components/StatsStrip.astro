@@ -1,6 +1,12 @@
 ---
-import { siteContent } from '@/config/siteContent';
-
+/**
+ * Stats strip.
+ *
+ * `stats` is intentionally required-in-practice and has no fallback. It used to
+ * default to `siteContent.stats`, which contained hardcoded invented figures —
+ * so any page that forgot to pass real data would silently publish fake social
+ * proof. With an empty default, a missing prop renders nothing instead.
+ */
 interface StatItem {
   target: string;
   suffix?: string;
@@ -12,17 +18,24 @@ interface Props {
   stats?: StatItem[];
 }
 
-const { stats = siteContent.stats } = Astro.props;
+const { stats = [] } = Astro.props;
 ---
-<section class="glow-stats-strip">
-  <div class="container">
-    <div class="stats-grid">
-      {stats.map((item) => (
-        <div class="stat-item">
-          <div class="stat-number" data-target={item.target} data-suffix={item.suffix || ''} data-decimals={item.decimals || '0'}>0</div>
-          <div class="stat-label">{item.label}</div>
-        </div>
-      ))}
+{stats.length > 0 && (
+  <section class="glow-stats-strip">
+    <div class="container">
+      <div class="stats-grid">
+        {stats.map((item) => (
+          <div class="stat-item">
+            <div
+              class="stat-number"
+              data-target={item.target}
+              data-suffix={item.suffix || ''}
+              data-decimals={item.decimals || '0'}
+            >0</div>
+            <div class="stat-label">{item.label}</div>
+          </div>
+        ))}
+      </div>
     </div>
-  </div>
-</section>
+  </section>
+)}

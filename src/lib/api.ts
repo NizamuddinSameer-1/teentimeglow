@@ -8,6 +8,21 @@ import {
 } from '@/lib/seeds';
 import type { Post, Ranking, Wallpaper, StoryMemeQuote, CommunityCreation, Quiz, QuizQuestion, QuizOutcome } from '@/types/database';
 
+/**
+ * Published articles for the public site.
+ *
+ * IMPORTANT: this merges database posts with the bundled seed articles instead
+ * of replacing one with the other. The previous logic was:
+ *
+ *     if (data.length === 0) return fallbackPosts;  // else return data
+ *
+ * which meant that the moment a single row was inserted into Supabase, all six
+ * seed articles disappeared from /edits, from internal links and from the
+ * sitemap — while `getPostBySlug` kept serving them with a 200 because it falls
+ * back per-slug. The result was five live, indexable, completely orphaned URLs.
+ * Merging keeps every reachable article discoverable. Database rows win on slug
+ * collisions so editorial edits always take precedence over seed copy.
+ */
 export async function getPosts(): Promise<Post[]> {
   try {
     const { data, error } = await supabase
@@ -16,10 +31,16 @@ export async function getPosts(): Promise<Post[]> {
       .eq('is_published', true)
       .order('created_at', { ascending: false });
 
-    if (error || !data || data.length === 0) {
+    const dbPosts = (!error && data ? data : []) as Post[];
+
+    if (dbPosts.length === 0) {
       return fallbackPosts;
     }
-    return data as Post[];
+
+    const dbSlugs = new Set(dbPosts.map((p) => p.slug));
+    const seedOnly = fallbackPosts.filter((p) => !dbSlugs.has(p.slug));
+
+    return [...dbPosts, ...seedOnly];
   } catch (err) {
     console.warn('Supabase fetch posts error, using fallback:', err);
     return fallbackPosts;
@@ -43,6 +64,14 @@ export async function getRankings(): Promise<Ranking[]> {
   }
 }
 
+/**
+ * Published mindset quotes.
+ *
+ * The live table currently contains three identical rows for the same quote
+ * ("Not every opportunity deserves a yes…"), which rendered the same card three
+ * times in the archive. Duplicates are collapsed here rather than deleted from
+ * the database, so nothing is lost if they turn out to be intentional variants.
+ */
 export async function getQuotes(): Promise<StoryMemeQuote[]> {
   try {
     const { data, error } = await supabase
@@ -50,10 +79,16 @@ export async function getQuotes(): Promise<StoryMemeQuote[]> {
       .select('*')
       .order('created_at', { ascending: false });
 
-    if (error || !data || data.length === 0) {
-      return fallbackQuotes;
-    }
-    return data as StoryMemeQuote[];
+    const rows = (!error && data && data.length > 0 ? data : fallbackQuotes) as StoryMemeQuote[];
+
+    const seen = new Set<string>();
+    return rows.filter((q) => {
+      const key = (q.content_text || '').toLowerCase().replace(/\s+/g, ' ').trim();
+      if (!key) return false;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   } catch (err) {
     console.warn('Supabase fetch quotes error, using fallback:', err);
     return fallbackQuotes;

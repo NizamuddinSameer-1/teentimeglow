@@ -13,7 +13,7 @@ export const siteContent = {
     fullTitle: 'TeenTimeGlow — Feel The Glow',
     tagline: 'feel the glow • curated teen aesthetic',
     email: 'hello@teentimeglow.me',
-    domain: 'https://teentimeglow.me',
+    domain: 'https://www.teentimeglow.me',
     metaDescription: 'Feel the vibes with TeenTimeGlow. Curated teen fashion lookbooks, glass skincare routines, cozy bedroom aesthetics, Prime Video rankings, daily quotes, and free 4K wallpapers by Rini.'
   },
 
@@ -59,12 +59,11 @@ export const siteContent = {
   },
 
   // Stats Strip
-  stats: [
-    { target: '14850', suffix: '+', label: '✨ Radiant Readers' },
-    { target: '99.4', suffix: '%', decimals: '1', label: '★ Glow Satisfaction' },
-    { target: '100', suffix: '%', label: '📱 Free 4K Wallpaper Vault' },
-    { target: '365', suffix: ' Days', label: '☕ Curated Teen Inspo' }
-  ],
+  // Intentionally empty. These used to hold hardcoded invented figures
+  // ("14,850+ readers", "99.4% satisfaction"). The homepage now computes real
+  // counters from the database in `src/pages/index.astro`. Do not put numbers
+  // back here — a static array cannot stay true.
+  stats: [],
 
   // Editorial Edits Section
   edits: {
@@ -115,7 +114,7 @@ export const siteContent = {
     trustPills: [
       '✦ 100% Free',
       '✦ Instant Badge',
-      '✦ 14k+ Teens Quizzed'
+      '✦ No Sign-Up Needed'
     ]
   },
 
@@ -123,7 +122,7 @@ export const siteContent = {
   gallery: {
     tag: 'Community Creations',
     title: 'The Teen Gallery',
-    subtitle: 'Aesthetic nail art, room setups, and style submissions by 12,000+ teen creators. Tag #TeenTimeGlow to be featured.',
+    subtitle: 'Aesthetic nail art, room setups, and style submissions from the TeenTimeGlow community. Tag #TeenTimeGlow to be featured.',
     submitBtnText: '✨ Submit Your Creation'
   },
 
@@ -135,11 +134,11 @@ export const siteContent = {
     mascotCaption: '“Sip, glow, and romanticize everyday moments.”',
     copyright: '© 2026 TeenTimeGlow (teentimeglow.me). Curated with love by Rini. All rights reserved.',
     socials: [
-      { name: 'Instagram', icon: '📸', url: 'https://instagram.com' },
-      { name: 'TikTok', icon: '🎵', url: 'https://tiktok.com' },
-      { name: 'Pinterest', icon: 'P', url: 'https://pinterest.com' },
-      { name: 'Spotify', icon: '🎧', url: 'https://spotify.com' },
-      { name: 'YouTube', icon: '▶', url: 'https://youtube.com' }
+      { name: 'Instagram', icon: '📸', url: 'https://www.instagram.com/teentimeglow' },
+      { name: 'TikTok', icon: '🎵', url: 'https://www.tiktok.com/@teentimeglow' },
+      { name: 'Pinterest', icon: 'P', url: 'https://www.pinterest.com/teentimeglow' },
+      { name: 'Spotify', icon: '🎧', url: 'https://open.spotify.com/user/teentimeglow' },
+      { name: 'YouTube', icon: '▶', url: 'https://www.youtube.com/@teentimeglow' }
     ]
   }
 };

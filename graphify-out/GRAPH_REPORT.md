@@ -1,17 +1,17 @@
-# Graph Report - rini website  (2026-10-21)
+# Graph Report - rini website  (2026-10-26)
 
 ## Corpus Check
-- 161 files · ~1,127,759 words
+- 161 files · ~140,346 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 5 file(s) not represented in the graph (top: (none) 2, .example 1, .xml 1)
 
 ## Summary
-- 1201 nodes · 1527 edges · 133 communities (113 shown, 20 thin omitted)
-- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 109 edges (avg confidence: 0.92)
+- 1197 nodes · 1533 edges · 132 communities (110 shown, 22 thin omitted)
+- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 111 edges (avg confidence: 0.92)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `ea8bf68f`
+- Built from commit: `a4ca994f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -25,7 +25,7 @@
 - Admin Rich Text Editor
 - GSD Workflow & Planning Tools
 - getAdminClient
-- Tasks
+- Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page (`/quotes`)
 - Interactive Glow Quiz Engine
 - Anti-AI Slop Craft Playbook
 - Supabase Database & API Layer
@@ -136,25 +136,24 @@
 - BaseLayout.astro
 - wallpapers/index.astro
 - renderQuizQuestionsBuilder
-- Plan 15-3: Interactive Quiz Studio Tab in Admin & Public Quiz Sync
+- Milestone 2: Dedicated Standalone Pages
 - rankings.ts
 - Plan 15-1: Backend API & Data Layer for Quizzes & Posts Draft Status
 - Phase 15: Admin Studio 2.0 — Research
-- Overview of Phases
+- Plan 7-1: Dedicated 4K Wallpaper Vault Standalone Page (`/wallpapers`)
 - quizzes.ts
 - Plan 3-1: Supabase Database Layer, Resilient Queries & Fallback Seeds
 - uploadPhotoFile
-- Plan 10-1: Editorial Magazine Lookbooks & Dynamic Reader Routes (`/edits` & `/edits/[slug]`)
-- Phase 10: Editorial Magazine & Full Article Reader — Verification
+- Plan 7-1: Dedicated 4K Wallpaper Vault Standalone Page — Summary
+- Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page — Summary
 - TeenTimeGlow (`teentimeglow.me`)
 - login.astro
-- Backend & Database Schemas
 
 ## God Nodes (most connected - your core abstractions)
 1. `getAdminClient()` - 44 edges
-2. `playTone()` - 19 edges
+2. `astro` - 19 edges
 3. `playTone()` - 19 edges
-4. `astro` - 18 edges
+4. `playTone()` - 19 edges
 5. `PART 12 — Google Stitch: deep dive` - 18 edges
 6. `showToast()` - 14 edges
 7. `parseApiResponse()` - 14 edges
@@ -163,16 +162,16 @@
 10. `showToast()` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Tasks` --references--> `getPosts()`  [INFERRED]
-  .planning/phases/10-editorial-magazine/10-01-PLAN.md → src/lib/api.ts
-- `Code Patterns (Model Resilience)` --references--> `getAdminClient()`  [INFERRED]
-  .planning/phases/04-serverless-api-endpoints/04-01-PLAN.md → src/lib/supabase.ts
-- `Files Created/Modified` --references--> `getAdminClient()`  [INFERRED]
-  .planning/phases/04-serverless-api-endpoints/04-01-SUMMARY.md → src/lib/supabase.ts
-- `Notable Decisions` --references--> `getAdminClient()`  [INFERRED]
-  .planning/phases/04-serverless-api-endpoints/04-01-SUMMARY.md → src/lib/supabase.ts
-- `Code Patterns (Model Resilience)` --references--> `getAdminClient()`  [INFERRED]
-  .planning/phases/05-zero-code-admin-dashboard/05-01-PLAN.md → src/lib/supabase.ts
+- `Tasks` --references--> `getQuotes()`  [INFERRED]
+  .planning/phases/08-quotes-hub/08-01-PLAN.md → src/lib/api.ts
+- `What Was Built` --references--> `getQuotes()`  [INFERRED]
+  .planning/phases/08-quotes-hub/08-01-SUMMARY.md → src/lib/api.ts
+- `Tasks` --references--> `getWallpapers()`  [INFERRED]
+  .planning/phases/07-wallpapers-vault/07-01-PLAN.md → src/lib/api.ts
+- `What Was Built` --references--> `getWallpapers()`  [INFERRED]
+  .planning/phases/07-wallpapers-vault/07-01-SUMMARY.md → src/lib/api.ts
+- `Phase 7: Dedicated 4K Wallpaper Vault (`/wallpapers`)` --references--> `getWallpapers()`  [INFERRED]
+  .planning/ROADMAP.md → src/lib/api.ts
 
 ## Import Cycles
 - None detected.
@@ -185,47 +184,47 @@
 - **Design & Aesthetic System** — concept_glassmorphism, concept_pink_hearts_cursor, concept_preloader_blobs, src_components_navbar, src_scripts_main [INFERRED]
 - **Interactive User Features** — concept_quiz_engine, concept_community_gallery, concept_wallpapers_vault, src_components_interactive_quizplayer, src_components_interactive_communitysubmitmodal [INFERRED]
 
-## Communities (133 total, 20 thin omitted)
+## Communities (132 total, 22 thin omitted)
 
 ### Community 0 - "4K Wallpapers Vault"
 Cohesion: 0.07
-Nodes (44): ambientGlow, calculateQuizResult(), closeStoryModalDirect(), closeSubmitModalDirect(), copyQuote(), executeNavSearch(), filterEdits(), filterWallpapers() (+36 more)
+Nodes (44): Pink Hearts Cursor Micro-Interactions, ambientGlow, calculateQuizResult(), closeStoryModalDirect(), closeSubmitModalDirect(), copyQuote(), executeNavSearch(), filterEdits() (+36 more)
 
 ### Community 1 - "4K Wallpapers Vault"
 Cohesion: 0.07
-Nodes (44): ambientGlow, calculateQuizResult(), closeStoryModalDirect(), closeSubmitModalDirect(), copyQuote(), executeNavSearch(), filterEdits(), filterWallpapers() (+36 more)
+Nodes (43): ambientGlow, calculateQuizResult(), closeStoryModalDirect(), closeSubmitModalDirect(), copyQuote(), executeNavSearch(), filterEdits(), filterWallpapers() (+35 more)
 
 ### Community 2 - "admin/index.astro"
-Cohesion: 0.08
-Nodes (21): supabase, activePreviewQuestions, adminClient, approvedList, archetypesData, currentQuizQuestions, escapeHtml(), openQuizPreviewModal() (+13 more)
+Cohesion: 0.09
+Nodes (20): activePreviewQuestions, adminClient, approvedList, archetypesData, currentQuizQuestions, escapeHtml(), openQuizPreviewModal(), pendingList (+12 more)
 
 ### Community 3 - "gsd-supermd Module"
 Cohesion: 0.05
 Nodes (38): 1.1 Project State Detection, 1.2 Existing Codebase Analysis (For Existing Projects), 1.3 Environment Detection, 3.1 Auto-Generate Project Files, 3.2 Auto-Scaffold Project, 3.3 Auto-Plan All Phases, 3.4 Dependency Resolution, 4.1 Phase Execution Flow (+30 more)
 
 ### Community 4 - "Supabase Database & API Layer"
-Cohesion: 0.05
-Nodes (35): dependencies, astro, @astrojs/react, @astrojs/vercel, dompurify, react, react-dom, @supabase/supabase-js (+27 more)
+Cohesion: 0.07
+Nodes (33): dependencies, astro@^5.4.2, @astrojs/react@^4.4.2, @astrojs/vercel@^8.0.7, dompurify@^3.2.4, react-dom@^19.3.1, @supabase/supabase-js@^2.49.1, @types/react@^19.3.0 (+25 more)
 
 ### Community 5 - "getWallpapers"
-Cohesion: 0.17
-Nodes (9): Objective, Plan 7-1: Dedicated 4K Wallpaper Vault Standalone Page (`/wallpapers`), Tasks, Plan 7-1: Dedicated 4K Wallpaper Vault Standalone Page — Summary, What Was Built, Phase 7: Dedicated 4K Wallpaper Vault — Verification, Verification Checklist, Phase 7: Dedicated 4K Wallpaper Vault (`/wallpapers`) (+1 more)
+Cohesion: 0.29
+Nodes (7): Tasks, Phase 7: Dedicated 4K Wallpaper Vault — Verification, Verification Checklist, Phase 3: Supabase Database Layer & Fallback Seeds, Phase 8: Daily Mindset & Quotes Hub (`/quotes`) [x] (Completed: 2026-10-17), getQuotes(), getWallpapers()
 
 ### Community 6 - "Admin Rich Text Editor"
 Cohesion: 0.06
 Nodes (27): 4K Wallpapers Visual Pack, Visual Non-Coder Admin Dashboard, Astro Hybrid SSR/SSG Framework, Cloudflare R2 Media Storage, Decoupled Edge-First Jamstack, Supabase Managed PostgreSQL, Vercel Global Edge Network, Community Creations Gallery Table (+19 more)
 
 ### Community 7 - "GSD Workflow & Planning Tools"
-Cohesion: 0.09
-Nodes (18): colors, commitMemory(), ensureMemoryDir(), extractField(), extractPhases(), findPlanningDir(), formatSize(), fs (+10 more)
+Cohesion: 0.10
+Nodes (15): colors, commitMemory(), ensureMemoryDir(), extractField(), extractPhases(), findPlanningDir(), formatSize(), getDateTimeString() (+7 more)
 
 ### Community 8 - "getAdminClient"
 Cohesion: 0.26
 Nodes (10): getAdminClient(), checkAuth(), DELETE(), POST(), prerender, PUT(), POST(), prerender (+2 more)
 
-### Community 9 - "Tasks"
-Cohesion: 0.20
-Nodes (8): Tasks, Objective, Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page (`/quotes`), Tasks, Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page — Summary, What Was Built, Phase 8: Daily Mindset & Quotes Hub (`/quotes`) [x] (Completed: 2026-10-17), getQuotes()
+### Community 9 - "Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page (`/quotes`)"
+Cohesion: 0.50
+Nodes (3): Objective, Plan 8-1: Dedicated Daily Mindset & Quotes Standalone Page (`/quotes`), Tasks
 
 ### Community 10 - "Interactive Glow Quiz Engine"
 Cohesion: 0.12
@@ -280,12 +279,12 @@ Cohesion: 0.15
 Nodes (12): 1. Validate Project, 2. Create Quick Task Directory, 3. Create Quick Plan, 4. Execute Tasks, 5. Create Summary, 6. Update STATE.md, 7. Git Commit Docs, 8. Completion (+4 more)
 
 ### Community 23 - "Supabase Database & API Layer"
-Cohesion: 0.27
-Nodes (10): Development Rules & Anti-Slop Constraints, System Architecture & Edge Compute, Vercel Global Edge Deployment, Master Engineering Brain Index, ADRs & Architecture Decision Log, Astro Hybrid Technology Stack, Testing & QA Playbook, Astro Hybrid Architecture (+2 more)
+Cohesion: 0.21
+Nodes (13): Development Rules & Anti-Slop Constraints, System Architecture & Edge Compute, Backend & Database Schemas, Vercel Global Edge Deployment, Master Engineering Brain Index, ADRs & Architecture Decision Log, Astro Hybrid Technology Stack, Testing & QA Playbook (+5 more)
 
 ### Community 24 - "Design System & UI Specifications"
-Cohesion: 0.33
-Nodes (6): Design System & UI Specifications, Glassmorphic Navbar & UI System, Pink Hearts Cursor Micro-Interactions, Cinematic Preloader & Morphing Blobs, dismiss(), tick()
+Cohesion: 0.40
+Nodes (5): Design System & UI Specifications, Glassmorphic Navbar & UI System, Cinematic Preloader & Morphing Blobs, dismiss(), tick()
 
 ### Community 25 - "Curated Rankings Showcase"
 Cohesion: 0.22
@@ -312,8 +311,8 @@ Cohesion: 0.50
 Nodes (3): 📚 Master Document Directory, Master Knowledge Index — TeenTimeGlow Engineering Brain, 🎯 North Star Metrics
 
 ### Community 31 - "Editorial Lifestyle Edits"
-Cohesion: 0.25
-Nodes (7): Must-Haves Check, Phase 3: Supabase Database Layer & Fallback Seeds, getPostBySlug(), getPosts(), categoryLabels, prerender, relatedPosts
+Cohesion: 0.20
+Nodes (8): Gaps, Must-Haves Check, Phase 10: Editorial Magazine & Full Article Reader — Verification, Requirements Coverage, getPostBySlug(), categoryLabels, prerender, relatedPosts
 
 ### Community 32 - "SEO Analytics & OpenGraph"
 Cohesion: 0.20
@@ -329,7 +328,7 @@ Nodes (9): 1. Astro Scaffolding & Component Modularization, 2. Backend & Supabas
 
 ### Community 35 - "QuizPlayer.tsx"
 Cohesion: 0.05
-Nodes (32): Community Gallery & Submissions, Objective, Plan 11-1: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`), Tasks, Notable Decisions, Files Created/Modified, Issues Encountered, Notable Decisions (+24 more)
+Nodes (33): Community Gallery & Submissions, react@^19.3.1, Objective, Plan 11-1: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`), Tasks, Notable Decisions, Files Created/Modified, Issues Encountered (+25 more)
 
 ### Community 36 - "Daily Vibe & Quotes Engine"
 Cohesion: 0.24
@@ -384,8 +383,8 @@ Cohesion: 0.29
 Nodes (6): Files Created/Modified, Issues Encountered, Notable Decisions, Plan 2-1: Modular Frontend Components, Client Directives & Manual Editability — Summary, Verification Results, What Was Built
 
 ### Community 49 - "Editorial Lifestyle Edits"
-Cohesion: 0.33
-Nodes (5): categoryLabels, filterEditsPage(), prerender, remainingPosts, resetEditsFilters()
+Cohesion: 0.18
+Nodes (9): Objective, Plan 10-1: Editorial Magazine Lookbooks & Dynamic Reader Routes (`/edits` & `/edits/[slug]`), Tasks, getPosts(), categoryLabels, filterEditsPage(), prerender, remainingPosts (+1 more)
 
 ### Community 50 - "Anti-AI Slop Craft Playbook"
 Cohesion: 0.33
@@ -484,8 +483,8 @@ Cohesion: 0.40
 Nodes (4): Gaps, Must-Haves Check, Phase 9: Dedicated Curated Leaderboard — Verification, Requirements Coverage
 
 ### Community 74 - "Milestone 2: Dedicated Standalone Pages"
-Cohesion: 0.18
-Nodes (10): Milestone 2: Dedicated Standalone Pages, Milestone 3: Google SEO, Analytics & Search Console Indexing, Milestone 4: Rini's Zero-Tech Visual Admin Studio, Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`) [x] (Completed: 2026-10-17), Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`) [x] (Completed: 2026-10-17), Phase 12: Unified Navigation, Global Links & Production Verification [x] (Completed: 2026-10-17), Phase 13: Google Analytics 4, Search Console, Sitemap & Search Engine Optimization [x] (Completed: 2026-10-18), Phase 14: Rini's Zero-Tech Visual Admin Studio (/admin) [x] (Completed: 2026-10-18) (+2 more)
+Cohesion: 0.15
+Nodes (12): Milestone 3: Google SEO, Analytics & Search Console Indexing, Milestone 4: Rini's Zero-Tech Visual Admin Studio, Overview of Phases, Phase 13: Google Analytics 4, Search Console, Sitemap & Search Engine Optimization [x] (Completed: 2026-10-18), Phase 14: Rini's Zero-Tech Visual Admin Studio (/admin) [x] (Completed: 2026-10-18), Phase 15: Admin Studio 2.0 (Quiz Builder, Advanced Article Rich Editor & Affiliate Links) [x] (Completed: 2026-10-21), Phase 1: Astro Scaffolding & Build Pipeline, Phase 2: Modular Frontend Components & Design Parity (+4 more)
 
 ### Community 75 - "Glassmorphic Navbar & Audio"
 Cohesion: 0.40
@@ -564,8 +563,8 @@ Cohesion: 0.50
 Nodes (3): Current State: TeenTimeGlow Dedicated Standalone Pages, Last Activity, Phase Tracking
 
 ### Community 94 - "supabase.ts"
-Cohesion: 0.25
-Nodes (6): Security Hardening & OWASP Defenses, getEnvVar(), POST(), prerender, POST(), prerender
+Cohesion: 0.22
+Nodes (7): Security Hardening & OWASP Defenses, getEnvVar(), supabase, POST(), prerender, POST(), prerender
 
 ### Community 114 - "Plan 15-01: Backend API & Data Layer for Quizzes & Posts Draft Status — Summary"
 Cohesion: 0.28
@@ -588,12 +587,12 @@ Cohesion: 0.28
 Nodes (6): filterWallpapersPage(), openWallpaperModal(), prerender, resetWallpaperFilters(), totalDownloads, trackWallpaperDownload()
 
 ### Community 119 - "renderQuizQuestionsBuilder"
-Cohesion: 0.43
-Nodes (8): Tasks, addOption(), addQuestion(), deleteQuestion(), moveQuestion(), removeOption(), renderQuizQuestionsBuilder(), syncQuizQuestionsFromDOM()
+Cohesion: 0.19
+Nodes (14): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 15-3: Interactive Quiz Studio Tab in Admin & Public Quiz Sync, Tasks, addOption(), addQuestion(), deleteQuestion() (+6 more)
 
-### Community 120 - "Plan 15-3: Interactive Quiz Studio Tab in Admin & Public Quiz Sync"
-Cohesion: 0.29
-Nodes (6): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 15-3: Interactive Quiz Studio Tab in Admin & Public Quiz Sync, editQuiz(), switchTab()
+### Community 120 - "Milestone 2: Dedicated Standalone Pages"
+Cohesion: 0.40
+Nodes (5): Milestone 2: Dedicated Standalone Pages, Phase 10: Editorial Magazine & Full Article Reader (`/edits` & `/edits/[slug]`) [x] (Completed: 2026-10-17), Phase 11: Dedicated Glow Quiz & Community Hub (`/quiz` & `/gallery`) [x] (Completed: 2026-10-17), Phase 12: Unified Navigation, Global Links & Production Verification [x] (Completed: 2026-10-17), Phase 7: Dedicated 4K Wallpaper Vault (`/wallpapers`)
 
 ### Community 121 - "rankings.ts"
 Cohesion: 0.43
@@ -607,9 +606,9 @@ Nodes (5): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 15-1: B
 Cohesion: 0.33
 Nodes (5): Implementation Approach, Libraries & Tools, Patterns to Follow, Phase 15: Admin Studio 2.0 — Research, Pitfalls to Avoid
 
-### Community 124 - "Overview of Phases"
-Cohesion: 0.33
-Nodes (6): Overview of Phases, Phase 1: Astro Scaffolding & Build Pipeline, Phase 2: Modular Frontend Components & Design Parity, Phase 4: Serverless API Endpoints & Community Uploads [x] (Completed: 2026-10-17), Phase 5: Rini's Zero-Code Admin Dashboard (`/admin`) [x] (Completed: 2026-10-17), Phase 6: Verification, Security Audit & Build Quality [x] (Completed: 2026-10-17)
+### Community 124 - "Plan 7-1: Dedicated 4K Wallpaper Vault Standalone Page (`/wallpapers`)"
+Cohesion: 0.50
+Nodes (3): Objective, Plan 7-1: Dedicated 4K Wallpaper Vault Standalone Page (`/wallpapers`), Tasks
 
 ### Community 125 - "quizzes.ts"
 Cohesion: 0.53
@@ -623,41 +622,29 @@ Nodes (4): Code Patterns (Model Resilience), Must-Haves, Objective, Plan 3-1: Su
 Cohesion: 0.40
 Nodes (5): handleCoverUpload(), handleQuizCoverUpload(), handleRankingUpload(), handleWallpaperUpload(), uploadPhotoFile()
 
-### Community 128 - "Plan 10-1: Editorial Magazine Lookbooks & Dynamic Reader Routes (`/edits` & `/edits/[slug]`)"
-Cohesion: 0.50
-Nodes (3): Objective, Plan 10-1: Editorial Magazine Lookbooks & Dynamic Reader Routes (`/edits` & `/edits/[slug]`), Tasks
-
-### Community 129 - "Phase 10: Editorial Magazine & Full Article Reader — Verification"
-Cohesion: 0.50
-Nodes (3): Gaps, Phase 10: Editorial Magazine & Full Article Reader — Verification, Requirements Coverage
-
 ### Community 130 - "TeenTimeGlow (`teentimeglow.me`)"
 Cohesion: 0.50
 Nodes (4): 🚀 Deployment Instructions, 🧠 Engineering Brain & Documentation, ✨ Latest Features & Design Updates, TeenTimeGlow (`teentimeglow.me`)
 
-### Community 132 - "Backend & Database Schemas"
-Cohesion: 0.67
-Nodes (3): Backend & Database Schemas, Cloudflare R2 Object Storage, Supabase PostgreSQL Database
-
 ## Knowledge Gaps
-- **36 isolated node(s):** `@types/react`, `@types/react-dom`, `dompurify`, `react-dom`, `@types/dompurify` (+31 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 714 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **29 isolated node(s):** `astro/tsconfigs/strict`, `Lighthouse CI 95-100 Performance Target`, `Cinematic Preloader & Organic Morphing Blobs`, `Edge Rate Limiting on Free Infrastructure`, `Google Analytics 4 Telemetry Integration` (+24 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 693 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `getAdminClient()` connect `getAdminClient` to `admin/index.astro`, `Tasks`, `Admin Authentication & Sessions`, `Admin Authentication & Sessions`, `astro`, `Admin Authentication & Sessions`, `quizzes.ts`, `SEO Analytics & OpenGraph`, `SEO Analytics & OpenGraph`, `Admin Authentication & Sessions`, `rankings.ts`, `-01-SUMMARYmd Module`, `Admin Media Upload`, `supabase.ts`?**
-  _High betweenness centrality (0.058) - this node is a cross-community bridge._
+- **Why does `getAdminClient()` connect `getAdminClient` to `admin/index.astro`, `getWallpapers`, `Admin Authentication & Sessions`, `Admin Authentication & Sessions`, `astro`, `Admin Authentication & Sessions`, `quizzes.ts`, `SEO Analytics & OpenGraph`, `SEO Analytics & OpenGraph`, `Admin Authentication & Sessions`, `rankings.ts`, `-01-SUMMARYmd Module`, `Admin Media Upload`, `supabase.ts`?**
+  _High betweenness centrality (0.056) - this node is a cross-community bridge._
 - **Are the 8 inferred relationships involving `getAdminClient()` (e.g. with `Tasks` and `Code Patterns (Model Resilience)`) actually correct?**
   _`getAdminClient()` has 8 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `@types/react`, `@types/react-dom`, `dompurify` to the rest of the system?**
-  _36 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **What connects `astro/tsconfigs/strict`, `Lighthouse CI 95-100 Performance Target`, `Cinematic Preloader & Organic Morphing Blobs` to the rest of the system?**
+  _29 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `4K Wallpapers Vault` be split into smaller, more focused modules?**
-  _Cohesion score 0.07058001397624039 - nodes in this community are weakly interconnected._
-- **Why does `Design System & UI Specifications` connect `Design System & UI Specifications` to `Supabase Database & API Layer`?**
+  _Cohesion score 0.06868686868686869 - nodes in this community are weakly interconnected._
+- **Why does `Design System & UI Specifications` connect `Design System & UI Specifications` to `4K Wallpapers Vault`, `Supabase Database & API Layer`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
 - **Should `4K Wallpapers Vault` be split into smaller, more focused modules?**
   _Cohesion score 0.07058001397624039 - nodes in this community are weakly interconnected._
-- **Why does `Pink Hearts Cursor Micro-Interactions` connect `Design System & UI Specifications` to `4K Wallpapers Vault`?**
-  _High betweenness centrality (0.032) - this node is a cross-community bridge._
+- **Why does `Pink Hearts Cursor Micro-Interactions` connect `4K Wallpapers Vault` to `Design System & UI Specifications`?**
+  _High betweenness centrality (0.031) - this node is a cross-community bridge._

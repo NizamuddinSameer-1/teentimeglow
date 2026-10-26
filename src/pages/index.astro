@@ -28,12 +28,26 @@ const [posts, rankings, quotes, wallpapers, creations, settings] = await Promise
   getSiteSettings()
 ]);
 
-const customStats = settings ? [
-  { target: settings.readersCount || '14850', suffix: '+', label: '✨ Radiant Readers' },
-  { target: settings.satisfactionRate || '99.4', suffix: '%', decimals: '1', label: '★ Glow Satisfaction' },
-  { target: '100', suffix: '%', label: '📱 Free 4K Wallpaper Vault' },
-  { target: '365', suffix: ' Days', label: '☕ Curated Teen Inspo' }
-] : undefined;
+/**
+ * Homepage counters.
+ *
+ * Every figure below is computed from live data at request time. Nothing is
+ * hardcoded. The previous version displayed invented social proof — "14,850+
+ * readers" and "99.4% glow satisfaction" were literals in the source, not
+ * measurements — which is a trust problem on a site aimed at teenagers and a
+ * deceptive-practices risk under Google's spam policies.
+ *
+ * If a counter reads low, that is the honest number and the fix is to earn it,
+ * not to type a bigger one.
+ */
+const totalDownloads = wallpapers.reduce((sum, w) => sum + (w.download_count || 0), 0);
+
+const liveStats = [
+  { target: String(posts.length), suffix: '', label: '✦ Guides Published' },
+  { target: String(wallpapers.length), suffix: '', label: '📱 Free Wallpapers' },
+  { target: String(totalDownloads), suffix: '', label: '⬇ Wallpaper Downloads' },
+  { target: String(creations.length), suffix: '', label: '💅 Community Creations' }
+];
 ---
 <BaseLayout>
   <Hero
@@ -41,7 +55,7 @@ const customStats = settings ? [
     headline={settings?.heroHeading}
     subtext={settings?.heroSubtext}
   />
-  <StatsStrip stats={customStats} />
+  <StatsStrip stats={liveStats} />
   <EditsSection posts={posts} />
   <RankingsSection rankings={rankings} />
   <QuotesSection quotes={quotes} />

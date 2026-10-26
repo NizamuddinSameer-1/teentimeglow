@@ -36,8 +36,6 @@ export const GET: APIRoute = async () => {
       heroBadge: siteContent.hero.issueBadge,
       heroHeading: siteContent.hero.mainHeadingHtml,
       heroSubtext: siteContent.hero.subtext,
-      readersCount: siteContent.stats[0]?.target || '14850',
-      satisfactionRate: siteContent.stats[1]?.target || '99.4',
       footerQuote: siteContent.footer.mascotCaption
     };
 
@@ -52,8 +50,6 @@ export const GET: APIRoute = async () => {
         heroBadge: siteContent.hero.issueBadge,
         heroHeading: siteContent.hero.mainHeadingHtml,
         heroSubtext: siteContent.hero.subtext,
-        readersCount: '14850',
-        satisfactionRate: '99.4',
         footerQuote: siteContent.footer.mascotCaption
       }
     }), {

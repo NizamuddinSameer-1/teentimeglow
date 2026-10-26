@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPostBySlug, getPosts } from '@/lib/api';
+import { SITE_URL, LOGO_URL, AUTHOR, absoluteUrl, categoryByDbValue } from '@/config/seo';
 import type { Post } from '@/types/database';
 
 export const prerender = false;
@@ -8,58 +9,129 @@ export const prerender = false;
 const { slug } = Astro.params;
 
 if (!slug) {
-  return Astro.redirect('/edits');
+  return Astro.rewrite('/404');
 }
 
 const post: Post | null = await getPostBySlug(slug);
 
+// Previously this redirected unknown slugs to /edits with a 200 response,
+// which tells Google "this URL is fine, it just shows the index". That creates
+// an unlimited supply of soft-404s and burns crawl budget. Rewriting to /404
+// keeps the URL intact and returns a genuine not-found state.
 if (!post) {
-  return Astro.redirect('/edits');
+  return Astro.rewrite('/404');
 }
 
 const allPosts: Post[] = await getPosts();
-const relatedPosts = allPosts.filter(p => p.slug !== post.slug).slice(0, 3);
 
-const categoryLabels: Record<string, string> = {
-  beauty: 'Beauty & Skincare',
-  fashion: 'Fashion Lookbook',
-  decor: 'Cozy Decor'
+const category = categoryByDbValue(post.category);
+const categoryLabel = category?.label || post.category;
+const categoryUrl = category ? `/edits/category/${category.slug}` : '/edits';
+
+// Related posts prefer the same category — that is what makes internal links
+// topically relevant instead of random.
+const sameCategory = allPosts.filter(p => p.slug !== post.slug && p.category === post.category);
+const otherCategory = allPosts.filter(p => p.slug !== post.slug && p.category !== post.category);
+const relatedPosts = [...sameCategory, ...otherCategory].slice(0, 3);
+
+const postUrl = absoluteUrl(`/edits/${post.slug}`);
+
+// ---------------------------------------------------------------------------
+// Table of contents built from the real <h2> headings in the article body.
+// The old sidebar listed three hardcoded labels ("Mindset & Preparation"…)
+// for every article regardless of content, and none of them were clickable.
+// ---------------------------------------------------------------------------
+function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/<[^>]+>/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-')
+    .slice(0, 60);
+}
+
+function buildTocAndContent(html: string): { html: string; toc: { id: string; text: string }[] } {
+  const toc: { id: string; text: string }[] = [];
+  const used = new Set<string>();
+
+  const out = html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (_match, attrs: string, inner: string) => {
+    const text = inner.replace(/<[^>]+>/g, '').trim();
+    if (!text) return _match;
+
+    const existingId = /\bid=["']([^"']+)["']/i.exec(attrs)?.[1];
+    let id = existingId || slugifyHeading(text);
+    if (!id) return _match;
+
+    let unique = id;
+    let n = 2;
+    while (used.has(unique)) unique = `${id}-${n++}`;
+    used.add(unique);
+
+    if (!existingId) {
+      toc.push({ id: unique, text });
+      return `<h2${attrs} id="${unique}">${inner}</h2>`;
+    }
+    toc.push({ id: existingId, text });
+    return _match;
+  });
+
+  return { html: out, toc };
+}
+
+const { html: articleHtml, toc } = buildTocAndContent(post.content_html || '');
+
+// Word count from the rendered body — useful for Article schema and for
+// spotting thin content during editorial review.
+const wordCount = (post.content_html || '')
+  .replace(/<[^>]+>/g, ' ')
+  .split(/\s+/)
+  .filter(Boolean).length;
+
+const coverImage = absoluteUrl(post.cover_image_url || '/assets/hero-glow-creator.jpg');
+
+const articleSchema = {
+  '@type': 'BlogPosting',
+  '@id': `${postUrl}#article`,
+  headline: post.title,
+  description: post.excerpt,
+  image: {
+    '@type': 'ImageObject',
+    url: coverImage,
+    width: 1200,
+    height: 675
+  },
+  datePublished: post.created_at || '2026-10-18T00:00:00Z',
+  dateModified: post.updated_at || post.created_at || '2026-10-18T00:00:00Z',
+  author: { '@id': `${SITE_URL}/#person-rini` },
+  publisher: { '@id': `${SITE_URL}/#organization` },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': postUrl },
+  articleSection: categoryLabel,
+  inLanguage: 'en',
+  wordCount,
+  isAccessibleForFree: true,
+  url: postUrl
+};
+
+const breadcrumbSchema = {
+  '@type': 'BreadcrumbList',
+  '@id': `${postUrl}#breadcrumb`,
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'Magazine', item: `${SITE_URL}/edits` },
+    { '@type': 'ListItem', position: 3, name: categoryLabel, item: absoluteUrl(categoryUrl) },
+    { '@type': 'ListItem', position: 4, name: post.title }
+  ]
 };
 ---
 
 <BaseLayout
-  title={`${post.title} — TeenTimeGlow Magazine`}
+  title={`${post.title} | TeenTimeGlow`}
   description={post.excerpt}
-  ogImage={post.cover_image_url?.startsWith('http') ? post.cover_image_url : `https://teentimeglow.me${post.cover_image_url || '/assets/hero-glow-creator.jpg'}`}
+  ogImage={coverImage}
+  ogType="article"
+  schema={[articleSchema, breadcrumbSchema]}
 >
-  <!-- Google Rich Snippet: BlogPosting Schema -->
-  <script type="application/ld+json" is:inline set:html={JSON.stringify({
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": post.title,
-    "description": post.excerpt,
-    "image": post.cover_image_url?.startsWith('http') ? post.cover_image_url : `https://teentimeglow.me${post.cover_image_url || '/assets/hero-glow-creator.jpg'}`,
-    "datePublished": post.created_at || "2026-10-18T00:00:00Z",
-    "dateModified": post.updated_at || post.created_at || "2026-10-18T00:00:00Z",
-    "author": {
-      "@type": "Person",
-      "name": "Rini",
-      "url": "https://teentimeglow.me/"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "TeenTimeGlow",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://teentimeglow.me/assets/logo.jpg"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://teentimeglow.me/edits/${post.slug}`
-    }
-  })} />
-
   <!-- Reading Progress Bar -->
   <div class="reading-progress-track">
     <div class="reading-progress-fill" id="readingProgress"></div>
@@ -73,6 +145,8 @@ const categoryLabels: Record<string, string> = {
         <span class="breadcrumb-sep">/</span>
         <a href="/edits" class="breadcrumb-link">Magazine</a>
         <span class="breadcrumb-sep">/</span>
+        <a href={categoryUrl} class="breadcrumb-link">{categoryLabel}</a>
+        <span class="breadcrumb-sep">/</span>
         <span class="breadcrumb-current">{post.title}</span>
       </nav>
       <a href="/edits" class="btn-back-home magnetic-btn">
@@ -84,7 +158,9 @@ const categoryLabels: Record<string, string> = {
     <article class="article-main-wrap">
       <header class="article-header container">
         <div class="article-meta-top">
-          <span class="article-cat-badge">{categoryLabels[post.category] || post.category}</span>
+          <span class="article-cat-badge">
+            <a href={categoryUrl} style="color:inherit;text-decoration:none">{categoryLabel}</a>
+          </span>
           <span class="article-read-time">📖 {post.read_time_minutes} min read</span>
           <span class="article-date-pill">✦ ISSUE #28</span>
         </div>
@@ -134,9 +210,18 @@ const categoryLabels: Record<string, string> = {
           <div class="sidebar-sticky-box">
             <span class="sidebar-heading">✦ IN THIS EDIT</span>
             <ul class="sidebar-toc-list">
-              <li><span class="toc-bullet">01</span> Mindset & Preparation</li>
-              <li><span class="toc-bullet">02</span> The Core Ritual</li>
-              <li><span class="toc-bullet">03</span> Pro Tips by Rini</li>
+              {toc.length > 0 ? (
+                toc.map((item, i) => (
+                  <li>
+                    <a href={`#${item.id}`} class="toc-link">
+                      <span class="toc-bullet">{String(i + 1).padStart(2, '0')}</span>
+                      {item.text}
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <li><span class="toc-bullet">01</span> Read the full edit</li>
+              )}
             </ul>
 
             <div class="sidebar-divider"></div>
@@ -150,7 +235,7 @@ const categoryLabels: Record<string, string> = {
 
         <!-- Article Rich HTML Body -->
         <div class="article-rich-body">
-          <div class="rich-html-content" set:html={post.content_html} />
+          <div class="rich-html-content" set:html={articleHtml} />
 
           <!-- Author Signature Card -->
           <div class="author-signoff-card">
@@ -179,7 +264,7 @@ const categoryLabels: Record<string, string> = {
               <a href={`/edits/${rel.slug}`} class="related-card tilt-card">
                 <div class="related-thumb-wrap">
                   <img src={rel.cover_image_url} alt={rel.title} class="related-thumb-img" loading="lazy" />
-                  <span class="related-cat-badge">{categoryLabels[rel.category] || rel.category}</span>
+                  <span class="related-cat-badge">{categoryByDbValue(rel.category)?.label || rel.category}</span>
                 </div>
                 <div class="related-info">
                   <h3 class="related-card-title">{rel.title}</h3>
@@ -472,6 +557,20 @@ const categoryLabels: Record<string, string> = {
     color: var(--sunset-accent);
     font-family: var(--font-syne);
     margin-right: 6px;
+  }
+  .toc-link {
+    color: #111827;
+    text-decoration: none;
+    line-height: 1.4;
+    display: block;
+    transition: color 0.2s ease;
+  }
+  .toc-link:hover {
+    color: var(--sunset-accent);
+  }
+  /* Offset anchored headings so they clear the fixed navbar */
+  .rich-html-content :global(h2) {
+    scroll-margin-top: 110px;
   }
   .sidebar-divider {
     height: 1px;
