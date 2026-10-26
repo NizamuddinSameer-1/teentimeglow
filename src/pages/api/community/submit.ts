@@ -1,11 +1,20 @@
 import type { APIRoute } from 'astro';
 import { getAdminClient } from '@/lib/supabase';
+import { clientIp, isRateLimited } from '@/lib/rate-limit';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
   const supabase = getAdminClient();
   try {
+    // Rule 5.3: blunts bot scraping / bulk junk submissions (per instance).
+    if (isRateLimited(`submit:${clientIp(request)}`, 5, 10 * 60 * 1000)) {
+      return new Response(JSON.stringify({ error: 'Too many submissions. Try again in a little while.' }), {
+        status: 429,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+
     const contentType = request.headers.get('content-type') || '';
     let authorName = '';
     let caption = '';

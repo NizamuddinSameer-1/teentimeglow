@@ -3,10 +3,16 @@ import '@/styles/global.css';
 
 export const prerender = false;
 
-// If already logged in, redirect to /admin directly
-const adminSession = Astro.cookies.get('ttg_admin_session')?.value;
-const expectedSecret = process.env.ADMIN_SECRET_KEY || 'rini-glow-2026';
-if (adminSession && adminSession === expectedSecret) {
+import { isValidSessionToken, ADMIN_SESSION_COOKIE } from '@/lib/admin-auth';
+
+// If already signed in (verified signed token), go straight to the Studio
+let sessionValid = false;
+try {
+  sessionValid = isValidSessionToken(Astro.cookies.get(ADMIN_SESSION_COOKIE)?.value);
+} catch {
+  sessionValid = false;
+}
+if (sessionValid) {
   return Astro.redirect('/admin');
 }
 ---
@@ -168,19 +174,19 @@ if (adminSession && adminSession === expectedSecret) {
     </a>
 
     <h1 class="login-title">Welcome, Rini ✨</h1>
-    <p class="login-subtitle">Enter your 4-digit PIN (<strong>2026</strong>) or secret passkey to access your personal Studio.</p>
+    <p class="login-subtitle">Enter your secret passkey to access your personal Studio.</p>
 
     <div id="loginError" class="login-error"></div>
 
     <form onsubmit="handleLogin(event)">
       <div class="form-group">
-        <label class="form-label" for="password">Studio Passcode or PIN</label>
+        <label class="form-label" for="password">Studio Passkey</label>
         <input
           type="password"
           id="password"
           name="password"
           required
-          placeholder="Enter 2026 or secret key..."
+          placeholder="Enter your passkey..."
           class="form-input"
           autocomplete="current-password"
         />

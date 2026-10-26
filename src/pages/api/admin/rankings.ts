@@ -5,17 +5,9 @@ export const prerender = false;
 
 const jsonHeaders = { 'Content-Type': 'application/json' };
 
-const checkAuth = (cookies: any) => {
-  const session = cookies.get('ttg_admin_session')?.value;
-  const expectedSecret = process.env.ADMIN_SECRET_KEY || 'rini-glow-2026';
-  return session && (session === expectedSecret || session === '2026');
-};
 
 // Create ranking
-export const POST: APIRoute = async ({ request, cookies }) => {
-  if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
-  }
+export const POST: APIRoute = async ({ request }) => {
 
   try {
     const { title, category, cover_image_url, rating, review_text, watch_url, tags } = await request.json();
@@ -45,10 +37,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 };
 
 // Update ranking
-export const PUT: APIRoute = async ({ request, cookies }) => {
-  if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
-  }
+export const PUT: APIRoute = async ({ request }) => {
 
   try {
     const { id, title, category, cover_image_url, rating, review_text, watch_url, tags } = await request.json();
@@ -79,10 +68,7 @@ export const PUT: APIRoute = async ({ request, cookies }) => {
 };
 
 // Delete ranking
-export const DELETE: APIRoute = async ({ request, cookies }) => {
-  if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
-  }
+export const DELETE: APIRoute = async ({ request }) => {
 
   try {
     const url = new URL(request.url);

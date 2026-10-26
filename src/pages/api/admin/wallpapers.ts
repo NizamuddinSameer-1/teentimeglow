@@ -5,17 +5,9 @@ export const prerender = false;
 
 const jsonHeaders = { 'Content-Type': 'application/json' };
 
-const checkAuth = (cookies: any) => {
-  const session = cookies.get('ttg_admin_session')?.value;
-  const expectedSecret = process.env.ADMIN_SECRET_KEY || 'rini-glow-2026';
-  return session && (session === expectedSecret || session === '2026');
-};
 
 // Create wallpaper
-export const POST: APIRoute = async ({ request, cookies }) => {
-  if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
-  }
+export const POST: APIRoute = async ({ request }) => {
 
   try {
     const { title, device_type, thumbnail_url, download_url, resolution_label } = await request.json();
@@ -43,10 +35,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 };
 
 // Delete wallpaper
-export const DELETE: APIRoute = async ({ request, cookies }) => {
-  if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401, headers: jsonHeaders });
-  }
+export const DELETE: APIRoute = async ({ request }) => {
 
   try {
     const url = new URL(request.url);

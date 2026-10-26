@@ -66,7 +66,7 @@ export const CATEGORIES: CategoryDef[] = [
     title: 'Skincare Routines & Glow Guides for Teens',
     h1: 'Skincare That Actually Works',
     description:
-      'Dermatologist-informed skincare routines for teens: glass skin layering, ceramide barrier repair, and gentle routines for acne-prone skin — tested and explained step by step.',
+      'Straight-talking skincare routines for teens: glass skin layering, ceramide barrier repair, and gentle routines for acne-prone skin, explained step by step.',
     keywords: ['teen skincare routine', 'glass skin routine', 'korean skincare for teens', 'ceramide barrier repair']
   },
   {

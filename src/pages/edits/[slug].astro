@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getPostBySlug, getPosts } from '@/lib/api';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 import { SITE_URL, LOGO_URL, AUTHOR, absoluteUrl, categoryByDbValue } from '@/config/seo';
 import type { Post } from '@/types/database';
 
@@ -79,7 +80,7 @@ function buildTocAndContent(html: string): { html: string; toc: { id: string; te
   return { html: out, toc };
 }
 
-const { html: articleHtml, toc } = buildTocAndContent(post.content_html || '');
+const { html: articleHtml, toc } = buildTocAndContent(sanitizeArticleHtml(post.content_html || ''));
 
 // Word count from the rendered body — useful for Article schema and for
 // spotting thin content during editorial review.

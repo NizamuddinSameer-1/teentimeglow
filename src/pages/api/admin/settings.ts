@@ -4,11 +4,6 @@ import { siteContent } from '@/config/siteContent';
 
 export const prerender = false;
 
-const checkAuth = (cookies: any) => {
-  const session = cookies.get('ttg_admin_session')?.value;
-  const expectedSecret = process.env.ADMIN_SECRET_KEY || 'rini-glow-2026';
-  return session && (session === expectedSecret || session === '2026');
-};
 
 // In-memory runtime cache for instantaneous text overrides
 let cachedSettings: any = null;
@@ -60,13 +55,7 @@ export const GET: APIRoute = async () => {
 };
 
 // Update site settings
-export const POST: APIRoute = async ({ request, cookies }) => {
-  if (!checkAuth(cookies)) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' }
-    });
-  }
+export const POST: APIRoute = async ({ request }) => {
 
   try {
     const body = await request.json();

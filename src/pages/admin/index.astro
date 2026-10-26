@@ -7,13 +7,6 @@ import type { CommunityCreation, Post, Wallpaper, StoryMemeQuote, Ranking, Quiz 
 
 export const prerender = false;
 
-// Route Guard: Require valid admin session
-const adminSession = Astro.cookies.get('ttg_admin_session')?.value;
-const expectedSecret = process.env.ADMIN_SECRET_KEY || 'rini-glow-2026';
-if (!adminSession || (adminSession !== expectedSecret && adminSession !== '2026')) {
-  return Astro.redirect('/admin/login');
-}
-
 const adminClient = getAdminClient();
 
 // Fetch live database counts & items
