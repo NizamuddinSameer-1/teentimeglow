@@ -637,6 +637,102 @@ const breadcrumbSchema = {
     line-height: 1.6;
   }
 
+  /* In-body figures. Article HTML can now carry <figure> blocks; without these
+     rules a 1200px image overflows the 614px reading column and captions render
+     as body copy. Images carry explicit width/height attributes in the HTML so
+     the aspect ratio is reserved before load (no layout shift). */
+  .rich-html-content :global(figure) {
+    margin: 36px 0;
+  }
+  .rich-html-content :global(figure img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+    background: #FAF9F6;
+  }
+  .rich-html-content :global(figcaption) {
+    font-family: var(--font-editorial);
+    font-style: italic;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+    margin-top: 12px;
+    padding-left: 2px;
+  }
+
+  /* Sub-headings and body furniture. A real article has <h3>s, a table and
+     lists; this template styled none of them, so they fell back to browser
+     defaults inside an otherwise fully art-directed page. */
+  .rich-html-content :global(h3) {
+    font-family: var(--font-editorial);
+    font-size: 1.28rem;
+    font-weight: 700;
+    color: #0F1115;
+    margin: 32px 0 10px;
+    line-height: 1.35;
+  }
+  .rich-html-content :global(ul) {
+    margin: 0 0 22px;
+    padding-left: 22px;
+  }
+  .rich-html-content :global(li) {
+    margin-bottom: 8px;
+    padding-left: 4px;
+  }
+  .rich-html-content :global(a) {
+    color: var(--sunset-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-thickness: 1px;
+  }
+  .rich-html-content :global(a:hover) {
+    text-decoration-thickness: 2px;
+  }
+  .rich-html-content :global(hr) {
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    margin: 40px 0 24px;
+  }
+
+  /* Tables scroll horizontally on phones rather than forcing the page wide.
+     The wrapper is emitted by scripts/md-to-post-html.mjs. */
+  .rich-html-content :global(.table-scroll) {
+    overflow-x: auto;
+    margin: 28px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+  .rich-html-content :global(table) {
+    width: 100%;
+    min-width: 560px;
+    border-collapse: collapse;
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+  .rich-html-content :global(thead th) {
+    text-align: left;
+    font-weight: 800;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #111827;
+    background: #FAF9F6;
+    padding: 12px 14px;
+    border-bottom: 2px solid var(--border-subtle);
+  }
+  .rich-html-content :global(tbody td) {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+  }
+  .rich-html-content :global(tbody td:first-child) {
+    font-weight: 700;
+    color: #111827;
+  }
+  .rich-html-content :global(tbody tr:last-child td) {
+    border-bottom: none;
+  }
+
   /* Author Sign-off */
   .author-signoff-card {
     display: flex;

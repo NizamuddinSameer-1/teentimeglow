@@ -266,7 +266,12 @@
     /* ==========================================================================
        1. TOP HEADER & NAVIGATION
        ========================================================================== */
-    header {
+    /* Scoped to the site nav's id, NOT the bare `header` tag: the article
+       reader page also uses a <header> element for its synopsis/premise block.
+       This selector used to be `header`, which made the article title card
+       stick to the top of the viewport (top: 0) and paint the nav's white
+       glass background + backdrop blur over the article text. */
+    #siteHeader {
       background: rgba(255, 255, 255, 0.92);
       padding: 16px 0;
       border-bottom: 1px solid var(--border-subtle);
