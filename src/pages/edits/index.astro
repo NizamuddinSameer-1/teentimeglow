@@ -159,6 +159,15 @@ const editsSchema = {
     <!-- Magazine Grid Section -->
     <section class="edits-grid-section">
       <div class="container">
+        {posts.length === 0 && (
+          <div class="no-results-state" style="display: block;">
+            <div class="no-results-icon">📖</div>
+            <h3>No edits published yet</h3>
+            <p>The first story is being written. New lookbooks, skincare guides and room makeovers land here every week.</p>
+            <a href="/wallpapers" class="btn-reset-filters" style="display:inline-block;text-decoration:none;">Browse wallpapers instead</a>
+          </div>
+        )}
+
         <div class="edits-catalog-grid" id="editsGrid">
           {posts.map((post) => (
             <a

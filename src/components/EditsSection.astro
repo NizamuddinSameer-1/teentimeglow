@@ -45,24 +45,31 @@ const filterKeys: Record<string, string> = {
       </div>
     </div>
 
-    <div class="edits-grid">
-      {posts.map((post) => (
-        <div class="edit-card tilt-card" data-cat={filterKeys[post.category] || post.category} onclick={`openStoryModal('${filterKeys[post.category] || post.category}')`}>
-          <div class="edit-img-wrap">
-            <img src={post.cover_image_url} alt={post.title} class="edit-img parallax-img" loading="lazy" decoding="async" />
-          </div>
-          <div class="edit-info">
-            <span class="edit-category-badge">{categoryLabels[post.category] || post.category}</span>
-            <h3 class="edit-title">{post.title}</h3>
-            <div class="edit-meta-row">
-              <span class="stars">★★★★★</span>
-              <span class="meta-time">• {post.read_time_minutes} min read</span>
+    {posts.length > 0 ? (
+      <div class="edits-grid">
+        {posts.map((post) => (
+          <div class="edit-card tilt-card" data-cat={filterKeys[post.category] || post.category} onclick={`openStoryModal('${filterKeys[post.category] || post.category}')`}>
+            <div class="edit-img-wrap">
+              <img src={post.cover_image_url} alt={post.title} class="edit-img parallax-img" loading="lazy" decoding="async" />
             </div>
-            <a href={`/edits/${post.slug}`} class="btn-read-edit">Read Full Edit &rarr;</a>
+            <div class="edit-info">
+              <span class="edit-category-badge">{categoryLabels[post.category] || post.category}</span>
+              <h3 class="edit-title">{post.title}</h3>
+              <div class="edit-meta-row">
+                <span class="stars">★★★★★</span>
+                <span class="meta-time">• {post.read_time_minutes} min read</span>
+              </div>
+              <a href={`/edits/${post.slug}`} class="btn-read-edit">Read Full Edit &rarr;</a>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    ) : (
+      <div class="edits-empty">
+        <p class="edits-empty-title">The first edit is being written.</p>
+        <p class="edits-empty-sub">New lookbooks, skincare guides and room makeovers land here every week.</p>
+      </div>
+    )}
 
     <div style="text-align: center; margin-top: 40px;">
       <a href="/edits" class="btn-black-pill magnetic-btn">
@@ -71,3 +78,23 @@ const filterKeys: Record<string, string> = {
     </div>
   </div>
 </section>
+
+<style>
+  .edits-empty {
+    background: #fff;
+    border: 1px dashed var(--border-subtle);
+    border-radius: 20px;
+    padding: 64px 24px;
+    text-align: center;
+  }
+  .edits-empty-title {
+    font-family: var(--font-editorial);
+    font-size: 1.4rem;
+    color: #0F1115;
+    margin-bottom: 8px;
+  }
+  .edits-empty-sub {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+  }
+</style>

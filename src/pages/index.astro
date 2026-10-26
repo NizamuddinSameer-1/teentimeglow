@@ -47,7 +47,9 @@ const liveStats = [
   { target: String(wallpapers.length), suffix: '', label: '📱 Free Wallpapers' },
   { target: String(totalDownloads), suffix: '', label: '⬇ Wallpaper Downloads' },
   { target: String(creations.length), suffix: '', label: '💅 Community Creations' }
-];
+  // A counter sitting at zero reads as a broken site rather than an empty one.
+  // Omitting it isn't a false claim — it just isn't displayed until it's true.
+].filter((stat) => Number(stat.target) > 0);
 ---
 <BaseLayout>
   <Hero

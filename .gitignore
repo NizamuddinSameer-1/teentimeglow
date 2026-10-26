@@ -8,3 +8,6 @@ dist/
 *.log
 graphify-out/cache/
 .astro/
+
+# Local database exports — may contain user data, never commit
+backups/
