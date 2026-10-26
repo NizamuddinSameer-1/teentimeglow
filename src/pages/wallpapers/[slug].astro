@@ -1,0 +1,376 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getWallpapers } from '@/lib/api';
+import { SITE_URL, absoluteUrl } from '@/config/seo';
+import { buildWallpaperSlugMap } from '@/lib/slugs';
+import { WALLPAPER_COPY, wallpaperFallbackCopy } from '@/config/wallpaperCopy';
+import type { Wallpaper } from '@/types/database';
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+
+const wallpapers: Wallpaper[] = await getWallpapers();
+const slugMap = buildWallpaperSlugMap(wallpapers);
+
+const current = wallpapers.find((w) => slugMap.get(w.id) === slug);
+
+if (!current) {
+  return Astro.rewrite('/404');
+}
+
+const cleanTitle = (current.title || '').replace(/\s+/g, ' ').trim();
+const isDesktop = current.device_type === 'desktop';
+const pageUrl = absoluteUrl(`/wallpapers/${slug}`);
+
+const copy =
+  WALLPAPER_COPY[slug as string] ||
+  wallpaperFallbackCopy(cleanTitle, current.device_type, current.resolution_label || '4K');
+
+const related = wallpapers
+  .filter((w) => w.id !== current.id && w.device_type === current.device_type)
+  .slice(0, 3);
+
+const deviceLabel = isDesktop ? 'Desktop / 16:9' : 'iPhone / 9:16';
+
+const setSteps = isDesktop
+  ? [
+      { title: 'Download the file', body: 'Tap "Download 4K" — the image saves to your Downloads folder at full resolution.' },
+      { title: 'Open display settings', body: 'Windows: Settings → Personalisation → Background. macOS: System Settings → Wallpaper → Add Photo.' },
+      { title: 'Choose the fit', body: 'Use "Fill" so the horizon crops evenly on wide monitors instead of stretching.' }
+    ]
+  : [
+      { title: 'Save to Photos', body: 'Tap "Download 4K", then use the share sheet and choose "Save Image" so it lands in your camera roll.' },
+      { title: 'Set as wallpaper', body: 'Settings → Wallpaper → Add New Wallpaper, then pick the image from your library.' },
+      { title: 'Check the crop', body: 'Pinch to scale so the subject clears the clock. Leave the top third quiet if you use widgets.' }
+    ];
+
+const metaDescription = `${cleanTitle} — free ${current.resolution_label || '4K'} ${isDesktop ? 'desktop' : 'phone'} wallpaper. ${copy.intro}`.slice(0, 158);
+
+const imageSchema = {
+  '@type': 'ImageObject',
+  '@id': `${pageUrl}#primaryimage`,
+  contentUrl: absoluteUrl(current.download_url),
+  url: absoluteUrl(current.download_url),
+  name: cleanTitle,
+  description: copy.intro,
+  caption: cleanTitle,
+  creator: { '@id': `${SITE_URL}/#person-rini` },
+  creditText: 'TeenTimeGlow',
+  copyrightNotice: 'Free for personal use — TeenTimeGlow',
+  acquireLicensePage: pageUrl,
+  representativeOfPage: true
+};
+
+const breadcrumbSchema = {
+  '@type': 'BreadcrumbList',
+  '@id': `${pageUrl}#breadcrumb`,
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+    { '@type': 'ListItem', position: 2, name: 'Wallpapers', item: `${SITE_URL}/wallpapers` },
+    { '@type': 'ListItem', position: 3, name: cleanTitle }
+  ]
+};
+---
+
+<BaseLayout
+  title={`${cleanTitle} — Free ${current.resolution_label || '4K'} ${isDesktop ? 'Desktop' : 'Phone'} Wallpaper`}
+  description={metaDescription}
+  ogImage={absoluteUrl(current.thumbnail_url)}
+  schema={[imageSchema, breadcrumbSchema]}
+>
+  <main class="wp-page">
+    <div class="container breadcrumb-wrap">
+      <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+        <a href="/" class="breadcrumb-link">Home</a>
+        <span class="breadcrumb-sep">/</span>
+        <a href="/wallpapers" class="breadcrumb-link">Wallpapers</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">{cleanTitle}</span>
+      </nav>
+    </div>
+
+    <article class="container wp-layout">
+      <div class="wp-preview">
+        <div class:list={['wp-frame', isDesktop ? 'is-desktop' : 'is-mobile']}>
+          <img
+            src={current.download_url}
+            alt={`${cleanTitle} — free ${current.resolution_label || '4K'} ${isDesktop ? 'desktop' : 'phone'} wallpaper`}
+            width={isDesktop ? 1920 : 1080}
+            height={isDesktop ? 1080 : 1920}
+            decoding="async"
+          />
+        </div>
+      </div>
+
+      <div class="wp-detail">
+        <span class="wp-pill">✦ {current.resolution_label || '4K ULTRA HD'}</span>
+        <h1 class="wp-title">{cleanTitle}</h1>
+        <p class="wp-intro">{copy.intro}</p>
+
+        <a
+          href={current.download_url}
+          download={`TeenTimeGlow-${slug}-4K.jpg`}
+          class="wp-download"
+          onclick={`trackWallpaperDownload('${cleanTitle.replace(/'/g, "\\'")}', event)`}
+        >
+          <span>Download {current.resolution_label || '4K'}</span>
+          <span aria-hidden="true">↓</span>
+        </a>
+
+        <dl class="wp-specs">
+          <div><dt>Device</dt><dd>{deviceLabel}</dd></div>
+          <div><dt>Resolution</dt><dd>{current.resolution_label || '4K Ultra-HD'}</dd></div>
+          <div><dt>Format</dt><dd>JPEG</dd></div>
+          <div><dt>Downloads</dt><dd>{current.download_count && current.download_count > 0 ? current.download_count.toLocaleString() : 'New drop'}</dd></div>
+          <div><dt>License</dt><dd>Free for personal use</dd></div>
+        </dl>
+
+        <div class="wp-why">
+          <h2>Why this one works</h2>
+          <p>{copy.mood}</p>
+        </div>
+
+        <ul class="wp-tags">
+          {copy.tags.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </article>
+
+    <section class="container wp-steps">
+      <h2 class="wp-section-title">How to set it</h2>
+      <div class="wp-step-grid">
+        {setSteps.map((s, i) => (
+          <div class="wp-step">
+            <span class="wp-step-num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    {related.length > 0 && (
+      <section class="container wp-related">
+        <h2 class="wp-section-title">More {isDesktop ? 'desktop' : 'phone'} wallpapers</h2>
+        <div class="wp-related-grid">
+          {related.map((w) => (
+            <a href={`/wallpapers/${slugMap.get(w.id)}`} class="wp-related-card">
+              <div class="wp-related-thumb">
+                <img src={w.thumbnail_url} alt={`${w.title} wallpaper`} width="400" height="280" loading="lazy" decoding="async" />
+              </div>
+              <h3>{w.title.replace(/\s+/g, ' ').trim()}</h3>
+            </a>
+          ))}
+        </div>
+        <a href="/wallpapers" class="wp-back">Browse the full vault &rarr;</a>
+      </section>
+    )}
+  </main>
+</BaseLayout>
+
+<script is:inline>
+  function trackWallpaperDownload(title, event) {
+    try {
+      if (typeof window.playTone === 'function') window.playTone(600, 'sine', 0.15);
+      if (typeof window.confetti === 'function') window.confetti({ particleCount: 35, spread: 60, origin: { y: 0.8 } });
+      if (typeof window.showToast === 'function') window.showToast('Starting your download ✨');
+
+      fetch('/api/wallpapers/download', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wallpaper_title: title })
+      }).catch(() => {});
+    } catch (e) {
+      console.warn('Track download error:', e);
+    }
+  }
+</script>
+
+<style>
+  .wp-page {
+    padding-top: 110px;
+    padding-bottom: 90px;
+    background: #FAF7F2;
+    min-height: 100vh;
+  }
+  .breadcrumb-wrap { margin-bottom: 28px; }
+  .breadcrumb-nav { display: flex; align-items: center; gap: 8px; font-size: 0.88rem; font-weight: 600; }
+  .breadcrumb-link { color: var(--text-muted); text-decoration: none; }
+  .breadcrumb-link:hover { color: var(--sunset-accent); }
+  .breadcrumb-sep { color: #CBD5E1; }
+  .breadcrumb-current { color: #111827; max-width: 340px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .wp-layout {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 48px;
+    align-items: start;
+    margin-bottom: 72px;
+  }
+  .wp-frame {
+    border-radius: 22px;
+    overflow: hidden;
+    background: #111827;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.12);
+    margin: 0 auto;
+  }
+  .wp-frame.is-mobile { max-width: 340px; aspect-ratio: 9 / 16; }
+  .wp-frame.is-desktop { aspect-ratio: 16 / 9; }
+  .wp-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .wp-pill {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--sunset-accent);
+    background: rgba(232, 93, 4, 0.08);
+    padding: 5px 13px;
+    border-radius: 999px;
+    margin-bottom: 14px;
+  }
+  .wp-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+    line-height: 1.1;
+    color: #0F1115;
+    text-transform: uppercase;
+    letter-spacing: -0.01em;
+    margin-bottom: 14px;
+  }
+  .wp-intro {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+  .wp-download {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 15px 24px;
+    background: var(--sunset-accent);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.95rem;
+    border-radius: 999px;
+    text-decoration: none;
+    margin-bottom: 26px;
+    transition: filter 0.2s ease;
+  }
+  .wp-download:hover { filter: brightness(1.06); }
+
+  .wp-specs {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-bottom: 28px;
+  }
+  .wp-specs div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 0.86rem;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .wp-specs dt { color: var(--text-muted); }
+  .wp-specs dd { font-weight: 700; color: #111827; text-align: right; }
+
+  .wp-why h2 {
+    font-family: var(--font-editorial);
+    font-size: 1.25rem;
+    color: #0F1115;
+    margin-bottom: 8px;
+  }
+  .wp-why p {
+    font-size: 0.94rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .wp-tags {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+  }
+  .wp-tags li {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    padding: 5px 12px;
+    border-radius: 999px;
+  }
+
+  .wp-section-title {
+    font-family: var(--font-editorial);
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+    color: #0F1115;
+    margin-bottom: 22px;
+  }
+  .wp-steps {
+    margin-bottom: 64px;
+    padding-top: 36px;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .wp-step-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .wp-step {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 18px;
+    padding: 24px;
+  }
+  .wp-step-num {
+    font-family: var(--font-syne);
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--sunset-accent);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .wp-step h3 { font-size: 1rem; font-weight: 800; color: #111827; margin-bottom: 6px; }
+  .wp-step p { font-size: 0.88rem; line-height: 1.6; color: var(--text-muted); }
+
+  .wp-related { padding-top: 36px; border-top: 1px solid var(--border-subtle); }
+  .wp-related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 26px;
+  }
+  .wp-related-card {
+    background: #fff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+  .wp-related-card:hover { transform: translateY(-3px); border-color: rgba(232, 93, 4, 0.35); }
+  .wp-related-thumb { aspect-ratio: 16 / 10; overflow: hidden; background: #111827; }
+  .wp-related-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .wp-related-card h3 {
+    font-family: var(--font-editorial);
+    font-size: 1rem;
+    color: #111827;
+    padding: 14px 16px;
+    line-height: 1.35;
+  }
+  .wp-back { font-weight: 800; font-size: 0.88rem; color: var(--sunset-accent); text-decoration: none; }
+
+  @media (max-width: 900px) {
+    .wp-layout { grid-template-columns: 1fr; gap: 32px; }
+    .wp-step-grid, .wp-related-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page not found | TeenTimeGlow"
+  description="This page has moved or never existed. Browse the magazine, wallpapers, and rankings instead."
+  noindex={true}
+>
+  <section class="nf-wrap container">
+    <span class="nf-badge">✦ 404</span>
+    <h1 class="nf-title">This page slipped out of the glow.</h1>
+    <p class="nf-text">
+      The link you followed is broken or the edit has been retired. Everything worth reading is one click away.
+    </p>
+    <div class="nf-links">
+      <a href="/edits" class="nf-btn nf-btn-primary">Browse the Magazine</a>
+      <a href="/wallpapers" class="nf-btn">Free 4K Wallpapers</a>
+      <a href="/rankings" class="nf-btn">Rankings</a>
+      <a href="/" class="nf-btn">Back Home</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .nf-wrap {
+    padding: 160px 20px 120px;
+    text-align: center;
+    max-width: 720px;
+  }
+  .nf-badge {
+    display: inline-block;
+    font-family: var(--font-syne);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--sunset-accent);
+    background: rgba(232, 93, 4, 0.08);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 20px;
+  }
+  .nf-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    line-height: 1.1;
+    color: #0F1115;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+  .nf-text {
+    color: var(--text-muted);
+    font-size: 1.05rem;
+    line-height: 1.65;
+    margin-bottom: 34px;
+  }
+  .nf-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .nf-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    background: #fff;
+    color: #111827;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .nf-btn:hover {
+    border-color: var(--sunset-accent);
+    color: var(--sunset-accent);
+  }
+  .nf-btn-primary {
+    background: var(--sunset-accent);
+    border-color: var(--sunset-accent);
+    color: #fff;
+  }
+  .nf-btn-primary:hover {
+    color: #fff;
+    filter: brightness(1.05);
+  }
+</style>

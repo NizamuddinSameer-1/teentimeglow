@@ -55,8 +55,6 @@ const currentSettings = settingsData?.value || {
   heroBadge: siteContent.hero.issueBadge,
   heroHeading: siteContent.hero.mainHeadingHtml,
   heroSubtext: siteContent.hero.subtext,
-  readersCount: siteContent.stats[0]?.target || '14850',
-  satisfactionRate: siteContent.stats[1]?.target || '99.4',
   footerQuote: siteContent.footer.mascotCaption
 };
 ---
@@ -66,6 +64,7 @@ const currentSettings = settingsData?.value || {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rini's Studio — TeenTimeGlow Admin</title>
+  <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" type="image/jpeg" href="/assets/logo.jpg" />
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1104,15 +1103,13 @@ const currentSettings = settingsData?.value || {
             <textarea id="settingHeroSubtext" rows="3" class="form-textarea">{currentSettings.heroSubtext}</textarea>
           </div>
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-            <div class="form-group">
-              <label class="form-label">Reader Count Number (e.g. 14850)</label>
-              <input type="text" id="settingReaders" value={currentSettings.readersCount} class="form-input" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">Satisfaction % (e.g. 99.4)</label>
-              <input type="text" id="settingSatisfaction" value={currentSettings.satisfactionRate} class="form-input" />
-            </div>
+          <div class="form-group">
+            <label class="form-label">Homepage counters</label>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin: 0;">
+              Reader and satisfaction counters were removed. The homepage strip now computes
+              guides, wallpapers, downloads and community creations directly from the database,
+              so the numbers cannot drift from reality or be typed in by hand.
+            </p>
           </div>
 
           <div class="form-group">
@@ -1595,15 +1592,13 @@ const currentSettings = settingsData?.value || {
       const heroBadge = document.getElementById('settingHeroBadge').value;
       const heroHeading = document.getElementById('settingHeroHeading').value;
       const heroSubtext = document.getElementById('settingHeroSubtext').value;
-      const readersCount = document.getElementById('settingReaders').value;
-      const satisfactionRate = document.getElementById('settingSatisfaction').value;
       const footerQuote = document.getElementById('settingFooterQuote').value;
 
       try {
         const res = await fetch('/api/admin/settings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ heroBadge, heroHeading, heroSubtext, readersCount, satisfactionRate, footerQuote })
+          body: JSON.stringify({ heroBadge, heroHeading, heroSubtext, footerQuote })
         });
         const data = await parseApiResponse(res);
         if (data.success) {

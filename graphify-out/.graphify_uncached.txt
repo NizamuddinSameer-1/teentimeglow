@@ -71,6 +71,15 @@ C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\14-zero-tech-admi
 C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\14-zero-tech-admin-studio\14-03-SUMMARY.md
 C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\14-zero-tech-admin-studio\14-CONTEXT.md
 C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\14-zero-tech-admin-studio\14-VERIFICATION.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-01-PLAN.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-01-SUMMARY.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-02-PLAN.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-02-SUMMARY.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-03-PLAN.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-03-SUMMARY.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-CONTEXT.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-RESEARCH.md
+C:\Users\lenovo\OneDrive\Desktop\rini website\.planning\phases\15-admin-studio-2-0\15-VERIFICATION.md
 C:\Users\lenovo\OneDrive\Desktop\rini website\AGENTS.md
 C:\Users\lenovo\OneDrive\Desktop\rini website\CLAUDE.md
 C:\Users\lenovo\OneDrive\Desktop\rini website\GEMINI.md
@@ -92,6 +101,7 @@ C:\Users\lenovo\OneDrive\Desktop\rini website\brain\testing.md
 C:\Users\lenovo\OneDrive\Desktop\rini website\index.html
 C:\Users\lenovo\OneDrive\Desktop\rini website\public\robots.txt
 C:\Users\lenovo\OneDrive\Desktop\rini website\BrandKit\IMG_20261017_013644_971.jpg
+C:\Users\lenovo\OneDrive\Desktop\rini website\BrandKit\d7495c90-e485-4cb4-b36e-43ccfce5df22.png
 C:\Users\lenovo\OneDrive\Desktop\rini website\BrandKit\website logo.jpg
 C:\Users\lenovo\OneDrive\Desktop\rini website\assets\arrival-1.jpg
 C:\Users\lenovo\OneDrive\Desktop\rini website\assets\arrival-2.jpg

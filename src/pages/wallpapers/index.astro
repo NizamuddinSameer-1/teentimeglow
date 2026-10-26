@@ -1,12 +1,16 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { getWallpapers } from '@/lib/api';
+import { buildWallpaperSlugMap } from '@/lib/slugs';
 import type { Wallpaper } from '@/types/database';
 
 export const prerender = false;
 
 // Hydrate live wallpapers with fallback seeds
 const wallpapers: Wallpaper[] = await getWallpapers();
+
+// Every wallpaper now has its own indexable URL at /wallpapers/[slug].
+const slugMap = buildWallpaperSlugMap(wallpapers);
 
 const mobileCount = wallpapers.filter(w => w.device_type === 'mobile').length;
 const desktopCount = wallpapers.filter(w => w.device_type === 'desktop').length;
@@ -112,16 +116,18 @@ const totalDownloads = wallpapers.reduce((acc, w) => acc + (w.download_count || 
                 data-title={wp.title.toLowerCase()}
               >
                 <div class={`wallpaper-thumb-frame ${isDesktop ? 'desktop-aspect' : 'mobile-aspect'}`}>
-                  <img
-                    src={wp.thumbnail_url}
-                    alt={wp.title}
-                    class="wallpaper-img parallax-img"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <a href={`/wallpapers/${slugMap.get(wp.id)}`} class="wallpaper-thumb-link" aria-label={`View ${wp.title} wallpaper page`}>
+                    <img
+                      src={wp.thumbnail_url}
+                      alt={`${wp.title} — ${deviceBadge} wallpaper`}
+                      class="wallpaper-img parallax-img"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </a>
                   <span class="wallpaper-res-badge">{wp.resolution_label || '4K ULTRA HD'}</span>
                   <span class="wallpaper-device-badge">{deviceBadge}</span>
-                  
+
                   <!-- Hover Quick Preview Overlay -->
                   <div class="wallpaper-overlay-btn" onclick={`openWallpaperModal('${safeTitle}', '${wp.download_url}', '${deviceBadge}', '${wp.resolution_label || '4K ULTRA HD'}')`}>
                     <span class="preview-pill">👁 Quick View</span>
@@ -129,10 +135,15 @@ const totalDownloads = wallpapers.reduce((acc, w) => acc + (w.download_count || 
                 </div>
 
                 <div class="wallpaper-info">
-                  <h3 class="wallpaper-title" title={wp.title}>{wp.title}</h3>
+                  <h3 class="wallpaper-title" title={wp.title}>
+                    <a href={`/wallpapers/${slugMap.get(wp.id)}`}>{wp.title.replace(/\s+/g, ' ').trim()}</a>
+                  </h3>
                   <div class="wallpaper-meta-row">
                     <span class="wallpaper-count-tag">
-                      <span class="download-icon">↓</span> {wp.download_count?.toLocaleString() || '1,200+'} saved
+                      <span class="download-icon">↓</span>
+                      {wp.download_count && wp.download_count > 0
+                        ? `${wp.download_count.toLocaleString()} saved`
+                        : 'New drop'}
                     </span>
                     <button
                       class="btn-quick-preview"
@@ -458,6 +469,18 @@ const totalDownloads = wallpapers.reduce((acc, w) => acc + (w.download_count || 
     overflow: hidden;
     background: #111827;
     border-radius: 16px 16px 0 0;
+  }
+  .wallpaper-thumb-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .wallpaper-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .wallpaper-title a:hover {
+    color: var(--sunset-accent);
   }
   .wallpaper-overlay-btn {
     position: absolute;
