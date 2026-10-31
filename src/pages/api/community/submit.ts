@@ -1,12 +1,16 @@
 import type { APIRoute } from 'astro';
-import { getAdminClient } from '@/lib/supabase';
+import { supabase, getAdminClient } from '@/lib/supabase';
 import { clientIp, isRateLimited } from '@/lib/rate-limit';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const supabase = getAdminClient();
   try {
+    let client = supabase;
+    try {
+      client = getAdminClient();
+    } catch {}
+
     // Rule 5.3: blunts bot scraping / bulk junk submissions (per instance).
     if (isRateLimited(`submit:${clientIp(request)}`, 5, 10 * 60 * 1000)) {
       return new Response(JSON.stringify({ error: 'Too many submissions. Try again in a little while.' }), {
@@ -38,12 +42,12 @@ export const POST: APIRoute = async ({ request }) => {
         // Upload file to Supabase Storage if bucket exists, or save file info
         const fileExt = file.name.split('.').pop() || 'jpg';
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-        const { data: uploadData, error: uploadErr } = await supabase.storage
+        const { data: uploadData, error: uploadErr } = await client.storage
           .from('community-pending')
           .upload(fileName, file, { contentType: file.type || 'image/jpeg', upsert: true });
 
         if (!uploadErr && uploadData) {
-          const { data: publicUrlData } = supabase.storage
+          const { data: publicUrlData } = client.storage
             .from('community-pending')
             .getPublicUrl(fileName);
           imageUrl = publicUrlData.publicUrl;
@@ -63,7 +67,7 @@ export const POST: APIRoute = async ({ request }) => {
     const safeCategory = validCategories.includes(category) ? category : 'nails';
 
     // Insert into community_creations in quarantine (status: pending)
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('community_creations')
       .insert({
         author_name: authorName,

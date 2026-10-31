@@ -1024,7 +1024,8 @@
       playBubblePop();
       if (e && e.stopPropagation) e.stopPropagation();
       const likeElem = document.getElementById(`like-${id}`);
-      let count = likeElem ? (parseInt(likeElem.textContent.replace(/\D/g, '')) || 500) : 500;
+      const parsed = likeElem ? parseInt(likeElem.textContent.replace(/\D/g, ''), 10) : 0;
+      let count = Number.isFinite(parsed) ? parsed : 0;
 
       if (!likedItems[id]) {
         likedItems[id] = true;
@@ -1082,7 +1083,7 @@
     let storyPreviousFocus;
 
     function openStoryModal(card, event) {
-      if (event.target.closest('a')) return;
+      if (event && event.target && typeof event.target.closest === 'function' && event.target.closest('a')) return;
       playTone(523.25, 'triangle', 0.2);
       const template = card.querySelector('.story-preview-template');
       const modal = document.getElementById('storyModal');
@@ -1118,7 +1119,9 @@
         lenis.scrollTo(storyScrollY, { immediate: true, force: true });
       }
       window.scrollTo({ top: storyScrollY, behavior: 'instant' });
-      storyPreviousFocus.focus({ preventScroll: true });
+      if (storyPreviousFocus && typeof storyPreviousFocus.focus === 'function') {
+        storyPreviousFocus.focus({ preventScroll: true });
+      }
     }
 
     document.addEventListener('keydown', (e) => {
@@ -1279,6 +1282,7 @@
       window.closeStoryModalDirect = closeStoryModalDirect;
       window.openSubmitModal = openSubmitModal;
       window.closeSubmitModal = closeSubmitModal;
+      window.closeSubmitModalDirect = closeSubmitModalDirect;
       window.filterEdits = filterEdits;
       window.filterWallpapers = filterWallpapers;
       window.shuffleQuote = shuffleQuote;

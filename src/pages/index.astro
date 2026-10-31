@@ -52,16 +52,18 @@ const liveStats = [
 ].filter((stat) => Number(stat.target) > 0);
 ---
 <BaseLayout>
-  <Hero
-    issueBadge={settings?.heroBadge}
-    headline={settings?.heroHeading}
-    subtext={settings?.heroSubtext}
-  />
-  <StatsStrip stats={liveStats} />
-  <EditsSection posts={posts} />
-  <RankingsSection rankings={rankings} />
-  <QuotesSection quotes={quotes} />
-  <WallpapersSection wallpapers={wallpapers} />
-  <QuizSection />
-  <GallerySection creations={creations} />
+  <main id="mainContent">
+    <Hero
+      issueBadge={settings?.heroBadge}
+      headline={settings?.heroHeading}
+      subtext={settings?.heroSubtext}
+    />
+    <StatsStrip stats={liveStats} />
+    <EditsSection posts={posts} />
+    <RankingsSection rankings={rankings} />
+    <QuotesSection quotes={quotes} />
+    <WallpapersSection wallpapers={wallpapers} />
+    <QuizSection />
+    <GallerySection creations={creations} />
+  </main>
 </BaseLayout>

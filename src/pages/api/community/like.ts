@@ -1,11 +1,15 @@
 import type { APIRoute } from 'astro';
-import { getAdminClient } from '@/lib/supabase';
+import { supabase, getAdminClient } from '@/lib/supabase';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const supabase = getAdminClient();
   try {
+    let client = supabase;
+    try {
+      client = getAdminClient();
+    } catch {}
+
     const { id } = await request.json();
 
     if (!id) {
@@ -16,7 +20,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Call rpc or fetch and increment
-    const { data: current } = await supabase
+    const { data: current } = await client
       .from('community_creations')
       .select('likes_count')
       .eq('id', id)
@@ -24,7 +28,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const newLikes = (current?.likes_count || 0) + 1;
 
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('community_creations')
       .update({ likes_count: newLikes })
       .eq('id', id)
@@ -43,7 +47,7 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ error: err.message || 'Internal error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });

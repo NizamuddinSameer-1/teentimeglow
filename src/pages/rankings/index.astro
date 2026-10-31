@@ -167,7 +167,7 @@ const audiobooks = rankings.filter(r => r.category === 'audiobook');
                   <div class="ranking-card-footer">
                     <div class="rating-stars-badge">
                       <span class="star-icon">★</span>
-                      <span class="rating-num">{item.rating.toFixed(1)} / 5.0</span>
+                      <span class="rating-num">{Number(item.rating || 5).toFixed(1)} / 5.0</span>
                     </div>
 
                     {isAudiobook ? (

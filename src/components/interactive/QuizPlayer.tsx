@@ -205,7 +205,7 @@ export default function QuizPlayer({
                   Take Again ↻
                 </button>
                 <a
-                  href="#edits"
+                  href="/edits"
                   className="btn-black-pill magnetic-btn"
                   style={{ padding: '10px 20px', fontSize: '0.85rem', textDecoration: 'none' }}
                 >

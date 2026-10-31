@@ -45,7 +45,7 @@ const {
               <h3 class="ranking-title">{item.title}</h3>
               <p class="ranking-synopsis">{item.review_text}</p>
               <div class="ranking-footer-row">
-                <span class="stars">★★★★★ {item.rating.toFixed(1)}</span>
+                <span class="stars">★★★★★ {Number(item.rating || 5).toFixed(1)}</span>
                 {isAudiobook ? (
                   <button onclick={`playAudiobookPreview('${item.title}', event)`} class="ranking-action-link" style="background: none; border: none; cursor: pointer;">Listen Sample ♫</button>
                 ) : (

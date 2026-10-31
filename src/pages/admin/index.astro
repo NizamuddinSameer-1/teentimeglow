@@ -7,7 +7,10 @@ import type { CommunityCreation, Post, Wallpaper, StoryMemeQuote, Ranking, Quiz 
 
 export const prerender = false;
 
-const adminClient = getAdminClient();
+let adminClient = supabase;
+try {
+  adminClient = getAdminClient();
+} catch {}
 
 // Fetch live database counts & items
 const [

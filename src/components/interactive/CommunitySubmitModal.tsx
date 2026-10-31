@@ -86,10 +86,18 @@ export default function CommunitySubmitModal({
         setPreviewUrl(null);
         closeModal();
       } else {
-        alert(data.error || 'Submission failed');
+        if (typeof window !== 'undefined' && (window as any).showToast) {
+          (window as any).showToast(data.error || 'Submission failed', '⚠️');
+        } else {
+          alert(data.error || 'Submission failed');
+        }
       }
     } catch (err: any) {
-      alert('Error submitting: ' + err.message);
+      if (typeof window !== 'undefined' && (window as any).showToast) {
+        (window as any).showToast('Error submitting: ' + (err.message || 'Network error'), '⚠️');
+      } else {
+        alert('Error submitting: ' + err.message);
+      }
     } finally {
       setIsSubmitting(false);
     }

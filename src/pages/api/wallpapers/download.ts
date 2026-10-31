@@ -1,11 +1,15 @@
 import type { APIRoute } from 'astro';
-import { getAdminClient } from '@/lib/supabase';
+import { supabase, getAdminClient } from '@/lib/supabase';
 
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  const supabase = getAdminClient();
   try {
+    let client = supabase;
+    try {
+      client = getAdminClient();
+    } catch {}
+
     const { title } = await request.json();
 
     if (!title) {
@@ -15,7 +19,7 @@ export const POST: APIRoute = async ({ request }) => {
       });
     }
 
-    const { data: current } = await supabase
+    const { data: current } = await client
       .from('wallpapers')
       .select('id, download_count')
       .eq('title', title)
@@ -23,7 +27,7 @@ export const POST: APIRoute = async ({ request }) => {
       .maybeSingle();
 
     if (current) {
-      await supabase
+      await client
         .from('wallpapers')
         .update({ download_count: (current.download_count || 0) + 1 })
         .eq('id', current.id);
@@ -34,7 +38,7 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (err: any) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({ error: err.message || 'Internal error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
     });

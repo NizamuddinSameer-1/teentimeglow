@@ -23,12 +23,12 @@ const supabaseUrl = getEnvVar('PUBLIC_SUPABASE_URL') || defaultSupabaseUrl;
 const supabaseAnonKey = getEnvVar('PUBLIC_SUPABASE_ANON_KEY') || defaultAnonKey;
 
 // Public Supabase client for safe read operations and client-side interactions
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient<any>(supabaseUrl, supabaseAnonKey);
 
-let adminClientInstance: ReturnType<typeof createClient> | null = null;
+let adminClientInstance: any = null;
 
 // Server-side admin client with service_role privileges (for API routes & admin SSR)
-export const getAdminClient = () => {
+export const getAdminClient = (): any => {
   if (adminClientInstance) {
     return adminClientInstance;
   }
@@ -40,7 +40,7 @@ export const getAdminClient = () => {
     throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for admin operations.');
   }
 
-  adminClientInstance = createClient(supabaseUrl, serviceRoleKey, {
+  adminClientInstance = createClient<any>(supabaseUrl, serviceRoleKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false
