@@ -1,7 +1,16 @@
 const { createClient } = require('@supabase/supabase-js');
 
-const supabaseUrl = 'https://txuubvzxmawjqqduavcv.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4dXVidnp4bWF3anFxZHVhdmN2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjIzOTQyNCwiZXhwIjoyMTA3ODE1NDI0fQ.pEy-Nf2Kk4nMJT9S2YGOTkvr4IILh1gIKYaAJzj-Li0';
+const supabaseUrl = process.env.PUBLIC_SUPABASE_URL || 'https://txuubvzxmawjqqduavcv.supabase.co';
+// The service-role key must come from the environment (.env / Vercel), never source control.
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
+
+if (!supabaseKey) {
+  console.error('\n[seed] SUPABASE_SERVICE_ROLE_KEY is not set.\n');
+  console.error('  1. Put SUPABASE_SERVICE_ROLE_KEY=... in the project .env');
+  console.error('  2. Then run:  node --env-file=.env supabase/seed.cjs');
+  console.error('     (Node 20+ auto-loads .env that way)\n');
+  process.exit(1);
+}
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 

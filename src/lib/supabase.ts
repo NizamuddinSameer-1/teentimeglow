@@ -14,9 +14,10 @@ const getEnvVar = (key: string): string | undefined => {
   return undefined;
 };
 
+// Only the URL and the *anon* (publishable) key are safe as committed fallbacks;
+// the service-role key must never live in source — set it in .env / Vercel env vars.
 const defaultSupabaseUrl = 'https://txuubvzxmawjqqduavcv.supabase.co';
 const defaultAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4dXVidnp4bWF3anFxZHVhdmN2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIyMzk0MjQsImV4cCI6MjEwNzgxNTQyNH0.Sx0rGz263LJBucLnPFVGgKI7kmiJ_ADyjxPW41DW8_Q';
-const defaultServiceRoleKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4dXVidnp4bWF3anFxZHVhdmN2Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjIzOTQyNCwiZXhwIjoyMTA3ODE1NDI0fQ.pEy-Nf2Kk4nMJT9S2YGOTkvr4IILh1gIKYaAJzj-Li0';
 
 const supabaseUrl = getEnvVar('PUBLIC_SUPABASE_URL') || defaultSupabaseUrl;
 const supabaseAnonKey = getEnvVar('PUBLIC_SUPABASE_ANON_KEY') || defaultAnonKey;
@@ -33,8 +34,7 @@ export const getAdminClient = () => {
   }
 
   const serviceRoleKey =
-    getEnvVar('SUPABASE_SERVICE_ROLE_KEY') ||
-    defaultServiceRoleKey;
+    getEnvVar('SUPABASE_SERVICE_ROLE_KEY');
 
   if (!serviceRoleKey) {
     throw new Error('SUPABASE_SERVICE_ROLE_KEY is required for admin operations.');
