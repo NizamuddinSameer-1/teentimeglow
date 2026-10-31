@@ -1984,6 +1984,69 @@
     .modal-overlay.active {
       display: flex;
     }
+    /* overflow: clip freezes scrolling while PRESERVING the current scroll
+       offset. The previous lock (html overflow:hidden + body position:fixed;
+       top) collapsed the document height, which clamped Lenis's internal
+       scroll position to 0, so closing the preview dragged the page back to
+       the top and lost the reader's place. */
+    html.story-modal-open {
+      overflow: clip;
+    }
+    #storyModal .modal-box {
+      max-height: calc(100dvh - 40px);
+      overscroll-behavior: contain;
+    }
+    .story-modal-title {
+      font-size: clamp(1.3rem, 4vw, 1.75rem);
+      font-weight: 800;
+      margin: 10px 0;
+      padding-right: 24px;
+      line-height: 1.25;
+    }
+    .story-modal-meta {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+    .story-modal-image {
+      width: 100%;
+      max-height: 320px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+    .story-preview-content {
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+    }
+    .story-preview-content :is(p, ul, ol) {
+      margin-bottom: 16px;
+    }
+    .story-preview-content :is(ul, ol) {
+      padding-left: 24px;
+    }
+    .story-preview-content :is(h2, h3, h4) {
+      font-size: 1.15rem;
+      margin: 24px 0 10px;
+    }
+    .story-preview-content img {
+      max-width: 100%;
+      height: auto;
+    }
+    .story-preview-content a {
+      text-decoration: underline;
+    }
+    .story-modal-actions {
+      position: sticky;
+      bottom: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+      padding: 18px 0;
+      border-top: 1px solid var(--border-subtle);
+      background: #FFFFFF;
+    }
     .modal-box {
       background: #FFFFFF;
       border-radius: 24px;

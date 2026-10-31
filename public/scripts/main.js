@@ -1078,97 +1078,73 @@
     }
 
     // --- 14. Editorial Quick-View Modals ---
-    const storyData = {
-      skincare: {
-        tag: 'Beauty & Skincare',
-        title: 'The 5-Step Glass Skin Morning Ritual',
-        image: 'assets/feature-skincare.jpg',
-        readTime: '4 min read • ★ 4.9 by 340 teens',
-        content: `
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Achieving luminous, glazed "glass skin" isn't about covering up; it’s about deep hydration, gentle barrier protection, and nourishing your skin while you’re young.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Step 1: Gentle Low-pH Cleanser</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Skip harsh stripping foams. Use a gentle lukewarm water rinse or a soothing milky cleanser that respects your natural microbiome.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Step 2: Hydrating Toner Layering (The 3-Skin Method)</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Pat 2 to 3 thin layers of hyaluronic or heartleaf toner into damp skin. Notice how plump and refreshed your skin feels immediately.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Step 3: Snail Mucin & Barrier Serums</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Lock in deep cellular moisture with ceramide or snail peptide essence to prevent redness and seasonal dry patches.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Step 4: Non-Greasy Dewy Sunscreen (SPF 50+)</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">The golden rule of teen skincare: your future self will thank you for daily sunscreen, even on overcast school mornings.</p>
-        `
-      },
-      fashion: {
-        tag: 'Fashion Lookbook',
-        title: 'Autumn Warm Layering: Trench & Oversized Knits',
-        image: 'assets/feature-fashion.jpg',
-        readTime: '5 min read • ★ 5.0 by 512 teens',
-        content: `
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Autumn is the ultimate season for style experimentation. The secret to looking effortlessly chic lies in playing with contrasting textures and balanced silhouettes.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">The Rule of Proportions</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Pair an oversized outer layer (like a long thrifted trench or vintage knitwear) with sleek inner garments: ribbed turtlenecks or straight-leg dark denim.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Warm Earth Tone Palette</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Stick to creamy oatmeals, burnt terracotta, forest matcha greens, and espresso browns for that timeless Pinterest autumn board look.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">Accessorizing Like A Pro</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Add chunky gold hoop earrings, a structured canvas tote bag, and wired headphones around your neck for that effortless high-school movie protagonist energy.</p>
-        `
-      },
-      decor: {
-        tag: 'Cozy Decor',
-        title: 'How To Romanticize Your Study Corner',
-        image: 'assets/feature-decor.jpg',
-        readTime: '3 min read • ★ 4.8 by 290 teens',
-        content: `
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Your bedroom desk doesn't have to feel like a high-stress exam prison. With just 3 intentional tweaks, you can turn study hours into your most peaceful ritual.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">1. Warm Ambient Lighting Only</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Turn off the harsh overhead fluorescent ceiling light! Use a 2700K warm desk lamp paired with delicate amber fairy lights pinned to your corkboard.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">2. Botanical Touches & Print Collages</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Tape mini postcard prints of impressionist art, Polaroid photos with best friends, and a small pothos or succulent plant in a ceramic mug.</p>
-          <h4 style="font-size: 1.1rem; font-weight: 800; margin: 16px 0 8px;">3. The Study Beverage Station</h4>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Keep an aesthetic glass tumbler with a glass straw filled with iced herbal tea or matcha. Hydration keeps focus sharp without afternoon crashes.</p>
-        `
-      },
-      about: {
-        tag: 'Creator Story',
-        title: 'About Rini & TeenTimeGlow',
-        image: 'assets/hero-glow-creator.jpg',
-        readTime: '2 min read',
-        content: `
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Hey loves! Welcome to <strong>TeenTimeGlow</strong> — a dedicated sanctuary for teenage self-expression, glowing beauty, aesthetic spaces, and daily positive mindset.</p>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">I created this website because so many teen blogs were either overloaded with aggressive advertisements or felt fake and disconnected from real high-school life. Here, everything is handpicked: genuine skincare routines that don't destroy your skin barrier, cozy book and show rankings, and free 4K wallpapers for your phones.</p>
-          <p style="margin-bottom: 14px; line-height: 1.6; color: #374151;">Remember: you are growing, blooming, and writing your own story. Stay glowing, always!</p>
-        `
-      }
-    };
+    let storyScrollY = 0;
+    let storyPreviousFocus;
 
-    function openStoryModal(key) {
+    function openStoryModal(card, event) {
+      if (event.target.closest('a')) return;
       playTone(523.25, 'triangle', 0.2);
-      const data = storyData[key];
-      if (!data) return;
-
-      const content = document.getElementById('modalStoryContent');
-      content.innerHTML = `
-        <span class="section-pill-tag">${data.tag}</span>
-        <h2 style="font-size: 1.75rem; font-weight: 800; margin: 10px 0; line-height: 1.25;">${data.title}</h2>
-        <div style="font-size: 0.82rem; color: #6B7280; font-weight: 600; margin-bottom: 18px;">${data.readTime}</div>
-        <img src="${data.image}" alt="${data.title}" style="width: 100%; max-height: 320px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);" />
-        <div>${data.content}</div>
-        <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #E5E7EB; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.85rem; font-weight: 700; color: #0C3B2E;">Tag #TeenTimeGlow on TikTok</span>
-          <button class="btn-black-pill" onclick="closeStoryModalDirect()">Close Edit</button>
-        </div>
-      `;
-
-      document.getElementById('storyModal').classList.add('active');
+      const template = card.querySelector('.story-preview-template');
+      const modal = document.getElementById('storyModal');
+      const box = modal.querySelector('.modal-box');
+      const root = document.documentElement;
+      document.getElementById('modalStoryContent').replaceChildren(template.content.cloneNode(true));
+      storyScrollY = window.scrollY;
+      storyPreviousFocus = document.activeElement;
+      if (lenis) lenis.stop();
+      root.classList.add('story-modal-open');
+      modal.classList.add('active');
+      box.scrollTop = 0;
+      box.focus({ preventScroll: true });
     }
 
     function closeStoryModal(e) {
       if (e.target.id === 'storyModal') {
-        document.getElementById('storyModal').classList.remove('active');
+        closeStoryModalDirect();
       }
     }
     function closeStoryModalDirect() {
+      const modal = document.getElementById('storyModal');
+      if (!modal.classList.contains('active')) return;
       playTone(392, 'sine', 0.15);
-      document.getElementById('storyModal').classList.remove('active');
+      const root = document.documentElement;
+      modal.classList.remove('active');
+      root.classList.remove('story-modal-open');
+      // The overflow:clip lock preserves window.scrollY, so the browser is
+      // already at the reader's position; Lenis just needs its own internal
+      // scroll synced back so it does not animate the page to a stale value.
+      if (lenis) {
+        lenis.start();
+        lenis.scrollTo(storyScrollY, { immediate: true, force: true });
+      }
+      window.scrollTo({ top: storyScrollY, behavior: 'instant' });
+      storyPreviousFocus.focus({ preventScroll: true });
     }
+
+    document.addEventListener('keydown', (e) => {
+      const modal = document.getElementById('storyModal');
+      if (!modal.classList.contains('active')) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeStoryModalDirect();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const box = modal.querySelector('.modal-box');
+      const focusable = Array.from(box.querySelectorAll('a[href],button,[tabindex="0"]')).filter((element) =>
+        !element.matches(':disabled') && element.getClientRects().length > 0 &&
+        window.getComputedStyle(element).visibility === 'visible'
+      );
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && (document.activeElement === first || document.activeElement === box)) {
+        e.preventDefault();
+        last.focus({ preventScroll: true });
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus({ preventScroll: true });
+      }
+    });
 
     // --- 15. Community Submit Modal ---
     function openSubmitModal() {

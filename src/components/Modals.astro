@@ -12,9 +12,9 @@ const {
 } = Astro.props;
 ---
 <!-- Interactive Story Detail Modal -->
-<div class="modal-overlay" id="storyModal" onclick="closeStoryModal(event)">
-  <div class="modal-box">
-    <button class="modal-close-btn" onclick="closeStoryModalDirect()">&times;</button>
+<div class="modal-overlay" id="storyModal" data-lenis-prevent onclick="closeStoryModal(event)">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="storyModalTitle" tabindex="-1">
+    <button class="modal-close-btn" aria-label="Close preview" onclick="closeStoryModalDirect()">&times;</button>
     <div id="modalStoryContent">
       <!-- Injected via JavaScript -->
     </div>

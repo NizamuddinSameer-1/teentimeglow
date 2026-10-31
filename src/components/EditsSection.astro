@@ -1,6 +1,7 @@
 ---
 import type { Post } from '@/types/database';
 import { siteContent } from '@/config/siteContent';
+import { sanitizeArticleHtml } from '@/lib/sanitize';
 
 interface Props {
   posts: Post[];
@@ -48,7 +49,18 @@ const filterKeys: Record<string, string> = {
     {posts.length > 0 ? (
       <div class="edits-grid">
         {posts.map((post) => (
-          <div class="edit-card tilt-card" data-cat={filterKeys[post.category] || post.category} onclick={`openStoryModal('${filterKeys[post.category] || post.category}')`}>
+          <div class="edit-card tilt-card" data-cat={filterKeys[post.category] || post.category} onclick="openStoryModal(this, event)">
+            <template class="story-preview-template">
+              <span class="section-pill-tag">{categoryLabels[post.category] || post.category}</span>
+              <h2 id="storyModalTitle" class="story-modal-title">{post.title}</h2>
+              <div class="story-modal-meta">{post.read_time_minutes} min read</div>
+              <img src={post.cover_image_url} alt={post.title} class="story-modal-image" loading="lazy" />
+              <div class="story-preview-content" set:html={sanitizeArticleHtml(post.content_html || '')} />
+              <div class="story-modal-actions">
+                <a href={`/edits/${post.slug}`} class="btn-black-pill">Read Full Article &rarr;</a>
+                <button class="btn-black-pill" onclick="closeStoryModalDirect()">Close Preview</button>
+              </div>
+            </template>
             <div class="edit-img-wrap">
               <img src={post.cover_image_url} alt={post.title} class="edit-img parallax-img" loading="lazy" decoding="async" />
             </div>
