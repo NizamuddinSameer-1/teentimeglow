@@ -234,9 +234,9 @@
     "semantic_hash": ""
   },
   "src/lib/supabase.ts": {
-    "mtime": 1793040330.3268974,
-    "seen": 1793041819.3577685,
-    "ast_hash": "ddcb334aa8a87833025f3e6de4900248",
+    "mtime": 1793431126.1505017,
+    "seen": 1793433107.638149,
+    "ast_hash": "258f92a2c0bd52689e5eca36ea6f99c8",
     "semantic_hash": ""
   },
   "src/pages/admin/index.astro": {
@@ -288,10 +288,10 @@
     "semantic_hash": ""
   },
   "supabase/seed.cjs": {
-    "mtime": 1792255172.7095103,
-    "seen": 1792256493.2681723,
-    "ast_hash": "4659a99cfeb48be86c34ef7ba11f945f",
-    "semantic_hash": "4659a99cfeb48be86c34ef7ba11f945f"
+    "mtime": 1793431183.6677547,
+    "seen": 1793433107.638149,
+    "ast_hash": "255b0d3e5da8b9094a009da134223369",
+    "semantic_hash": ""
   },
   "tsconfig.json": {
     "mtime": 1792255172.710512,
