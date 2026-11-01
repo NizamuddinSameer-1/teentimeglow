@@ -62,6 +62,21 @@ const imageSchema = {
   representativeOfPage: true
 };
 
+const artworkSchema = {
+  '@type': 'VisualArtwork',
+  '@id': `${pageUrl}#artwork`,
+  name: cleanTitle,
+  description: `${cleanTitle} — Free ${current.resolution_label || '4K'} aesthetic wallpaper for ${isDesktop ? 'desktop' : 'phone'} by TeenTimeGlow.`,
+  image: absoluteUrl(current.download_url),
+  creator: { '@id': `${SITE_URL}/#person-rini` },
+  publisher: { '@id': `${SITE_URL}/#organization` },
+  artMedium: 'Digital 4K Illustration',
+  artform: 'Wallpaper Graphic',
+  inLanguage: 'en',
+  isAccessibleForFree: true,
+  license: 'https://creativecommons.org/licenses/by-nc/4.0/'
+};
+
 const breadcrumbSchema = {
   '@type': 'BreadcrumbList',
   '@id': `${pageUrl}#breadcrumb`,
@@ -77,7 +92,7 @@ const breadcrumbSchema = {
   title={`${cleanTitle} — Free ${current.resolution_label || '4K'} ${isDesktop ? 'Desktop' : 'Phone'} Wallpaper`}
   description={metaDescription}
   ogImage={absoluteUrl(current.thumbnail_url)}
-  schema={[imageSchema, breadcrumbSchema]}
+  schema={[imageSchema, artworkSchema, breadcrumbSchema]}
 >
   <main class="wp-page">
     <div class="container breadcrumb-wrap">
