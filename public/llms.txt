@@ -1,0 +1,29 @@
+# TeenTimeGlow
+
+> TeenTimeGlow is a curated lifestyle publication for teenagers founded by Rini, featuring independent beauty research, Korean glass skin routines, budget fashion lookbooks, room aesthetic makeovers, Prime Video rankings, and daily mindset quotes.
+
+## Core Guides & Editorial Edits
+
+- [TeenTimeGlow Magazine Hub](https://www.teentimeglow.me/edits): Curated beauty, style, and cozy room decor lookbooks for teenagers.
+- [The Korean Glass Skin Routine for School Days](https://www.teentimeglow.me/edits/glass-skin-korean-routine): A 5-step gentle, non-comedogenic morning skincare routine for teenagers focused on skin barrier recovery, hydration, and sun protection without harsh active ingredients.
+- [Capsule Wardrobe for Teens on a Budget](https://www.teentimeglow.me/edits/capsule-wardrobe-for-teens-on-a-budget): The ultimate 15-to-20 piece interchangeable styling system and thrift formula for high school and college days.
+- [Small Bedroom Ideas for Teens on a Budget](https://www.teentimeglow.me/edits/small-bedroom-ideas-for-teens-on-a-budget): Aesthetic, cozy room transformation blueprint utilizing warm lighting, pegboard organization, and DIY decor.
+
+## Visual Inspiration & Digital Assets
+
+- [4K Aesthetic Wallpapers Vault](https://www.teentimeglow.me/wallpapers): Free downloadable 4K mobile and desktop aesthetic wallpapers featuring anime, soft pastel, matcha, and cozy study desk aesthetics.
+
+## Interactive Features & Daily Inspiration
+
+- [Glow Archetype Quiz](https://www.teentimeglow.me/quiz): Interactive personality engine to discover personal aesthetic styles and tailored skincare formulas.
+- [Daily Mindset & Quotes Engine](https://www.teentimeglow.me/quotes): Daily motivational quotes, confidence affirmations, and printable affirmation cards.
+- [Curated Leaderboard & Rankings](https://www.teentimeglow.me/rankings): Honest teen reviews and rank medals for Prime Video shows and addictive audiobooks.
+- [Community Showcase Gallery](https://www.teentimeglow.me/gallery): Moderated showcase of teen room decor, digital art sketches, and nail art submissions.
+
+## About & Editorial Standards
+
+- [About Rini & Editorial Policy](https://www.teentimeglow.me/about): Founder story, ingredient label-reading philosophy, independent research standards, and non-medical transparency disclaimers.
+
+## Full Corpus
+
+- [Full Text Digest](https://www.teentimeglow.me/llms-full.txt): Complete text of all primary guides, routines, and editorial manifestos for offline LLM indexing and synthesis.
