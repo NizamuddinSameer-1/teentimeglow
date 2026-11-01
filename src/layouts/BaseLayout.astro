@@ -146,6 +146,24 @@ const graph = [...baseGraph, ...schema];
     "@graph": graph
   })} />
 
+  <!-- Speculation Rules API for instant prefetch and pre-rendering -->
+  <script type="speculationrules" is:inline set:html={JSON.stringify({
+    prefetch: [
+      {
+        source: "list",
+        urls: ["/edits", "/wallpapers", "/quotes", "/quiz", "/rankings", "/about"],
+        eagerness: "moderate"
+      }
+    ],
+    prerender: [
+      {
+        source: "list",
+        urls: ["/edits", "/wallpapers"],
+        eagerness: "conservative"
+      }
+    ]
+  })} />
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
