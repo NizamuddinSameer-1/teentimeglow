@@ -1,0 +1,75 @@
+# TeenTimeGlow — Complete Knowledge Base & Editorial Digest
+
+> **Site:** https://www.teentimeglow.me  
+> **Founder & Lifestyle Editor:** Rini  
+> **Editorial Mission:** Honest, accessible lifestyle, beauty, fashion, and aesthetic guidance for teenagers with 0% corporate fluff and 0% exaggerated medical claims.
+
+---
+
+## 1. Editorial Manifesto & About Rini
+
+TeenTimeGlow is an independent digital magazine and creative ecosystem founded by Rini. Every guide on TeenTimeGlow—spanning barrier-first skincare routines, thrift styling formulas, room aesthetics, and mindset reflections—is produced from meticulous ingredient label-reading, independent research, and real-world student testing.
+
+### Transparency & Medical Disclaimer
+Rini is not a dermatologist, cosmetologist, or medical doctor. The advice published across TeenTimeGlow reflects independent research and personal consumer testing. Teen skin is biologically dynamic; visitors experiencing cystic acne, chronic eczema, or severe skin conditions are always advised to consult a board-certified dermatologist before introducing active treatments.
+
+---
+
+## 2. Core Editorial Edits
+
+### Edit 01: The 5-Step Korean Glass Skin Routine for School Days
+**URL:** https://www.teentimeglow.me/edits/glass-skin-korean-routine  
+**Category:** Skincare / Beauty  
+**Philosophy:** True "glass skin" is not about artificial highlighter or greasy oils; it is the visual appearance of a calm, deeply hydrated, and intact epidermal barrier. Teenagers should avoid harsh 10-step influencer routines and stripping physical scrubs.
+
+#### The 5 Essential Morning Steps:
+1. **Gentle Low-pH Water Cleanse:** Wash with lukewarm water and a gentle, non-foaming or low-pH gel cleanser (pH 5.0–5.5). Stripping morning cleansers destroy the acid mantle, triggering reactive sebum production by lunchtime.
+2. **Hydrating Essence Toner Layering (The 2-Skin Method):** Instead of one heavy application, pat 2 thin layers of an alcohol-free hydrating toner containing humectants like Hyaluronic Acid, Centella Asiatica, or Panthenol into slightly damp skin.
+3. **Barrier Recovery Serum:** Apply 2 to 3 drops of a gentle calming serum. Look for soothing extracts such as Centella Asiatica (Madecassoside) or gentle low-concentration Niacinamide (2% to 4%) to soothe morning redness, strengthen the lipid matrix, and balance excess T-zone oiliness.
+4. **Glow-Lock Lightweight Gel Cream:** Seal hydration with a non-comedogenic gel-cream or water-cream enriched with Ceramides and Squalane. Avoid heavy mineral oils or thick pore-clogging waxes.
+5. **Broad-Spectrum Daily SPF 50:** Finish with a fluid, non-greasy chemical or hybrid sunscreen. UV damage breaks down young collagen and exacerbates post-inflammatory erythema (acne red marks).
+
+#### Teen Precautions:
+- Patch test every new product behind the ear for 48 hours.
+- Never layer multiple active exfoliating acids (AHA/BHA) simultaneously.
+- Hydration first, treatment second.
+
+---
+
+### Edit 02: Capsule Wardrobe for Teens on a Budget
+**URL:** https://www.teentimeglow.me/edits/capsule-wardrobe-for-teens-on-a-budget  
+**Category:** Fashion / Style  
+**Philosophy:** A cohesive aesthetic does not require expensive fast-fashion hauls or designer labels. A versatile school capsule wardrobe consists of 15 to 20 interchangeable pieces built on a cohesive 3-color palette (two neutral bases, one muted accent).
+
+#### The 15-Piece Core Formula:
+- **Tops (4):** 1 oversized crisp white tee, 1 ribbed neutral baby tee, 1 heather grey crewneck sweatshirt, 1 tailored button-down shirt for layering.
+- **Bottoms (4):** 1 pair of classic straight-leg medium-wash denim, 1 pair of relaxed wide-leg trousers (black or charcoal), 1 pleated tennis or A-line skirt, 1 pair of comfortable cotton everyday joggers.
+- **Layering & Outerwear (3):** 1 boxy vintage knit cardigan, 1 oversized denim jacket or blazer, 1 warm neutral zip fleece.
+- **Footwear (2):** 1 pair of classic low-top white sneakers, 1 pair of versatile loafers or chelsea boots.
+- **Accessories (2):** 1 canvas everyday tote bag, 1 minimalist leather shoulder bag.
+
+#### Thrift & Styling Rules:
+- **The Rule of 3s:** Every new item added to the wardrobe must pair seamlessly with at least 3 existing items.
+- **Texture Over Logos:** Elevate outfits by balancing textures (e.g. chunky knit over sleek cotton denim) rather than relying on prominent brand logos.
+
+---
+
+### Edit 03: Small Bedroom Ideas for Teens on a Budget
+**URL:** https://www.teentimeglow.me/edits/small-bedroom-ideas-for-teens-on-a-budget  
+**Category:** Decor / Room Aesthetics  
+**Philosophy:** Small bedrooms present spatial constraints that can be converted into cozy, high-functioning study sanctuaries using vertical space, layered ambient lighting, and decluttering systems.
+
+#### Key Makeover Principles:
+1. **Warm Layered Lighting (Color Temp 2700K):** Eliminate harsh overhead glare. Use 3 warm light points: a warm desk reading lamp, fairy string lights or LED diffuser strips behind headboards, and a bedside sunset lamp.
+2. **Vertical Pegboard Organization:** Free up valuable desk real estate by mounting an aesthetic wooden or white pegboard for headphones, pens, photos, and daily planner clips.
+3. **Cozy Tactile Textiles:** Use soft boucle or waffle-knit throws, washed cotton duvet covers, and low-pile floor rugs to dampen sound and create a warm sanctuary feel.
+4. **Curated Moodboards:** Replace cluttered wall posters with minimalist, frame-less aesthetic photo print grids aligned with washi tape.
+
+---
+
+## 3. Interactive Tools & Digital Vaults
+
+- **Glow Archetype Quiz (`/quiz`):** An interactive personality and aesthetic quiz guiding visitors to tailored lifestyle routines, room palettes, and styling inspiration.
+- **Daily Mindset & Quotes Engine (`/quotes`):** Curated daily inspiration cards designed to promote self-worth, study focus, healthy digital boundaries, and gentle confidence.
+- **Curated Leaderboard (`/rankings`):** Student-tested ratings and editorial reviews of popular Prime Video coming-of-age series and audiobooks.
+- **4K Wallpapers Vault (`/wallpapers`):** Hand-curated 4K resolution mobile and desktop wallpapers free from intrusive watermarks.
