@@ -94,3 +94,4 @@ None. All specifications were verified against official Google Search Central do
 
 ---
 *Researched: 2026-11-01*
+
