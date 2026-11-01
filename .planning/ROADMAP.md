@@ -181,3 +181,14 @@
 
 
 
+
+---
+
+## Milestone 5: Search & AI Citation Dominance (GEO)
+
+### Phase 16: Claude SEO Remediation & AI Search Optimization (GEO)
+* **Goal**: Implement high-impact recommendations from the Claude SEO audit suite to maximize rankings in Google and ensure dominant citations in AI Search engines (Google AI Overviews, Perplexity, ChatGPT Search, Claude).
+* **Tasks**:
+  1. Publish /llms.txt and /llms-full.txt directories and declare explicit AI search directives in obots.txt.
+  2. Implement rich JSON-LD schemas: HowTo for step routines, FAQPage for editorial Q&As, and VisualArtwork for 4K wallpapers.
+  3. Implement W3C Speculation Rules API for instant prefetch/prerender and add peer-reviewed dermatology research citations with fact-checked bylines.
