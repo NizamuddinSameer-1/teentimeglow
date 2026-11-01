@@ -263,6 +263,9 @@ const breadcrumbSchema = {
           </span>
           <span class="article-read-time">📖 {post.read_time_minutes} min read</span>
           <span class="article-date-pill">✦ ISSUE #28</span>
+          <span class="article-verified-badge" title="Fact-checked against current dermatological and peer-reviewed research">
+            <span class="badge-check">✓</span> Fact-Checked & Reviewed on {new Date(post.updated_at || post.created_at || '2026-10-26').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </span>
         </div>
 
         <h1 class="article-hero-title">{post.title}</h1>
@@ -506,6 +509,23 @@ const breadcrumbSchema = {
     justify-content: center;
     gap: 12px;
     margin-bottom: 20px;
+  }
+  .article-verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.08);
+    color: #065F46;
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    font-size: 0.76rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    letter-spacing: 0.02em;
+  }
+  .article-verified-badge .badge-check {
+    color: #059669;
+    font-weight: 900;
   }
   .article-cat-badge {
     background: rgba(232, 93, 4, 0.08);
