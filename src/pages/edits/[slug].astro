@@ -340,6 +340,32 @@ const breadcrumbSchema = {
         <div class="article-rich-body">
           <div class="rich-html-content" set:html={articleHtml} />
 
+          {post.category === 'skincare' && (
+            <div class="scientific-references-box">
+              <div class="refs-header">
+                <span class="refs-icon">🔬</span>
+                <h4>Scientific Evidence & Clinical References</h4>
+              </div>
+              <p class="refs-intro">
+                TeenTimeGlow is committed to evidence-based skincare guidance. Recommendations for barrier-repair ingredients are grounded in peer-reviewed dermatological literature:
+              </p>
+              <ul class="refs-list">
+                <li>
+                  <strong>Centella Asiatica (Madecassoside):</strong> Bylka W, et al. <em>"Centella asiatica in cosmetology."</em> Postepy Dermatol Alergol. 2013 Feb;30(1):46-9.
+                  <a href="https://pubmed.ncbi.nlm.nih.gov/23620842/" target="_blank" rel="noopener noreferrer" class="ref-link">PubMed PMID: 23620842 ↗</a>
+                </li>
+                <li>
+                  <strong>Niacinamide (Vitamin B3) Barrier Recovery:</strong> Bissett DL, et al. <em>"Niacinamide: A B vitamin that improves aging facial skin appearance and barrier function."</em> Dermatol Surg. 2005 Jul;31(7 Pt 2):860-5.
+                  <a href="https://pubmed.ncbi.nlm.nih.gov/16029679/" target="_blank" rel="noopener noreferrer" class="ref-link">PubMed PMID: 16029679 ↗</a>
+                </li>
+                <li>
+                  <strong>Ceramides & Transepidermal Water Loss:</strong> Coderch L, et al. <em>"Ceramides and skin function."</em> Am J Clin Dermatol. 2003;4(2):107-29.
+                  <a href="https://pubmed.ncbi.nlm.nih.gov/12553851/" target="_blank" rel="noopener noreferrer" class="ref-link">PubMed PMID: 12553851 ↗</a>
+                </li>
+              </ul>
+            </div>
+          )}
+
           <!-- Author Signature Card -->
           <div class="author-signoff-card">
             <img src="/assets/logo.jpg" alt="Rini" class="signoff-avatar" />
@@ -853,6 +879,54 @@ const breadcrumbSchema = {
   }
 
   /* Author Sign-off */
+  .scientific-references-box {
+    margin-top: 40px;
+    margin-bottom: 30px;
+    padding: 24px 28px;
+    background: #F8FAF9;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    border-radius: 16px;
+    text-align: left;
+  }
+  .refs-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .refs-header h4 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #065F46;
+  }
+  .refs-intro {
+    font-size: 0.88rem;
+    color: #4B5563;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .refs-list {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .refs-list li {
+    font-size: 0.84rem;
+    color: #374151;
+    line-height: 1.45;
+  }
+  .ref-link {
+    color: #059669;
+    font-weight: 600;
+    text-decoration: underline;
+    margin-left: 6px;
+  }
+  .ref-link:hover {
+    color: #047857;
+  }
   .author-signoff-card {
     display: flex;
     align-items: center;
