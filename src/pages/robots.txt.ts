@@ -18,7 +18,29 @@ Disallow: /*?q=
 Disallow: /*?category=
 Disallow: /*?sort=
 
-# Aggressive AI scrapers that provide no referral value
+# Explicit AI Search & Citation Agents (Allow Indexing & Answer Citation)
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+
+# Content Signals Policy declaration (Cloudflare / IETF Draft)
+Content-Signal: search=yes, ai-input=yes, ai-train=no
+
+# Aggressive crawlers rate limit
 User-agent: AhrefsBot
 Crawl-delay: 10
 
