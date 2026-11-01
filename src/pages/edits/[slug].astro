@@ -166,6 +166,53 @@ const howToSchema = isGlassSkinRoutine ? {
     }
   ]
 } : null;
+const faqsBySlug: Record<string, { q: string; a: string }[]> = {
+  'glass-skin-korean-routine': [
+    {
+      q: 'Can teens with acne do the Korean glass skin routine?',
+      a: 'Yes. The key for acne-prone teen skin is skipping heavy face oils and using oil-free hydrating toners and gentle barrier repair ingredients like Centella Asiatica.'
+    },
+    {
+      q: 'What age is suitable to start a skincare routine?',
+      a: 'Simple routines focusing on gentle cleansing, light hydration, and daily sun protection can safely begin in the early teen years (ages 12-14).'
+    },
+    {
+      q: 'Do I need expensive products to get glass skin?',
+      a: 'No. Glass skin is about hydration consistency and technique rather than luxury brands. Budget drugstore options with simple ingredients work effectively.'
+    }
+  ],
+  'capsule-wardrobe-for-teens-on-a-budget': [
+    {
+      q: 'How many pieces should be in a teen capsule wardrobe?',
+      a: 'A practical school capsule wardrobe consists of 15 to 20 interchangeable pieces, including 4 tops, 3 bottoms, 2 layerings, 2 pairs of footwear, and versatile accessories.'
+    },
+    {
+      q: 'How do I choose colors for a capsule wardrobe?',
+      a: 'Stick to a 3-color palette: two neutral foundation shades (like black, white, cream, or navy) and one soft accent color (like sage, blush, or baby blue).'
+    }
+  ],
+  'small-bedroom-ideas-for-teens-on-a-budget': [
+    {
+      q: 'How can I make a small teen bedroom look bigger?',
+      a: 'Use vertical wall space with pegboards, mount floating shelves, stick to light neutral bedding, and use warm ambient lighting instead of harsh overhead lamps.'
+    }
+  ]
+};
+
+const activeFaqs = faqsBySlug[post.slug];
+const faqSchema = activeFaqs && activeFaqs.length > 0 ? {
+  '@type': 'FAQPage',
+  '@id': `${postUrl}#faq`,
+  mainEntity: activeFaqs.map(item => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a
+    }
+  }))
+} : null;
+
 const breadcrumbSchema = {
   '@type': 'BreadcrumbList',
   '@id': `${postUrl}#breadcrumb`,
@@ -183,7 +230,7 @@ const breadcrumbSchema = {
   description={post.excerpt}
   ogImage={coverImage}
   ogType="article"
-  schema={[articleSchema, breadcrumbSchema, ...(howToSchema ? [howToSchema] : [])]}
+  schema={[articleSchema, breadcrumbSchema, ...(howToSchema ? [howToSchema] : []), ...(faqSchema ? [faqSchema] : [])]}
 >
   <!-- Reading Progress Bar -->
   <div class="reading-progress-track">
