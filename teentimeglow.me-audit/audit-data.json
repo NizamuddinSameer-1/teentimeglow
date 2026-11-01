@@ -1,0 +1,183 @@
+{
+  "summary": {
+    "health_score": 88,
+    "business_type": "Lifestyle & Editorial Publisher / Niche Media",
+    "url": "https://www.teentimeglow.me",
+    "domain": "teentimeglow.me",
+    "audit_date": "2026-11-01",
+    "top_findings": [
+      "Missing /llms.txt and /llms-full.txt directory for AI search crawlers (Perplexity, ChatGPT, Claude, Gemini).",
+      "Opportunity to add HowTo & FAQPage Schema to beauty and fashion guides for step-by-step mobile rich snippets.",
+      "Speculation Rules not implemented (Preload Score: 75/100) — adding speculationrules can eliminate client navigation delay.",
+      "6 third-party script libraries (GSAP, Lenis, Lucide, etc.) served from external CDNs instead of self-hosted assets."
+    ],
+    "quick_wins": [
+      "Deploy /llms.txt at the site root following the Lighthouse Agentic Browsing standard.",
+      "Add HowTo JSON-LD schema on the Korean Glass Skin routine guide.",
+      "Add Speculation Rules script tag targeting /edits and /wallpapers for instant page rendering.",
+      "Add explicit AI crawler policy headers/directives in robots.txt."
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO & Infrastructure",
+      "score": 94,
+      "what_works": [
+        "Strict HTTPS with HSTS (max-age=63072000, includeSubDomains, preload).",
+        "A+ Security headers: nosniff, DENY frame options, mode=block XSS protection.",
+        "Edge routing correctly canonicalizes to https://www.teentimeglow.me/ without redirect hops.",
+        "Robots.txt correctly disallows private endpoints (/admin, /api/) and filtered queries.",
+        "Clean HTTP 404 responses on non-existent endpoints (no soft-404 catch-alls).",
+        "Sitemap.xml clean, indexed, and auto-discovered with correct priority weights."
+      ],
+      "findings": [
+        {
+          "title": "Declare explicit AI crawler directives in robots.txt",
+          "severity": "Low",
+          "description": "Currently all crawlers except AhrefsBot fall through to the wildcard User-agent: * block. Explicit directives for GPTBot, ClaudeBot, PerplexityBot clarify crawling vs training boundaries.",
+          "recommendation": "Add named User-agent blocks for GPTBot, Claude-SearchBot, and PerplexityBot with Content-Signal declarations."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality & E-E-A-T",
+      "score": 90,
+      "what_works": [
+        "Tested quality scores: Homepage (84/100), Glass Skin Routine (89/100), Capsule Wardrobe (89/100), About Page (91/100), Wallpapers (93/100).",
+        "Zero AI fluff patterns detected — authentic personal editorial voice by founder Rini.",
+        "Information density is very high (0.65 to 0.86 across content pages).",
+        "Explicit editorial disclaimer and non-medical advisory clearly stated.",
+        "Strong interactive content (Glow Quiz, Daily Quotes, Community Gallery) driving high engagement signals."
+      ],
+      "findings": [
+        {
+          "title": "Cite peer-reviewed scientific studies for skincare active ingredients",
+          "severity": "Medium",
+          "description": "Guides recommend active ingredients like Niacinamide, Hyaluronic Acid, and Centella Asiatica. Direct external links to scientific research (e.g. PubMed/dermatology journals) elevate E-E-A-T for health-adjacent beauty queries.",
+          "recommendation": "Add 2-3 links to PubMed clinical studies in skincare articles when discussing active barrier ingredients."
+        },
+        {
+          "title": "Include 'Reviewed / Fact-Checked On' timestamps",
+          "severity": "Low",
+          "description": "Currently articles show published/updated dates. Adding a visible 'Fact-checked on [Date]' reinforces ongoing freshness for Google quality raters.",
+          "recommendation": "Add a micro-byline with verification date near the author bio."
+        }
+      ]
+    },
+    {
+      "name": "Structured Data (Schema.org)",
+      "score": 86,
+      "what_works": [
+        "Extensive schema graphs: WebSite, Organization, Person (Rini), BlogPosting, BreadcrumbList, AboutPage, Quotation.",
+        "Proper entity linking via @id across publisher, founder, and articles.",
+        "Social sameAs links present for Pinterest and Instagram."
+      ],
+      "findings": [
+        {
+          "title": "Missing HowTo schema on step-by-step skincare & styling tutorials",
+          "severity": "High",
+          "description": "The Korean Glass Skin guide has defined numbered steps (Double Cleanse, Hydrating Toner, Barrier Serum, Glow Moisturizer, Daily SPF) which qualify for Google HowTo rich snippets.",
+          "recommendation": "Add HowTo JSON-LD schema with Step objects, supply requirements, and estimated completion times."
+        },
+        {
+          "title": "Add FAQPage schema on articles with Q&A sections",
+          "severity": "Medium",
+          "description": "Articles answer common teen questions (e.g., routine for acne-prone skin, age suitability).",
+          "recommendation": "Markup question-and-answer pairs with FAQPage schema to capture accordion rich results."
+        },
+        {
+          "title": "Enhance Wallpaper pages with CreativeWork/VisualArtwork schema",
+          "severity": "Low",
+          "description": "Wallpaper pages use generic ImageObject. CreativeWork / VisualArtwork provides richer attributes (artMedium, creator, license).",
+          "recommendation": "Include CreativeWork schema with license and download links for Google Images authority."
+        }
+      ]
+    },
+    {
+      "name": "AI Search (GEO) & Agent Readiness",
+      "score": 82,
+      "what_works": [
+        "Full server-side rendering: 1,000+ words delivered directly in raw HTML without requiring JavaScript execution.",
+        "User-triggered AI agents (Claude-User, ChatGPT-User, Perplexity-User) are completely unobstructed.",
+        "Clean accessibility tree with valid headings, landmarks, and form inputs."
+      ],
+      "findings": [
+        {
+          "title": "Missing /llms.txt and /llms-full.txt",
+          "severity": "High",
+          "description": "AI models (Perplexity, ChatGPT, Claude) look for /llms.txt as an authoritative index of high-value resources and site structure.",
+          "recommendation": "Create /public/llms.txt with an H1, brief overview, and markdown links to core guides, quizzes, and wallpapers."
+        },
+        {
+          "title": "Lack of Markdown content negotiation (Accept: text/markdown)",
+          "severity": "Medium",
+          "description": "Providing markdown alternatives allows AI retrieval tools to parse articles at fraction of the token cost without HTML clutter.",
+          "recommendation": "Serve markdown representations or link rel='alternate' type='text/markdown' versions of key edits."
+        }
+      ]
+    },
+    {
+      "name": "Performance & Resource Delivery",
+      "score": 88,
+      "what_works": [
+        "Preload score: 75/100. Hero LCP image properly prioritized with fetchpriority='high'.",
+        "BFCache optimization: Zero unload or beforeunload blockers, allowing instant back/forward navigation.",
+        "Zero console errors during Chromium headless rendering."
+      ],
+      "findings": [
+        {
+          "title": "Add Speculation Rules for instant intra-site navigations",
+          "severity": "Medium",
+          "description": "Users moving from Home to /edits or /wallpapers must wait for document fetch. Speculation Rules allow the browser to pre-render the target in idle time.",
+          "recommendation": "Inject <script type='speculationrules'> to prefetch /edits, /wallpapers, and /quiz on link hover."
+        },
+        {
+          "title": "Consolidate or self-host external CDN libraries",
+          "severity": "Low",
+          "description": "6 external scripts from unpkg, cdnjs, and jsdelivr create separate connection overhead and DNS resolutions.",
+          "recommendation": "Bundle Lenis, GSAP, and Lucide through Vite into the client build."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Quick Wins & AI Search Readiness",
+        "timeframe": "Days 1 - 3",
+        "items": [
+          "Deploy /llms.txt and /llms-full.txt at the public root.",
+          "Add Speculation Rules script tag in the base layout to boost navigation speed to near 0ms.",
+          "Add explicit AI crawler directives to robots.txt."
+        ]
+      },
+      {
+        "name": "Phase 2: Rich Snippet & Schema Expansion",
+        "timeframe": "Week 1",
+        "items": [
+          "Implement HowTo JSON-LD schema on step-by-step skincare and styling articles.",
+          "Implement FAQPage JSON-LD schema on articles featuring reader questions.",
+          "Add CreativeWork/VisualArtwork schema to the 4K wallpapers collection."
+        ]
+      },
+      {
+        "name": "Phase 3: E-E-A-T & Authority Reinforcement",
+        "timeframe": "Weeks 2 - 3",
+        "items": [
+          "Incorporate 2-3 scientific citations (PubMed/dermatological studies) into active ingredient guides.",
+          "Add 'Fact-checked on [Date]' verification tags to editorial bylines.",
+          "Promote guides on Pinterest and Instagram with deep links to build external domain citations."
+        ]
+      },
+      {
+        "name": "Phase 4: Asset Optimization & Monitoring",
+        "timeframe": "Month 1",
+        "items": [
+          "Bundle external CDN scripts (GSAP, Lenis, Lucide) directly through Vite.",
+          "Monitor weekly drift snapshots with claude-seo drift compare."
+        ]
+      }
+    ]
+  }
+}
+

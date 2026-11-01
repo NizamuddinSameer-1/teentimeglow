@@ -73,3 +73,4 @@ Rini is not a dermatologist, cosmetologist, or medical doctor. The advice publis
 - **Daily Mindset & Quotes Engine (`/quotes`):** Curated daily inspiration cards designed to promote self-worth, study focus, healthy digital boundaries, and gentle confidence.
 - **Curated Leaderboard (`/rankings`):** Student-tested ratings and editorial reviews of popular Prime Video coming-of-age series and audiobooks.
 - **4K Wallpapers Vault (`/wallpapers`):** Hand-curated 4K resolution mobile and desktop wallpapers free from intrusive watermarks.
+

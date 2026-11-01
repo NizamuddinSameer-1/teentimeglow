@@ -27,3 +27,4 @@
 ## Full Corpus
 
 - [Full Text Digest](https://www.teentimeglow.me/llms-full.txt): Complete text of all primary guides, routines, and editorial manifestos for offline LLM indexing and synthesis.
+
